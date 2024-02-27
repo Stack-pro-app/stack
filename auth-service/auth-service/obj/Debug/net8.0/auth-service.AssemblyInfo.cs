@@ -10,13 +10,12 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("f9e8f172-6aad-4309-9d83-01262ac91854")]
-[assembly: System.Reflection.AssemblyCompanyAttribute("messaging-service")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("auth-service")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ea330cae4e8cd87a3d37162674547de0096c47aa")]
-[assembly: System.Reflection.AssemblyProductAttribute("messaging-service")]
-[assembly: System.Reflection.AssemblyTitleAttribute("messaging-service")]
+[assembly: System.Reflection.AssemblyProductAttribute("auth-service")]
+[assembly: System.Reflection.AssemblyTitleAttribute("auth-service")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
 
 // Généré par la classe MSBuild WriteCodeFragment.
