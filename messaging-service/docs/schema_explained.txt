@@ -1,0 +1,50 @@
+﻿users: Represents individual users on the platform with attributes like:
+
+id: Unique identifier for each user.
+name: User's display name.
+email: User's email address.
+created_at: Timestamp of when the user's account was created.
+last_login: Timestamp of the user's last login activity.
+========================================================================================================================================
+members: This table establishes the connection between users and the channels they participate in.
+
+id: Unique identifier for a membership entry.
+user_id: Foreign key referencing a user in the 'users' table.
+channel_id: Foreign key referencing a channel in the 'channels' table.
+created_at: Timestamp of when the user joined the channel.
+========================================================================================================================================
+channels: Represents communication channels within workspaces.
+
+id: Unique identifier for each channel.
+name: The name of the channel.
+description: A brief description of the channel's purpose.
+created_at: Timestamp of when the channel was created.
+is_private: Indicates whether the channel is private or public.
+========================================================================================================================================
+workspaces: Represents the overarching organizational units, potentially analogous to companies or teams using the system.
+
+id: Unique identifier for each workspace.
+name: The name of the workspace.
+created_at: Timestamp of when the workspace was created.
+========================================================================================================================================
+chat: Stores individual chat messages.
+
+id: Unique identifier for each message.
+user_id: Foreign key referencing the user who sent the message.
+channel_id: Foreign key referencing the channel where the message was sent.
+message: The text content of the message (stored as JSONB, potentially to accommodate rich formatting).
+total_replies: Likely a counter to track the number of replies to a message.
+is_deleted: A flag to indicate if a message has been deleted.
+modified_at: Timestamp tracking the last modification time (if edits are allowed).
+created_at: Timestamp of when the message was sent.
+parent_id: Used to establish a threaded message structure (replies to a specific message).
+========================================================================================================================================
+shared_channels: Facilitates the sharing of channels across workspaces.
+
+channel_id Foreign key pointing to the primary 'channels' table.
+workspace_id Foreign key referencing the workspace where the channel originates.
+target_workspace_id: Foreign key referencing the workspace the channel is being shared with.
+origin_workspace_id An additional foreign key referencing the workspace where the channel originates (likely for consistency/clarity).
+name: The name of the shared channel.
+topic: The topic for the shared channel.
+is_private: Indicates whether the shared channel is private or public.
