@@ -16,6 +16,6 @@ namespace messaging_service.models
         public int WorkspaceId { get; set; }
         public Workspace Workspace { get; set; } = null!;
         public ICollection<Member> Members { get; set; }= new List<Member>();
-        public ICollection<Chat> Channels { get; set; }= new List<Chat>();
+        public ICollection<Chat> Messages { get; set; }= new HashSet<Chat>();
     }
 }
