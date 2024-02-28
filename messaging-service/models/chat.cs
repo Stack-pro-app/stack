@@ -1,6 +1,21 @@
-﻿namespace messaging_service.models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace messaging_service.models
 {
-    public class chat
+    public class Chat
     {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+        public int ChannelId { get; set; }
+        public Channel Channel { get; set; }
+        [MaxLength(500)]
+        public string Message { get; set; }
+        public bool Is_deleted { get; set; } = false;
+        public DateTime? Modified_at { get; set; }
+        public DateTime Created_at { get; set; }
+        public int? ParentId { get; set; }
+        public Chat? Parent { get; set; }
+        public ICollection<User>? Tagged { get; set; } = new List<User>();
     }
 }
