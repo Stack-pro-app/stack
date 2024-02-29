@@ -4,7 +4,8 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<int> ChannelIds { get; set; }
-        public ICollection<int> UsersIds { get; set; }
+        public ChannelDto MainChannel { get; set; }
+        public ICollection<int> channelIds { get; set; }
+        public ICollection<int> userIds { get; set; }
     }
 }

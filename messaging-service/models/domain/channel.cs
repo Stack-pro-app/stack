@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace messaging_service.models
+namespace messaging_service.models.domain
 {
     public class Channel
     {
@@ -11,11 +11,11 @@ namespace messaging_service.models
         [MaxLength(300)]
         public string? Description { get; set; }
 
-        public DateTime Created_at { get; set; }
+        public DateTime? Created_at { get; set; }
         public bool Is_private { get; set; } = true;
         public int WorkspaceId { get; set; }
         public Workspace Workspace { get; set; } = null!;
-        public ICollection<Member> Members { get; set; }= new List<Member>();
-        public ICollection<Chat> Messages { get; set; }= new HashSet<Chat>();
+        public ICollection<Member> Members { get; set; } = new List<Member>();
+        public ICollection<Chat> Messages { get; set; } = new HashSet<Chat>();
     }
 }

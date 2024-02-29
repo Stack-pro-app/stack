@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace messaging_service.models
+namespace messaging_service.models.domain
 {
     public class Workspace
     {

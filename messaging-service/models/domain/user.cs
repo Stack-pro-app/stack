@@ -1,4 +1,4 @@
-﻿namespace messaging_service.models
+﻿namespace messaging_service.models.domain
 {
     public class User
     {
@@ -6,7 +6,7 @@
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime Created_at { get; set; }
-        public DateTime Last_login { get; set;}
+        public DateTime Last_login { get; set; }
         public int WorkspaceId { get; set; }
         public Workspace Workspace { get; set; }
         public ICollection<Member> Memberships { get; set; } = new List<Member>();

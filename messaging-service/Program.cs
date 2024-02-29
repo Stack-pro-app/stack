@@ -1,4 +1,5 @@
 using messaging_service.Data;
+using messaging_service.MappingProfiles;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(typeof(MemberProfile));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

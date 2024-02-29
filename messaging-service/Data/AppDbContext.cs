@@ -1,4 +1,4 @@
-﻿using messaging_service.models;
+﻿using messaging_service.models.domain;
 using Microsoft.EntityFrameworkCore;
 
 
