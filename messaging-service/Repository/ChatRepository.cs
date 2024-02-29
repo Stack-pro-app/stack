@@ -1,82 +1,102 @@
 ﻿using messaging_service.models.domain;
 using messaging_service.Repository.Interfaces;
 using messaging_service.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace messaging_service.Repository
 {
-    
     public class ChatRepository : IChatRepository
     {
         private readonly AppDbContext _context;
-        public ChatRepository(AppDbContext appDbContext) { _context=appDbContext }
-        public bool CreateChat(Chat message)
+
+        public ChatRepository(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<bool> CreateChatAsync(Chat message)
         {
             try
             {
                 _context.Add(message);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
-            catch
-            (Exception ex)
-            { throw; }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
-        //Delete Partially
-        public bool DeleteChatPart(int messageId)
+
+        public async Task<bool> DeleteChatPartAsync(int messageId)
         {
             try
             {
-                var message = _context.Chats.FirstOrDefault(x => x.Id == messageId && x.Is_deleted == false) ?? throw new InvalidOperationException("Message Inexistant");
+                var message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new InvalidOperationException("Message Inexistant");
                 message.Is_deleted = true;
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex){ throw; }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
-        //Delete Permanently
-        public bool DeleteChatPerm(int messageId)
+
+        public async Task<bool> DeleteChatPermAsync(int messageId)
         {
             try
             {
-                var message = _context.Chats.FirstOrDefault(x => x.Id == messageId) ?? throw new InvalidOperationException("Message Inexistant");
+                var message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId) ?? throw new InvalidOperationException("Message Inexistant");
                 _context.Chats.Remove(message);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex) { throw; }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
-
-
-        public IEnumerable<Chat> GetChannelMessage(int channelId)
+        public async Task<IEnumerable<Chat>> GetChannelMessageAsync(int channelId)
         {
             try
             {
-                var msgs = _context.Chats.Where(x => x.ChannelId == channelId).ToList();
+                var msgs = await _context.Chats.Where(x => x.ChannelId == channelId).ToListAsync();
                 return msgs;
             }
-            catch (Exception ex) { throw; }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
-        public Chat GetMessage(int messageId)
+        public async Task<Chat> GetMessageAsync(int messageId)
         {
             try
             {
-                var message = _context.Chats.FirstOrDefault(x => x.Id == messageId) ?? throw new InvalidOperationException("Message Inexistant");
+                var message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId) ?? throw new InvalidOperationException("Message Inexistant");
                 return message;
             }
-            catch (Exception ex) { throw; }
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
 
-        public bool UpdateChat(Chat msg)
+        public async Task<bool> UpdateChatAsync(int messageId, string message)
         {
             try
             {
-                _context.Chats.Update(msg);
-                _context.SaveChanges();
+                var msg = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new InvalidOperationException("Message Inexistant");
+                msg.Message = message;
+                await _context.SaveChangesAsync();
                 return true;
             }
-            catch(Exception ex) { throw; } 
+            catch (Exception ex)
+            {
+                throw;
+            }
         }
     }
 }

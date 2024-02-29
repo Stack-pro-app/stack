@@ -4,10 +4,10 @@ namespace messaging_service.Repository.Interfaces
 {
     public interface IMemberRepository
     {
-        bool CreateMember(Member member);
-        bool DeleteMemberById(int memberId);
-        bool DeleteMemberByUserChannel(int userId,int channelId);
-        IEnumerable<Member> GetMembersByChannel(int channelId);
-        IEnumerable<Member> GetMembersByUser(int userId);
+        Task<bool> CreateMemberAsync(Member member);
+        Task<bool> DeleteMemberByIdAsync(int memberId);
+        Task<bool> DeleteMemberByUserChannelAsync(int userId, int channelId);
+        Task<IEnumerable<Member>> GetMembersByChannelAsync(int channelId);
+        Task<IEnumerable<Member>> GetMembersByUserAsync(int userId);
     }
 }

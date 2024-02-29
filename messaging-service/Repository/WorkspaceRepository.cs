@@ -2,6 +2,7 @@
 using messaging_service.models.dto;
 using messaging_service.Repository.Interfaces;
 using messaging_service.models.domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace messaging_service.Repository
 {
@@ -11,16 +12,12 @@ namespace messaging_service.Repository
         public WorkspaceRepository(AppDbContext context) {
             _context = context;
         }
-        public bool CreateWorkspace(WorkspaceDto workspaceDto)
+        public async Task<bool> CreateWorkspaceAsync(Workspace workspace)
         {
-            Workspace workspace = new Workspace
-            {
-                Name = workspaceDto.Name,
-            };
             try
             {
                 _context.Workspaces.Add(workspace);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -32,20 +29,49 @@ namespace messaging_service.Repository
 
         }
 
-        public bool DeleteWorkspace(int workspaceId)
+        public async Task<bool> DeleteWorkspaceAsync(int workspaceId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId)?? throw new InvalidOperationException("invalid Workspace");
+                _context.Workspaces.Remove(workspace);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting workspace: {ex.Message}");
+                return false;
+            }
         }
 
-        public WorkspaceDto GetWorkspace(int workspaceId)
+        public async Task<Workspace> GetWorkspaceAsync(int workspaceId)
         {
-            Workspace workspace = _context.Workspaces.FirstOrDefault(x => x.Id == workspaceId);
-            if (workspace == null) { return new WorkspaceDto(); }
+            try
+            {
+                var workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId) ?? throw new InvalidOperationException("invalid Workspace");
+                return workspace;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error finding workspace: {ex.Message}");
+                throw;
+            }
         }
 
-        public bool UpdateWorkspace(WorkspaceDto workspace)
+        public async Task<bool> UpdateWorkspaceAsync(Workspace workspace)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _context.Workspaces.Update(workspace);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating workspace: {ex.Message}");
+                return false;
+            }
         }
     }
 }

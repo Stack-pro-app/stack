@@ -3,11 +3,11 @@ namespace messaging_service.Repository.Interfaces
 {
     public interface IChatRepository
     {
-        bool CreateChat(Chat message);
-        bool DeleteChatPart(int messageId);
-        bool DeleteChatPerm(int messageId);
-        bool UpdateChat(int messageId,string message);
-        Chat GetMessage(int messageId);
-        IEnumerable<Chat> GetChannelMessage(int channelId);
+        Task<bool> CreateChatAsync(Chat message);
+        Task<bool> DeleteChatPartAsync(int messageId);
+        Task<bool> DeleteChatPermAsync(int messageId);
+        Task<bool> UpdateChatAsync(int messageId, string message);
+        Task<Chat> GetMessageAsync(int messageId);
+        Task<IEnumerable<Chat>> GetChannelMessageAsync(int channelId);
     }
 }
