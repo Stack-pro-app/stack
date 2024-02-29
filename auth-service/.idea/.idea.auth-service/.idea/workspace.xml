@@ -10,25 +10,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3179422e-f3d5-46e7-b9e6-1000df6c0de0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/app.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/app.component.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/app.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/app.config.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/app.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/tailwind.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/tailwind.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front/src/app/core/services/Auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/core/services/Auth/auth.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front/src/app/features/pages/home/home.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/features/pages/home/home.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Front/src/app/features/pages/home/home.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/features/pages/home/home.component.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.auth-service/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.auth-service/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.dll" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.exe" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/apphost.exe" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/apphost.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.AssemblyInfoInputs.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.dll" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.sourcelink.json" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/auth-service.sourcelink.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/ref/auth-service.dll" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/ref/auth-service.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/refint/auth-service.dll" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/refint/auth-service.dll" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +117,7 @@
       <option name="presentableId" value="Default" />
       <updated>1709077403715</updated>
       <workItem from="1709077406429" duration="2432000" />
-      <workItem from="1709230302246" duration="2660000" />
+      <workItem from="1709230302246" duration="3663000" />
     </task>
     <servers />
   </component>

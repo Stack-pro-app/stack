@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable,tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { LoginResponseDto } from '../../Models/login-response-dto';
 import { StoreService } from '../store/store.service';
 
@@ -23,28 +23,13 @@ export class AuthService {
       .pipe(tap((response) => console.log('Login Response:', response)));
   }
   logout() {
-    console.log(this.store.isLogged);
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer' + localStorage.getItem('token'),
-    });
-    this.http.post(this.url + 'logout', { headers }).subscribe(
-      (response) => {
-        localStorage.removeItem('token');
-        console.log(response);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-    console.log(this.store.isLogged);
+    console.log(this.store.isLogged());
+    localStorage.removeItem('token');
+    console.log(this.store.isLogged());
   }
   register(userData: any): Observable<any> {
     console.log(userData);
     const registerUrl = `${this.url}register`;
     return this.http.post(registerUrl, userData);
   }
-
- 
 }
-

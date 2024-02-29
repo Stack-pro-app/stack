@@ -1,14 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../core/services/Auth/auth.service';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { LoginRequestDto } from '../../../core/Models/login-request-dto';
 import { StoreService } from '../../../core/services/store/store.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink
+  ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   providers:[AuthService]
