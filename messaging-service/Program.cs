@@ -16,6 +16,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<WorkspaceRepository>();
+builder.Services.AddScoped<ChatRepository>();
+builder.Services.AddScoped<ChannelRepository>();
 
 builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile));
 var app = builder.Build();

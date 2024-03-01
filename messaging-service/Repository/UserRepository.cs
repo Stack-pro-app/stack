@@ -29,11 +29,11 @@ namespace messaging_service.Repository
                 }
             }
 
-            public async Task<bool> DeleteUserAsync(int userId)
+            public async Task<bool> DeleteUserAsync(int authId)
             {
                 try
                 {
-                    var userToDelete = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId) ?? throw new InvalidOperationException("User not found.");
+                    var userToDelete = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == authId) ?? throw new InvalidOperationException("User not found.");
                     _context.Users.Remove(userToDelete);
                     await _context.SaveChangesAsync();
                     return true;
@@ -49,7 +49,9 @@ namespace messaging_service.Repository
             {
                 try
                 {
-                    _context.Users.Update(user);
+                    var target = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == user.AuthId);
+                    target.Name = user.Name;
+                    target.Email = user.Email;
                     await _context.SaveChangesAsync();
                     return true;
                 }
@@ -60,11 +62,11 @@ namespace messaging_service.Repository
                 }
             }
 
-            public async Task<User> GetUserAsync(int userId)
+            public async Task<User> GetUserAsync(int authId)
             {
                 try
                 {
-                    var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId) ?? throw new InvalidOperationException("User not found.");
+                    var user = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == authId) ?? throw new InvalidOperationException("User not found.");
                     return user;
                 }
                 catch (Exception ex)
@@ -100,7 +102,12 @@ namespace messaging_service.Repository
             {
                 try
                 {
-                    var users = await _context.Users.Where(u => u.WorkspaceId == workspaceId).ToListAsync();
+                    var users = await _context.UsersWorkspaces.Where(u => u.WorkspaceId == workspaceId).Join(
+                            _context.Users,
+                            u => u.UserId,
+                            user => user.Id,
+                            (u, user) => user
+                        ).ToListAsync();
                     return users;
                 }
                 catch (Exception ex)

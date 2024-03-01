@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using messaging_service.Data;
 
@@ -11,9 +12,11 @@ using messaging_service.Data;
 namespace messaging_service.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240301173519_SecondMigration")]
+    partial class SecondMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,9 +91,6 @@ namespace messaging_service.Migrations
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("TaggedIds")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -144,6 +144,9 @@ namespace messaging_service.Migrations
                     b.Property<int>("AuthId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ChatId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Created_at")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -160,43 +163,22 @@ namespace messaging_service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("WorkspaceId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthId")
                         .IsUnique();
 
+                    b.HasIndex("ChatId");
+
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Users", "chat");
-                });
-
-            modelBuilder.Entity("messaging_service.models.domain.UserWorkspace", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created_at")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WorkspaceId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
                     b.HasIndex("WorkspaceId");
 
-                    b.ToTable("UsersWorkspaces", "chat");
+                    b.ToTable("Users", "chat");
                 });
 
             modelBuilder.Entity("messaging_service.models.domain.Workspace", b =>
@@ -246,7 +228,7 @@ namespace messaging_service.Migrations
                         .HasForeignKey("ParentId");
 
                     b.HasOne("messaging_service.models.domain.User", "User")
-                        .WithMany("Messages")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -277,21 +259,15 @@ namespace messaging_service.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("messaging_service.models.domain.UserWorkspace", b =>
+            modelBuilder.Entity("messaging_service.models.domain.User", b =>
                 {
-                    b.HasOne("messaging_service.models.domain.User", "User")
-                        .WithMany("UserWorkspaces")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("messaging_service.models.domain.Chat", null)
+                        .WithMany("Tagged")
+                        .HasForeignKey("ChatId");
 
                     b.HasOne("messaging_service.models.domain.Workspace", "Workspace")
-                        .WithMany("UserWorkspaces")
-                        .HasForeignKey("WorkspaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
+                        .WithMany("Users")
+                        .HasForeignKey("WorkspaceId");
 
                     b.Navigation("Workspace");
                 });
@@ -303,20 +279,21 @@ namespace messaging_service.Migrations
                     b.Navigation("Messages");
                 });
 
+            modelBuilder.Entity("messaging_service.models.domain.Chat", b =>
+                {
+                    b.Navigation("Tagged");
+                });
+
             modelBuilder.Entity("messaging_service.models.domain.User", b =>
                 {
                     b.Navigation("Memberships");
-
-                    b.Navigation("Messages");
-
-                    b.Navigation("UserWorkspaces");
                 });
 
             modelBuilder.Entity("messaging_service.models.domain.Workspace", b =>
                 {
                     b.Navigation("Channels");
 
-                    b.Navigation("UserWorkspaces");
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

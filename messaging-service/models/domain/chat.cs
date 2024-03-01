@@ -16,6 +16,6 @@ namespace messaging_service.models.domain
         public DateTime Created_at { get; set; }
         public int? ParentId { get; set; }
         public Chat? Parent { get; set; }
-        public ICollection<User>? Tagged { get; set; } = new List<User>();
+        public ICollection<int>? TaggedIds { get; set; } = new List<int>();
     }
 }

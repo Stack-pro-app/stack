@@ -12,6 +12,7 @@ using JWT.Algorithms;
 using JWT.Serializers;
 using AutoMapper;
 using messaging_service.models.domain;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace messaging_service.Controllers
@@ -44,12 +45,15 @@ namespace messaging_service.Controllers
             try
             {
                 var user = _mapper.Map<User>(userDto);
-                ResponseDto response = new ResponseDto();
                 bool result = await _userRepository.CreateUserAsync(user);
                 if (result)
                 {
-                    response.IsSuccess = true;
-                    response.Message = "Successfully Created !";
+                    ResponseDto response = new()
+                    {
+                        IsSuccess = true,
+                        Message = "Successfully Created !",
+                    };
+                    
                     return Ok(response);
                 }
                 else
@@ -59,10 +63,98 @@ namespace messaging_service.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
 
+        }
+        [HttpGet("{authId}")]
+        public async Task<ActionResult<ResponseDto>> GetUser([FromRoute]int authId)
+        {
+            try
+            {
+                var user = await _userRepository.GetUserAsync(authId);
+                if (user == null) throw new Exception("No User Was Found");
+                var userResponseDto = _mapper.Map<UserResponseDto>(user);
+                ResponseDto response = new()
+                {
+                    IsSuccess = true,
+                    Result = userResponseDto,
+                    Message = "Welcome !"
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("{authId}")]
+        public async Task<ActionResult<ResponseDto>> DeleteUser([FromRoute]int authId)
+        {
+            try
+            {
+                bool result = await _userRepository.DeleteUserAsync(authId);
+                if (!result) throw new Exception("Failed To Delete !");
+                ResponseDto response = new()
+                {
+                    IsSuccess = true,
+                    Result = null,
+                    Message = "Successfully Deleted",
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut]
+        public async Task<ActionResult<ResponseDto>> UpdateUser([FromBody]UserDto userDto)
+        {
+            try
+            {
+                var user = _mapper.Map<User>(userDto);
+                bool result = await _userRepository.UpdateUserAsync(user);
+                if (!result) throw new Exception("can't find user");
+                ResponseDto response = new()
+                {
+                    IsSuccess = true,
+                    Message = "Successfully Updated",
+                };
+                return Ok(response);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        // Custom Apis Here
+        // Get Users By WorkspaceId
+        [HttpGet("{WorkspaceId}")]
+        public async Task<ActionResult<ResponseDto>> GetUsersByWorkspaceId([FromRoute]int workspaceId)
+        {
+            try
+            {
+                var users = await _userRepository.GetUsersByWorkspaceAsync(workspaceId);
+                if (users.IsNullOrEmpty()) throw new Exception("Can't find any users");
+                ResponseDto response = new()
+                {
+                    Result = users,
+                    IsSuccess = true,
+                    Message = "Users from your workspace",
+                };
+                return Ok(users);
+            }
+            catch(Exception ex)
+            {
+                ResponseDto response = new()
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+                return BadRequest(response);
+            }
         }
 
 

@@ -8,7 +8,7 @@ namespace messaging_service.models.domain
         [MaxLength(30)]
         public string Name { get; set; }
         public ICollection<Channel> Channels { get; set; } = new List<Channel>();
-        public ICollection<User> Users { get; set; } = new List<User>();
+        public ICollection<UserWorkspace> UserWorkspaces { get; set; } = new List<UserWorkspace>();
         public DateTime Created_at { get; set; }
     }
 }

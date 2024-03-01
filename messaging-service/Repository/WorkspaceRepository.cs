@@ -12,10 +12,12 @@ namespace messaging_service.Repository
         public WorkspaceRepository(AppDbContext context) {
             _context = context;
         }
-        public async Task<bool> CreateWorkspaceAsync(Workspace workspace)
+        public async Task<bool> CreateWorkspaceAsync(string name)
         {
             try
             {
+                Workspace workspace = new();
+                workspace.Name = name;
                 _context.Workspaces.Add(workspace);
                 await _context.SaveChangesAsync();
                 return true;
@@ -25,8 +27,6 @@ namespace messaging_service.Repository
                 Console.WriteLine($"Error creating workspace: {ex.Message}");
                 return false;
             }
-            
-
         }
 
         public async Task<bool> DeleteWorkspaceAsync(int workspaceId)

@@ -13,6 +13,7 @@ namespace messaging_service.Data
         public DbSet<Member> Members { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
+        public DbSet<UserWorkspace> UsersWorkspaces { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,8 +24,17 @@ namespace messaging_service.Data
                     typeof(Chat),
                     typeof(Member),
                     typeof(User),
-                    typeof(Workspace)
+                    typeof(Workspace),
+                    typeof(UserWorkspace)
             };
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.AuthId)
+                .IsUnique();
 
             foreach (var entityType in entityTypes)
             {
