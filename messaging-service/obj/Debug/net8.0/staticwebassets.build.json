@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "4ahO9kwHKwapvTlt2+NUi6JPapbs8WTirawZ1KYdAp0=",
+  "Source": "messaging-service",
+  "BasePath": "_content/messaging-service",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
