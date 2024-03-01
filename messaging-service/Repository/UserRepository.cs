@@ -50,6 +50,7 @@ namespace messaging_service.Repository
                 try
                 {
                     var target = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == user.AuthId);
+                if (target == null) throw new InvalidOperationException("Invalid User"); 
                     target.Name = user.Name;
                     target.Email = user.Email;
                     await _context.SaveChangesAsync();
@@ -76,7 +77,7 @@ namespace messaging_service.Repository
                 }
             }
 
-            public async Task<IEnumerable<User>> GetUsersByChannelAsync(int channelId)
+            public async Task<IEnumerable<object>> GetUsersByChannelAsync(int channelId)
             {
                 try
                 {
@@ -98,7 +99,7 @@ namespace messaging_service.Repository
                 }
             }
 
-            public async Task<IEnumerable<User>> GetUsersByWorkspaceAsync(int workspaceId)
+            public async Task<IEnumerable<object>> GetUsersByWorkspaceAsync(int workspaceId)
             {
                 try
                 {
@@ -116,5 +117,45 @@ namespace messaging_service.Repository
                     throw;
                 }
             }
+            
+            public async Task<IEnumerable<string>> AddUsersToWorkspace(int workspaceId,ICollection<int> usersId)
+            {
+            try
+            {
+                var IsValidWorkspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == workspaceId);
+                if (IsValidWorkspace == null) throw new InvalidOperationException("Workspace Invalid");
+                List<string> results = new List<string>();
+                foreach(var Id in usersId)
+                {
+                    var IsValidUser = await _context.Users.FirstOrDefaultAsync(u=>u.Id == Id);
+                    if(IsValidUser == null)
+                    {
+                        results.Add("Failed To Add User with ID:" + Id);
+                        continue;
+                    }
+                    UserWorkspace userWorkspace = new()
+                    {
+                        WorkspaceId = workspaceId,
+                        UserId = Id,
+                    };
+                    Console.WriteLine($"User {userWorkspace.WorkspaceId}");
+                    
+                    var result = await _context.UsersWorkspaces.AddAsync(userWorkspace);
+                    if (result.State != EntityState.Added) { results.Add("Failed To Add User with ID:" + Id); }
+                    else
+                    {
+                        results.Add("Successfully Added User with ID:" + Id);
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return results;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error Addin users to workspace: {ex.Message}");
+                throw;
+            }
+        }
         }
     }

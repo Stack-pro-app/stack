@@ -12,8 +12,8 @@ using messaging_service.Data;
 namespace messaging_service.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240301192156_ChangedModels")]
-    partial class ChangedModels
+    [Migration("20240301194906_FirstCreate")]
+    partial class FirstCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -4,14 +4,7 @@ using messaging_service.models.domain;
 using messaging_service.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using JWT;
-using JWT.Builder;
-using Newtonsoft.Json.Linq;
-using System.Reflection.PortableExecutable;
-using JWT.Algorithms;
-using JWT.Serializers;
 using AutoMapper;
-using messaging_service.models.domain;
 using Microsoft.IdentityModel.Tokens;
 
 
@@ -129,8 +122,36 @@ namespace messaging_service.Controllers
             }
         }
         // Custom Apis Here
+        // Add Users To WorkSpace
+        [HttpPost("toWorkspace")]
+        public async Task<ActionResult<ResponseDto>> AddUsersToWorkspace([FromBody]UsersWorkSpaceDto usersDto)
+        {
+            try
+            {
+                IEnumerable<string> result = await _userRepository.AddUsersToWorkspace(usersDto.WorkspaceId, usersDto.UsersId);
+                if (!result.Any()) throw new Exception("Can't Add Users To Workspace");
+                ResponseDto response = new()
+                {
+                    Result = result.ToList(),
+                    IsSuccess = true,
+                    Message = " Added Users To Workspace",
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                ResponseDto response = new()
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+                return BadRequest(response);
+            }
+
+        }
         // Get Users By WorkspaceId
-        [HttpGet("{WorkspaceId}")]
+        [HttpGet("Workspace/{workspaceId}")]
         public async Task<ActionResult<ResponseDto>> GetUsersByWorkspaceId([FromRoute]int workspaceId)
         {
             try

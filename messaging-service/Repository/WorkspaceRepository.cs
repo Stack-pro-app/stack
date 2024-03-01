@@ -59,11 +59,12 @@ namespace messaging_service.Repository
             }
         }
 
-        public async Task<bool> UpdateWorkspaceAsync(Workspace workspace)
+        public async Task<bool> UpdateWorkspaceAsync(int id,string name)
         {
             try
             {
-                _context.Workspaces.Update(workspace);
+                Workspace workspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == id) ?? throw new InvalidOperationException("Can't Find User");
+                workspace.Name = name;
                 await _context.SaveChangesAsync();
                 return true;
             }

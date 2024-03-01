@@ -54,5 +54,75 @@ namespace messaging_service.Controllers
             }
 
         }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ResponseDto>> CreateUser([FromRoute]int id)
+        {
+            try
+            {
+                bool result = await _repository.DeleteWorkspaceAsync(id);
+                if (result)
+                {
+                    ResponseDto response = new()
+                    {
+                        Result = null,
+                        IsSuccess = true,
+                        Message = "Workspace Succesfully Deleted",
+                    };
+                    return Ok(response);
+
+                }
+                else
+                {
+                    throw new Exception("Failed to Delete !");
+                }
+            }
+            catch (Exception ex)
+            {
+                ResponseDto response = new()
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+                return BadRequest(response);
+            }
+
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int id,[FromBody]string name)
+        {
+            try
+            {
+                bool result = await _repository.UpdateWorkspaceAsync(id,name);
+                if (result)
+                {
+                    ResponseDto response = new()
+                    {
+                        Result = null,
+                        IsSuccess = true,
+                        Message = "Workspace Name Succesfully Updated",
+                    };
+                    return Ok(response);
+
+                }
+                else
+                {
+                    throw new Exception("Failed to Update Name !");
+                }
+            }
+            catch (Exception ex)
+            {
+                ResponseDto response = new()
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+                return BadRequest(response);
+            }
+
+        }
+
+
     }
 }
