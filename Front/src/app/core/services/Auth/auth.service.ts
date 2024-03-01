@@ -32,4 +32,6 @@ export class AuthService {
     const registerUrl = `${this.url}register`;
     return this.http.post(registerUrl, userData);
   }
+  
+
 }

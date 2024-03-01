@@ -22,6 +22,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
         this.loggeduser = this.store.isLogged();
         console.log(this.loggeduser);
+        this.store.getUser();
   }
   OnLogout(){
       this.service.logout();

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
+import { JwtTokenService } from '../JwtToken/jwt-token.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StoreService {
-  constructor() {}
+  constructor(private decoder:JwtTokenService) {}
 
   setToken(token: string) {
     localStorage.setItem('token', token);
@@ -19,6 +20,15 @@ export class StoreService {
       return true;
     }
     return false;
+  }
+  getUser():any{
+
+    let CurrentToken  = this.getToken();
+    if(CurrentToken!=null){
+    const decoded = this.decoder.DecodeToken(CurrentToken);
+    console.log(decoded);
+}
+
   }
 
 
