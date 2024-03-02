@@ -2,6 +2,7 @@
 using messaging_service.models.domain;
 using messaging_service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace messaging_service.Repository
 {
@@ -20,6 +21,22 @@ namespace messaging_service.Repository
             {
                 _context.Channels.Add(channel);
                 await _context.SaveChangesAsync();
+                if (!channel.Is_private)
+                {
+                    IEnumerable<int> users = await _context.UsersWorkspaces.Where(uw=>uw.WorkspaceId == channel.WorkspaceId).Select(uw=> uw.UserId).ToListAsync();
+                    foreach (int user in users)
+                    {
+                        Member member = new Member()
+                        {
+                            ChannelId = channel.Id,
+                            UserId = user,
+                        };
+                        _context.Members.Add(member);
+                    }
+                }
+                await _context.SaveChangesAsync();
+
+
                 return true;
             }
             catch (Exception) { throw; }
@@ -29,7 +46,7 @@ namespace messaging_service.Repository
         {
             try
             {
-                var channel = await _context.Channels.FirstOrDefaultAsync(x => x.Id == channelId) ?? throw new InvalidOperationException("Invalid Channel");
+                Channel channel = await _context.Channels.FirstOrDefaultAsync(x => x.Id == channelId) ?? throw new InvalidOperationException("Invalid Channel");
                 _context.Channels.Remove(channel);
                 await _context.SaveChangesAsync();
                 return true;
@@ -61,7 +78,12 @@ namespace messaging_service.Repository
         {
             try
             {
-                _context.Channels.Update(channel);
+                Console.WriteLine(channel);
+                Channel validChannel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channel.Id) ?? throw new Exception("Invalid Channel");
+                if(!channel.Description.IsNullOrEmpty()) validChannel.Description = channel.Description;
+                if(!channel.Name.IsNullOrEmpty()) validChannel.Name = channel.Name;
+                if(channel.Is_private != null) validChannel.Is_private = channel.Is_private;
+
                 await _context.SaveChangesAsync();
                 return true;
             }
