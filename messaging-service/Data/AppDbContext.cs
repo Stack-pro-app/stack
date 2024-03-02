@@ -36,6 +36,10 @@ namespace messaging_service.Data
                 .HasIndex(u => u.AuthId)
                 .IsUnique();
 
+            modelBuilder.Entity<UserWorkspace>()
+            .HasIndex(uw => new { uw.UserId, uw.WorkspaceId })
+            .IsUnique();
+
             foreach (var entityType in entityTypes)
             {
                 modelBuilder.Entity(entityType)

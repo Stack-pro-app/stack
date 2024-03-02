@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace messaging_service.Controllers
@@ -123,7 +124,7 @@ namespace messaging_service.Controllers
         }
         // Custom Apis Here
         // Add Users To WorkSpace
-        [HttpPost("toWorkspace")]
+        [HttpPost("Workspace")]
         public async Task<ActionResult<ResponseDto>> AddUsersToWorkspace([FromBody]UsersWorkSpaceDto usersDto)
         {
             try
@@ -167,6 +168,32 @@ namespace messaging_service.Controllers
                 return Ok(users);
             }
             catch(Exception ex)
+            {
+                ResponseDto response = new()
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+                return BadRequest(response);
+            }
+        }
+        [HttpDelete("Workspace")]
+        public async Task<ActionResult<ResponseDto>> GetUsersByWorkspaceId([FromBody]UsersWorkSpaceDto usersDto)
+        {
+            try
+            {
+                IEnumerable<string> result = await _userRepository.RemoveUserFromWorkspace(usersDto.WorkspaceId, usersDto.UsersId);
+                if (!result.Any()) throw new Exception("Can't Add Users To Workspace");
+                ResponseDto response = new()
+                {
+                    Result = result.ToList(),
+                    IsSuccess = true,
+                    Message = " Deleted Users From Workspace",
+                };
+                return Ok(response);
+            }
+            catch (Exception ex)
             {
                 ResponseDto response = new()
                 {
