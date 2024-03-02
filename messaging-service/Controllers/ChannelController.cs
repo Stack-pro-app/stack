@@ -7,6 +7,14 @@ namespace messaging_service.Controllers
     [ApiController]
     public class ChannelController : ControllerBase
     {
-        //Connect To Channel
+        //Create A Channel (Private or Public)
+
+        //Delete A Channel
+
+        //Update Channel Name
+
+        //Add Users To A Private Channel
+
+
     }
 }

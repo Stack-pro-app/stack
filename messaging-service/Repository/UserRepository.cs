@@ -179,5 +179,38 @@ namespace messaging_service.Repository
             }
             return results;
         }
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            try
+            {
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception("User not found");
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<Workspace>> SetLoginAndGetWorkspaces(int authId)
+        {
+            try
+            {
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new Exception("User not found");
+                user.Last_login = DateTime.Now;
+                IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == user.Id).Join(
+                        _context.Workspaces,
+                        u => u.WorkspaceId,
+                        w => w.Id,
+                        (u, w) => w
+                    ).ToListAsync();
+                _context.SaveChanges();
+                return workspaces;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
