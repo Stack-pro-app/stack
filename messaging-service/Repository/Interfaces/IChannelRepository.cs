@@ -9,5 +9,6 @@ namespace messaging_service.Repository.Interfaces
         Task<bool> UpdateChannelAsync(Channel channel);
         Task<Channel> GetChannelAsync(int channelId);
         Task<IEnumerable<Channel>> GetChannelsByWorkspaceAsync(int workspaceId);
+        Task<bool> AddUserToPrivateChannel(int channelId,int userId);
     }
 }

@@ -135,6 +135,32 @@ namespace messaging_service.Controllers
         }
 
         //Add Users To A Private Channel
+        [HttpPost("AddUser/{channelId}")]
+        public async Task<ActionResult<ResponseDto>> AddToPrivateChannel([FromRoute] int channelId,[FromBody] int userId)
+        {
+            try
+            {
+                bool result = await _repository.AddUserToPrivateChannel(channelId, userId);
+                if (!result) throw new Exception("Can't Add User To Channel");
+                ResponseDto responseDto = new()
+                {
+                    IsSuccess = true,
+                    Message = "User Added To Channel Successfully",
+                };
+                return Ok(responseDto);
+
+            }
+            catch (Exception ex)
+            {
+                ResponseDto response = new()
+                {
+                    IsSuccess = false,
+                    Message = "Failed To Add User To Channel!" + ex.Message,
+                    Result = null,
+                };
+                return BadRequest(response);
+            }
+        }
 
 
     }

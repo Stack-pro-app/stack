@@ -21,22 +21,6 @@ namespace messaging_service.Repository
             {
                 _context.Channels.Add(channel);
                 await _context.SaveChangesAsync();
-                if (!channel.Is_private)
-                {
-                    IEnumerable<int> users = await _context.UsersWorkspaces.Where(uw=>uw.WorkspaceId == channel.WorkspaceId).Select(uw=> uw.UserId).ToListAsync();
-                    foreach (int user in users)
-                    {
-                        Member member = new Member()
-                        {
-                            ChannelId = channel.Id,
-                            UserId = user,
-                        };
-                        _context.Members.Add(member);
-                    }
-                }
-                await _context.SaveChangesAsync();
-
-
                 return true;
             }
             catch (Exception) { throw; }
@@ -78,7 +62,6 @@ namespace messaging_service.Repository
         {
             try
             {
-                Console.WriteLine(channel);
                 Channel validChannel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channel.Id) ?? throw new Exception("Invalid Channel");
                 if(!channel.Description.IsNullOrEmpty()) validChannel.Description = channel.Description;
                 if(!channel.Name.IsNullOrEmpty()) validChannel.Name = channel.Name;
@@ -89,5 +72,25 @@ namespace messaging_service.Repository
             }
             catch (Exception) { throw; }
         }
+
+        public async Task<bool> AddUserToPrivateChannel(int channelId, int userId)
+        {
+            try
+            {
+                Channel Channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId) ?? throw new Exception("Invalid Channel!");
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new Exception("Invalid User!");
+                
+                Member member = new()
+                {
+                    ChannelId = channelId,
+                    UserId = userId,
+                };
+                _context.Add(member);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception) { throw; }
+        }
+
     }
 }
