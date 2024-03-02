@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using messaging_service.models.dto;
+using messaging_service.models.dto.Response;
 using messaging_service.models.domain;
 
 namespace messaging_service.MappingProfiles
@@ -11,6 +12,8 @@ namespace messaging_service.MappingProfiles
             CreateMap<ChannelDto, Channel>();
             CreateMap<Channel, ChannelUpdateDto>();
             CreateMap<ChannelUpdateDto, Channel>();
+            CreateMap<ChannelResponseDto, Channel>();
+            CreateMap<Channel, ChannelResponseDto>();
         }
     }
 }

@@ -105,6 +105,35 @@ namespace messaging_service.Controllers
             }
         }
 
+        //Get a channel with it's last 10 messages
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ResponseDto>> GetChannel([FromRoute]int id)
+        {
+            try
+            {
+                Channel channel = await _repository.GetChannelAsync(id) ?? throw new Exception("Invalid ChannelId");
+                ChannelResponseDto channelResponseDto = _mapper.Map<ChannelResponseDto>(channel);
+                ResponseDto response = new()
+                {
+                    IsSuccess = true,
+                    Message = "Found it!",
+                    Result = channelResponseDto,
+                };
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                ResponseDto response = new()
+                {
+                    IsSuccess = false,
+                    Message = "Failed To Find Channel!" + ex.Message,
+                    Result = null,
+                };
+                return BadRequest(response);
+            }
+        }
+
         //Add Users To A Private Channel
 
 
