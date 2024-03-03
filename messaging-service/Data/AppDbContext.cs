@@ -1,5 +1,6 @@
-﻿using messaging_service.models;
+﻿using messaging_service.models.domain;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 
 namespace messaging_service.Data
@@ -13,6 +14,7 @@ namespace messaging_service.Data
         public DbSet<Member> Members { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
+        public DbSet<UserWorkspace> UsersWorkspaces { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,8 +25,36 @@ namespace messaging_service.Data
                     typeof(Chat),
                     typeof(Member),
                     typeof(User),
-                    typeof(Workspace)
+                    typeof(Workspace),
+                    typeof(UserWorkspace)
             };
+
+            modelBuilder.Entity<Channel>()
+            .Property(c => c.ChannelString)
+            .HasDefaultValueSql("NEWID()");
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
+                .IsUnique();
+
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.AuthId)
+                .IsUnique();
+
+            modelBuilder.Entity<UserWorkspace>()
+            .HasIndex(uw => new { uw.UserId, uw.WorkspaceId })
+            .IsUnique();
+
+
+            modelBuilder.Entity<Channel>()
+            .HasIndex(c => new { c.WorkspaceId, c.Name })
+            .IsUnique();
+
+            modelBuilder.Entity<Channel>()
+            .HasIndex(c => c.ChannelString)
+            .IsUnique();
+
+
 
             foreach (var entityType in entityTypes)
             {
