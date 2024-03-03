@@ -77,7 +77,7 @@ namespace messaging_service.Repository
             }
         }
 
-        public async Task<IEnumerable<object>> GetUsersByChannelAsync(int channelId)
+        public async Task<IEnumerable<User>> GetUsersByChannelAsync(int channelId)
         {
             try
             {

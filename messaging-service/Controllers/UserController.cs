@@ -185,6 +185,35 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
+        // Get Users In a Channel by channelId
+        [HttpGet("channel/{channelId}")]
+        public async Task<ActionResult<ResponseDto>> GetUsersByChannelId([FromRoute] int channelId)
+        {
+            try
+            {
+                IEnumerable<User> users = await _userRepository.GetUsersByChannelAsync(channelId);
+                IEnumerable<UserResponseDto> usersDto = users.Select(user => _mapper.Map<UserResponseDto>(user));
+                Console.WriteLine(usersDto);
+                if (users.IsNullOrEmpty()) throw new Exception("Can't find any users");
+                ResponseDto response = new()
+                {
+                    Result = usersDto,
+                    IsSuccess = true,
+                    Message = "Users from your channel",
+                };
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                ResponseDto response = new()
+                {
+                    Result = null,
+                    IsSuccess = false,
+                    Message = ex.Message,
+                };
+                return BadRequest(response);
+            }
+        }
 
 
         //  Multiple Users From a workspace by workspaceId & UsersIds

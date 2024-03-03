@@ -11,6 +11,8 @@ namespace messaging_service.MappingProfiles
             CreateMap<User, UserDto>();
             CreateMap<UserDto, User>();
             CreateMap<User, UserResponseDto>();
+            CreateMap<UserResponseDto, User>();
+
         }
     }
 }
