@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using messaging_service.Data;
 
@@ -11,9 +12,11 @@ using messaging_service.Data;
 namespace messaging_service.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240303162158_ChannelString")]
+    partial class ChannelString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,8 +37,7 @@ namespace messaging_service.Migrations
                     b.Property<string>("ChannelString")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("Created_at")
                         .ValueGeneratedOnAdd()

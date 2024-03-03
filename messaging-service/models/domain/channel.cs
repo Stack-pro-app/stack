@@ -6,6 +6,7 @@ namespace messaging_service.models.domain
     public class Channel
     {
         public int Id { get; set; }
+        public string ChannelString {  get; set; }
         [MaxLength(30)]
         public string Name { get; set; }
         [MaxLength(300)]

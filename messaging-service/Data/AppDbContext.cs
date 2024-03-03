@@ -1,5 +1,6 @@
 ﻿using messaging_service.models.domain;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 
 namespace messaging_service.Data
@@ -28,6 +29,10 @@ namespace messaging_service.Data
                     typeof(UserWorkspace)
             };
 
+            modelBuilder.Entity<Channel>()
+            .Property(c => c.ChannelString)
+            .HasDefaultValueSql("NEWID()");
+
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();
@@ -44,6 +49,11 @@ namespace messaging_service.Data
             modelBuilder.Entity<Channel>()
             .HasIndex(c => new { c.WorkspaceId, c.Name })
             .IsUnique();
+
+            modelBuilder.Entity<Channel>()
+            .HasIndex(c => c.ChannelString)
+            .IsUnique();
+
 
 
             foreach (var entityType in entityTypes)
