@@ -13,7 +13,7 @@ using System.Reflection;
 
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("f9e8f172-6aad-4309-9d83-01262ac91854")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("messaging-service")]
-[assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a5e9785aec476f7205cb4d523eee2e2f609ceaf8")]
 [assembly: System.Reflection.AssemblyProductAttribute("messaging-service")]

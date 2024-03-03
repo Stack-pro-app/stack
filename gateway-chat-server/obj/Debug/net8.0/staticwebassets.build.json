@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "BtULoNnpakKzxEel71qRhyGbyAUsB3ZmVgU1HsOKElc=",
+  "Source": "gateway-chat-server",
+  "BasePath": "_content/gateway-chat-server",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

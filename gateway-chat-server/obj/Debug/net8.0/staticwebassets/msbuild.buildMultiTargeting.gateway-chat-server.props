@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\gateway-chat-server.props" />
+</Project>
