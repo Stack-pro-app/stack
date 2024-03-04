@@ -31,9 +31,7 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '7.0.2xx'
-
-
-
+          
       - name: Install dependencies
         run: |
           cd Front
