@@ -1,4 +1,4 @@
-﻿namespace messaging_service.models.dto.Request
+﻿namespace messaging_service.models.dto.Requests
 {
     public class WorkspaceRequestDto
     {

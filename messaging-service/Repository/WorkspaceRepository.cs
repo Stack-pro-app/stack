@@ -1,17 +1,22 @@
 ﻿using messaging_service.Data;
+using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto;
+using messaging_service.models.dto.Minimal;
 using messaging_service.Repository.Interfaces;
 using messaging_service.models.domain;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 
 namespace messaging_service.Repository
 {
     public class WorkspaceRepository : IWorkspaceRepository
     {
         private readonly AppDbContext _context;
-        public WorkspaceRepository(AppDbContext context) {
+        private readonly IMapper _mapper;
+        public WorkspaceRepository(AppDbContext context,IMapper mapper) {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<bool> CreateWorkspaceAsync(string name,int adminId)
         {
@@ -22,6 +27,12 @@ namespace messaging_service.Repository
                 workspace.AdminId = adminId;
                 _context.Workspaces.Add(workspace);
                 await _context.SaveChangesAsync();
+                UserWorkspace userWorkspace = new()
+                {
+                    UserId = adminId,
+                    WorkspaceId = workspace.Id,
+                };
+                _context.UsersWorkspaces.Add(userWorkspace);
                 //creating main channel
                 Channel main = new(){
                     Name = "main",
@@ -56,12 +67,32 @@ namespace messaging_service.Repository
             }
         }
 
-        public async Task<Workspace> GetWorkspaceAsync(int workspaceId)
+        public async Task<WorkspaceDetailDto> GetWorkspaceAsync(int workspaceId,int userId)
         {
             try
             {
-                var workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId) ?? throw new InvalidOperationException("invalid Workspace");
-                return workspace;
+                Workspace workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId)?? throw new InvalidOperationException("invalid Workspace");
+                IEnumerable<Channel> channel = await _context.Channels.Where(x => x.WorkspaceId == workspaceId).ToListAsync() ?? throw new InvalidOperationException("invalid Channels");
+                //Get the detailed main channel
+                Channel mainChannel = channel.FirstOrDefault(c => c.Name == "main") ?? throw new Exception("Invalid Workspace");
+                ChannelDetailDto mainDetail = _mapper.Map<ChannelDetailDto>(mainChannel);
+                //Get the minimal public channels
+                IEnumerable<Channel> publicChannels = channel.Where(c=>c.Is_private == false && c.Name != "main").ToList();
+                IEnumerable<ChannelMinimalDto> publicMinimal = _mapper.Map<IEnumerable<Channel>,IEnumerable<ChannelMinimalDto>>(publicChannels);
+                //Get the minimal Private Channels
+                IEnumerable<Channel> privateChannels = channel.Where(c => c.Is_private == true).ToList();
+                IEnumerable<ChannelMinimalDto> privateMinimal = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(privateChannels);
+                WorkspaceDetailDto detail = new()
+                {
+                    Id = workspace.Id,
+                    Name = workspace.Name,
+                    adminId = workspace.AdminId,
+                    MainChannel = mainDetail,
+                    PublicChannels = publicMinimal.ToList(),
+                    PrivateChannels = privateMinimal.ToList(),
+
+                };
+                return detail;
             }
             catch (Exception ex)
             {

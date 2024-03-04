@@ -32,7 +32,7 @@ builder.Services.AddScoped<WorkspaceRepository>();
 builder.Services.AddScoped<ChatRepository>();
 builder.Services.AddScoped<ChannelRepository>();
 
-builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile));
+builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

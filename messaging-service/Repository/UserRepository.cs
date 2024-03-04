@@ -1,5 +1,7 @@
-﻿using messaging_service.Data;
+﻿using AutoMapper;
+using messaging_service.Data;
 using messaging_service.models.domain;
+using messaging_service.models.dto.Detailed;
 using messaging_service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +10,11 @@ namespace messaging_service.Repository
     public class UserRepository : IUserRepository
     {
         private readonly AppDbContext _context;
-
-        public UserRepository(AppDbContext context)
+        private readonly IMapper _mapper;
+        public UserRepository(AppDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<bool> CreateUserAsync(User user)
@@ -99,17 +102,13 @@ namespace messaging_service.Repository
             }
         }
 
-        public async Task<IEnumerable<object>> GetUsersByWorkspaceAsync(int workspaceId)
+        public async Task<IEnumerable<UserDetailDto>> GetUsersByWorkspaceAsync(int workspaceId)
         {
             try
             {
-                var users = await _context.UsersWorkspaces.Where(u => u.WorkspaceId == workspaceId).Join(
-                        _context.Users,
-                        u => u.UserId,
-                        user => user.Id,
-                        (u, user) => user
-                    ).ToListAsync();
-                return users;
+                IEnumerable<User> users = await _context.UsersWorkspaces.Where(u => u.WorkspaceId == workspaceId).Include(uw=>uw.User).Select(uw=>uw.User).ToListAsync();
+                IEnumerable<UserDetailDto> usersDetails = _mapper.Map<IEnumerable<User>,IEnumerable<UserDetailDto>>(users);
+                return usersDetails;
             }
             catch (Exception ex)
             {
@@ -198,13 +197,8 @@ namespace messaging_service.Repository
             {
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new Exception("User not found");
                 user.Last_login = DateTime.Now;
-                IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == user.Id).Join(
-                        _context.Workspaces,
-                        u => u.WorkspaceId,
-                        w => w.Id,
-                        (u, w) => w
-                    ).ToListAsync();
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
+                IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == 1).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
                 return workspaces;
             }
             catch (Exception ex)

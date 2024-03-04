@@ -1,5 +1,8 @@
-﻿using messaging_service.Data;
+﻿using AutoMapper;
+using messaging_service.Data;
 using messaging_service.models.domain;
+using messaging_service.models.dto.Minimal;
+using messaging_service.models.dto.Detailed;
 using messaging_service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -9,10 +12,12 @@ namespace messaging_service.Repository
     public class ChannelRepository : IChannelRepository
     {
         private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ChannelRepository(AppDbContext context)
+        public ChannelRepository(AppDbContext context,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<bool> CreateChannelAsync(Channel channel)
@@ -38,22 +43,24 @@ namespace messaging_service.Repository
             catch (Exception) { throw; }
         }
 
-        public async Task<Channel> GetChannelAsync(int channelId)
+        public async Task<ChannelDetailDto> GetChannelAsync(int channelId)
         {
             try
             {
-                var channel = await _context.Channels.FirstOrDefaultAsync(x => x.Id == channelId) ?? throw new InvalidOperationException("Invalid Channel");
-                return channel;
+                Channel channel = await _context.Channels.FirstOrDefaultAsync(x => x.Id == channelId) ?? throw new InvalidOperationException("Invalid Channel");
+                ChannelDetailDto channelMinimalDto = _mapper.Map<ChannelDetailDto>(channel);
+                return channelMinimalDto;
             }
             catch (Exception) { throw; }
         }
 
-        public async Task<IEnumerable<Channel>> GetChannelsByWorkspaceAsync(int workspaceId)
+        public async Task<IEnumerable<ChannelMinimalDto>> GetChannelsByWorkspaceAsync(int workspaceId)
         {
             try
             {
-                var channels = await _context.Channels.Where(x => x.WorkspaceId == workspaceId).ToListAsync();
-                return channels;
+                IEnumerable<Channel> channels = await _context.Channels.Where(x => x.WorkspaceId == workspaceId).ToListAsync()?? throw new Exception("Invalid Workspace");
+                IEnumerable<ChannelMinimalDto> channelsMinimalDto = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(channels);
+                return channelsMinimalDto;
             }
             catch (Exception) { throw; }
         }

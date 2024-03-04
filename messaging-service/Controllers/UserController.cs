@@ -1,5 +1,4 @@
-﻿using messaging_service.models.dto;
-using messaging_service.models.dto.Response;
+﻿using messaging_service.models.dto.Response;
 using messaging_service.models.domain;
 using messaging_service.Repository;
 using Microsoft.AspNetCore.Http;
@@ -7,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http.HttpResults;
+using messaging_service.models.dto.Minimal;
+using messaging_service.models.dto.Detailed;
+using messaging_service.models.dto.Requests;
 
 
 namespace messaging_service.Controllers
@@ -26,7 +28,7 @@ namespace messaging_service.Controllers
 
         //Create a new Chat User
         [HttpPost]
-        public async Task<ActionResult<ResponseDto>> CreateUser([FromBody]UserDto userDto)
+        public async Task<ActionResult<ResponseDto>> CreateUser([FromBody]UserMinimalDto userDto)
         {
             try
             {
@@ -63,7 +65,7 @@ namespace messaging_service.Controllers
             {
                 var user = await _userRepository.GetUserAsync(authId);
                 if (user == null) throw new Exception("No User Was Found");
-                var userResponseDto = _mapper.Map<UserResponseDto>(user);
+                var userResponseDto = _mapper.Map<UserDetailDto>(user);
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -104,7 +106,7 @@ namespace messaging_service.Controllers
 
         //Update User's Name & Email (and authId if needed)
         [HttpPut]
-        public async Task<ActionResult<ResponseDto>> UpdateUser([FromBody]UserDto userDto)
+        public async Task<ActionResult<ResponseDto>> UpdateUser([FromBody]UserMinimalDto userDto)
         {
             try
             {
@@ -164,11 +166,11 @@ namespace messaging_service.Controllers
         {
             try
             {
-                var users = await _userRepository.GetUsersByWorkspaceAsync(workspaceId);
+                IEnumerable<UserDetailDto> users = await _userRepository.GetUsersByWorkspaceAsync(workspaceId);
                 if (users.IsNullOrEmpty()) throw new Exception("Can't find any users");
                 ResponseDto response = new()
                 {
-                    Result = users,
+                    Result = users.ToList(),
                     IsSuccess = true,
                     Message = "Users from your workspace",
                 };
@@ -192,7 +194,7 @@ namespace messaging_service.Controllers
             try
             {
                 IEnumerable<User> users = await _userRepository.GetUsersByChannelAsync(channelId);
-                IEnumerable<UserResponseDto> usersDto = users.Select(user => _mapper.Map<UserResponseDto>(user));
+                IEnumerable<UserDetailDto> usersDto = users.Select(user => _mapper.Map<UserDetailDto>(user));
                 Console.WriteLine(usersDto);
                 if (users.IsNullOrEmpty()) throw new Exception("Can't find any users");
                 ResponseDto response = new()
@@ -246,14 +248,14 @@ namespace messaging_service.Controllers
 
 
         // Get Your User by Email
-        [HttpGet("email")]
-        public async Task<ActionResult<ResponseDto>> GetUserByEmail([FromBody]string email)
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<ResponseDto>> GetUserByEmail([FromRoute]string email)
         {
             try
             {
                 var user = await _userRepository.GetUserByEmailAsync(email);
                 if (user == null) throw new Exception("No User Was Found");
-                var userResponseDto = _mapper.Map<UserResponseDto>(user);
+                var userResponseDto = _mapper.Map<UserDetailDto>(user);
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -283,18 +285,18 @@ namespace messaging_service.Controllers
         {
             try
             {
-                var user = await _userRepository.GetUserAsync(authId);
+                User user = await _userRepository.GetUserAsync(authId);
                 if (user == null) throw new Exception("No User Was Found");
-                var userResponseDto = _mapper.Map<UserResponseDto>(user);
-                IEnumerable<Workspace> workspaces = await _userRepository.SetLoginAndGetWorkspaces(authId) ?? throw new Exception("Can't find user or workpaces");
-                var workspacesDto = _mapper.Map<IEnumerable<WorkspaceDto>>(workspaces);
+                UserDetailDto userResponseDto = _mapper.Map<UserDetailDto>(user);
+                IEnumerable<Workspace> workspacs = await _userRepository.SetLoginAndGetWorkspaces(authId) ?? throw new Exception("Can't find user or workpaces");
+               // IEnumerable<WorkspaceMinimalDto> workspacesDto = _mapper.Map<IEnumerable<WorkspaceMinimalDto>>(workspaces);
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
                     Result = new
                     {
                         user = userResponseDto,
-                        workspaces = workspacesDto
+                        workspaces = workspacs
                     },
                     Message = "Successfully logged in to the Chat!"
                 };

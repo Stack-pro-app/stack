@@ -1,8 +1,8 @@
 ﻿using messaging_service.models.domain;
 
-namespace messaging_service.models.dto.Response
+namespace messaging_service.models.dto.Detailed
 {
-    public class UserResponseDto
+    public class UserDetailDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

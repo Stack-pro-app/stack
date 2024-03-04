@@ -1,11 +1,13 @@
-﻿using messaging_service.models.domain;
-using messaging_service.models.dto.Response;
-using messaging_service.models.dto;
-using messaging_service.models.dto.Request;
+﻿
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using messaging_service.Repository;
 using AutoMapper;
+using messaging_service.models.dto.Requests;
+using messaging_service.models.dto.Response;
+using messaging_service.models.domain;
+using messaging_service.models.dto.Detailed;
 
 namespace messaging_service.Controllers
 {
@@ -22,7 +24,7 @@ namespace messaging_service.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponseDto>> CreateUser([FromBody]WorkspaceRequestDto workspace)
+        public async Task<ActionResult<ResponseDto>> CreateWorkspace([FromBody]WorkspaceRequestDto workspace)
         {
             try
             {
@@ -57,7 +59,7 @@ namespace messaging_service.Controllers
 
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ResponseDto>> CreateUser([FromRoute]int id)
+        public async Task<ActionResult<ResponseDto>> DeleteWorkspace([FromRoute]int id)
         {
             try
             {
@@ -122,7 +124,30 @@ namespace messaging_service.Controllers
                 };
                 return BadRequest(response);
             }
-
+        }
+        //Workspace and it's channels by Id (and the user's Id extacted from jwt Token!)
+        [HttpGet("{id}/user/{userId}")]
+        public async Task<ActionResult<ResponseDto>> GetWorkspace([FromRoute]int id, [FromRoute]int userId)
+        {
+            try
+            {
+                WorkspaceDetailDto workspace = await _repository.GetWorkspaceAsync(id,userId);
+                ResponseDto response = new()
+                {
+                    Result = workspace,
+                    IsSuccess = true,
+                    Message = "Succesfully got your workspace!",
+                };
+                return Ok(response);
+            }
+            catch(Exception ex) {
+                ResponseDto response = new()
+                {
+                    IsSuccess = false,
+                    Message = "Failed to get your workspace!"+ex.Message,
+                };
+                return BadRequest(response);
+            }
         }
 
 

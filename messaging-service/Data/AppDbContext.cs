@@ -54,6 +54,12 @@ namespace messaging_service.Data
             .HasIndex(c => c.ChannelString)
             .IsUnique();
 
+            modelBuilder
+            .Entity<Chat>()
+            .HasOne(e => e.Parent)
+            .WithMany(e => e.Children)
+            .OnDelete(DeleteBehavior.ClientSetNull);
+
 
 
             foreach (var entityType in entityTypes)

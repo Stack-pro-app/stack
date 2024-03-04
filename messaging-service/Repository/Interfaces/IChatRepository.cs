@@ -1,4 +1,6 @@
 ﻿using messaging_service.models.domain;
+using messaging_service.models.dto.Detailed;
+
 namespace messaging_service.Repository.Interfaces
 {
     public interface IChatRepository
@@ -7,7 +9,7 @@ namespace messaging_service.Repository.Interfaces
         Task<bool> DeleteChatPartAsync(int messageId);
         Task<bool> DeleteChatPermAsync(int messageId);
         Task<bool> UpdateChatAsync(int messageId, string message);
-        Task<Chat> GetMessageAsync(int messageId);
-        Task<IEnumerable<Chat>> GetChannelMessageAsync(int channelId);
+        Task<MessageDetailDto> GetMessageAsync(int messageId);
+        Task<IEnumerable<MessageDetailDto>> GetChannelLastMessagesAsync(int channelId,int page);
     }
 }
