@@ -5,7 +5,7 @@ import { JwtTokenService } from '../JwtToken/jwt-token.service';
   providedIn: 'root',
 })
 export class StoreService {
-  constructor(private decoder:JwtTokenService) {}
+  constructor(private decoder: JwtTokenService) {}
 
   setToken(token: string) {
     localStorage.setItem('token', token);
@@ -21,17 +21,11 @@ export class StoreService {
     }
     return false;
   }
-  getUser():any{
-
-    let CurrentToken  = this.getToken();
-    if(CurrentToken!=null){
-    const decoded = this.decoder.DecodeToken(CurrentToken);
-    console.log(decoded);
-}
-
+  getUser(): any {
+    let CurrentToken = this.getToken();
+    if (CurrentToken != null) {
+      const decoded = this.decoder.DecodeToken(CurrentToken);
+      return decoded;
+    }
   }
-
-
-
-  
 }

@@ -5,21 +5,25 @@ import { Channel } from '../../../core/Models/channel';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ChannelService } from '../../../core/services/Channel/channel.service';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [InputComponent, ChannelComponent,ReactiveFormsModule,CommonModule],
+  imports: [
+    InputComponent,
+    RouterLink,
+    ChannelComponent,
+    ReactiveFormsModule,
+    CommonModule,
+  ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
 export class MainComponent {
   channels: Channel[];
   currentChannel: string;
-  constructor(
-    private service: ChannelService,
-    private builder: FormBuilder
-  ) {
+  constructor(private service: ChannelService, private builder: FormBuilder) {
     this.channels = service.chanels;
     this.currentChannel = this.channels[0].name;
   }
@@ -32,7 +36,6 @@ export class MainComponent {
       channelPrivate: this.builder.control(false),
     });
   }
- 
 
   onCreateChannel() {
     let channel = this.channelForm.value;
