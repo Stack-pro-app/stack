@@ -1,6 +1,7 @@
 ﻿using messaging_service.models.domain;
 using messaging_service.models.dto.Response;
 using messaging_service.models.dto;
+using messaging_service.models.dto.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using messaging_service.Repository;
@@ -20,12 +21,13 @@ namespace messaging_service.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("{name}")]
-        public async Task<ActionResult<ResponseDto>> CreateUser([FromRoute]string name)
+        [HttpPost]
+        public async Task<ActionResult<ResponseDto>> CreateUser([FromBody]WorkspaceRequestDto workspace)
         {
             try
             {
-                bool result = await _repository.CreateWorkspaceAsync(name);
+                Console.Write(workspace);
+                bool result = await _repository.CreateWorkspaceAsync(workspace.Name,workspace.userId);
                 if (result)
                 {
                     ResponseDto response = new()
@@ -39,7 +41,7 @@ namespace messaging_service.Controllers
                 }
                 else
                 {
-                    throw new Exception("Failled to add !");
+                    throw new Exception("Failled to ad !");
                 }
             }
             catch (Exception ex)

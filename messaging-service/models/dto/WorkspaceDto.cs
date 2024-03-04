@@ -7,5 +7,6 @@
         public ChannelDto? MainChannel { get; set; }
         public ICollection<int>? channelIds { get; set; }
         public ICollection<int>? userIds { get; set; }
+        public int userId { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using messaging_service.models.dto;
 using messaging_service.Repository.Interfaces;
 using messaging_service.models.domain;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace messaging_service.Repository
 {
@@ -12,20 +13,30 @@ namespace messaging_service.Repository
         public WorkspaceRepository(AppDbContext context) {
             _context = context;
         }
-        public async Task<bool> CreateWorkspaceAsync(string name)
+        public async Task<bool> CreateWorkspaceAsync(string name,int adminId)
         {
             try
             {
                 Workspace workspace = new();
                 workspace.Name = name;
+                workspace.AdminId = adminId;
                 _context.Workspaces.Add(workspace);
+                await _context.SaveChangesAsync();
+                //creating main channel
+                Channel main = new(){
+                    Name = "main",
+                    Description = "The Workspace Main Room",
+                    Is_private = false,
+                    WorkspaceId = workspace.Id,
+                };
+                _context.Channels.Add(main);
                 await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error creating workspace: {ex.Message}");
-                return false;
+                throw;
             }
         }
 

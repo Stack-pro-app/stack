@@ -10,5 +10,6 @@ namespace messaging_service.models.domain
         public ICollection<Channel> Channels { get; set; } = new List<Channel>();
         public ICollection<UserWorkspace> UserWorkspaces { get; set; } = new List<UserWorkspace>();
         public DateTime Created_at { get; set; }
+        public int AdminId { get; set; }
     }
 }
