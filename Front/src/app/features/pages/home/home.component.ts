@@ -2,29 +2,37 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { StoreService } from '../../../core/services/store/store.service';
 import { AuthService } from '../../../core/services/Auth/auth.service';
-
+import { CommonModule } from '@angular/common';
+import { HeaderComponent } from '../header/header.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink,CommonModule,HeaderComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
 })
 export class HomeComponent implements OnInit {
-  loggeduser:any = '';
+  loggeduser: any = '';
+  userEmail: any = 'Hayaouimouad@gmail.com';
+  workspaces: any[] = [
+    {
+      name: 'First WorksSpace',
+    },
+    {
+      name: 'Second WorksSpace',
+    },
+  ];
 
-  constructor(private store:StoreService,
-    private service:AuthService
-    ) {
-  
-  }
-
+  constructor(private store: StoreService, private service: AuthService) {}
+  decoded = this.store.getUser();
   ngOnInit(): void {
-        this.loggeduser = this.store.isLogged();
-        console.log(this.loggeduser);
-        this.store.getUser();
+    this.loggeduser = this.store.isLogged();
+    console.log(this.loggeduser);
+    this.store.getUser();
+    //    this.userEmail=this.decoded.email;
+    
   }
-  OnLogout(){
-      this.service.logout();
+  OnLogout() {
+    this.service.logout();
   }
 }
