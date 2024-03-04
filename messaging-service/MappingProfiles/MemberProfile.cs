@@ -7,7 +7,6 @@ namespace messaging_service.MappingProfiles
     public class MemberProfile : Profile
     {
         public MemberProfile() {
-            CreateMap<Member, MemberDto>();
         }
     }
 }

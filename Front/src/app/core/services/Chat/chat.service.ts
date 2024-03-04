@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 
@@ -7,7 +7,9 @@ import { Injectable } from '@angular/core';
 })
 export class ChatService {
 
-  constructor(httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient) { }
 
-  
+  GetUserWorkspace(userId:number):any {
+    return this.httpClient.get("https://localhost:7005/api/User/myworkspaces/"+userId)
+  }
 }

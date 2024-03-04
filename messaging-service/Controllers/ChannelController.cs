@@ -1,10 +1,11 @@
 ﻿using messaging_service.models.dto.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using messaging_service.models.dto;
 using messaging_service.models.domain;
 using messaging_service.Repository;
 using AutoMapper;
+using messaging_service.models.dto.Detailed;
+using messaging_service.models.dto.Requests;
 
 namespace messaging_service.Controllers
 {
@@ -21,7 +22,7 @@ namespace messaging_service.Controllers
         }
         //Create A Channel (Private or Public)
         [HttpPost]
-        public async Task<ActionResult<ResponseDto>> CreateChannel([FromBody]ChannelDto channelDto)
+        public async Task<ActionResult<ResponseDto>> CreateChannel([FromBody]ChannelRequestDto channelDto)
         {
             try
             {
@@ -105,19 +106,18 @@ namespace messaging_service.Controllers
             }
         }
 
-        //Get a channel with it's last 10 messages
+        //Get a channel info
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseDto>> GetChannel([FromRoute]int id)
         {
             try
             {
-                Channel channel = await _repository.GetChannelAsync(id) ?? throw new Exception("Invalid ChannelId");
-                ChannelResponseDto channelResponseDto = _mapper.Map<ChannelResponseDto>(channel);
+                ChannelDetailDto channel = await _repository.GetChannelAsync(id) ?? throw new Exception("Invalid ChannelId");
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
                     Message = "Found it!",
-                    Result = channelResponseDto,
+                    Result = channel,
                 };
                 return Ok(response);
 

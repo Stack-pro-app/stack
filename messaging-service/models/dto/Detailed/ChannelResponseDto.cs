@@ -1,4 +1,4 @@
-﻿namespace messaging_service.models.dto.Response
+﻿namespace messaging_service.models.dto.Detailed
 {
     public class ChannelResponseDto
     {

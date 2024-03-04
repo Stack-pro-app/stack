@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ChatService } from '../../../../core/services/Chat/chat.service';
 
 @Component({
   selector: 'app-workspaces-display',
@@ -9,16 +10,17 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './workspaces-display.component.html',
   styleUrl: './workspaces-display.component.css'
 })
-export class WorkspacesDisplayComponent {
-  workspaces:any = [
-    {
-      Name: 'Workspace 1',
-      Description: 'This is the first workspace',
-    },
-    {
-      Name: 'Workspace 2',
-      Description: 'This is the second workspace',
-    }
-  ];
+export class WorkspacesDisplayComponent implements OnInit{
+  workspaces:any = [];
+
+  constructor(private chatService:ChatService) { }
+
+  ngOnInit() {
+    this.chatService.GetUserWorkspace(1).subscribe((data:any) => {
+      console.log(data);
+      this.workspaces = data;
+    })
+  }
+
 
 }

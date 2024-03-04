@@ -1,4 +1,6 @@
 ﻿using messaging_service.models.domain;
+using messaging_service.models.dto.Minimal;
+using messaging_service.models.dto.Detailed;
 
 namespace messaging_service.Repository.Interfaces
 {
@@ -7,8 +9,8 @@ namespace messaging_service.Repository.Interfaces
         Task<bool> CreateChannelAsync(Channel channel);
         Task<bool> DeleteChannelAsync(int channelId);
         Task<bool> UpdateChannelAsync(Channel channel);
-        Task<Channel> GetChannelAsync(int channelId);
-        Task<IEnumerable<Channel>> GetChannelsByWorkspaceAsync(int workspaceId);
+        Task<ChannelDetailDto> GetChannelAsync(int channelId);
+        Task<IEnumerable<ChannelMinimalDto>> GetChannelsByWorkspaceAsync(int workspaceId);
         Task<bool> AddUserToPrivateChannel(int channelId,int userId);
     }
 }

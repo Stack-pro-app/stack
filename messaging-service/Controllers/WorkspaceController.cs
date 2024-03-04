@@ -1,10 +1,13 @@
-﻿using messaging_service.models.domain;
-using messaging_service.models.dto.Response;
-using messaging_service.models.dto;
+﻿
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using messaging_service.Repository;
 using AutoMapper;
+using messaging_service.models.dto.Requests;
+using messaging_service.models.dto.Response;
+using messaging_service.models.domain;
+using messaging_service.models.dto.Detailed;
 
 namespace messaging_service.Controllers
 {
@@ -20,12 +23,13 @@ namespace messaging_service.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("{name}")]
-        public async Task<ActionResult<ResponseDto>> CreateUser([FromRoute]string name)
+        [HttpPost]
+        public async Task<ActionResult<ResponseDto>> CreateWorkspace([FromBody]WorkspaceRequestDto workspace)
         {
             try
             {
-                bool result = await _repository.CreateWorkspaceAsync(name);
+                Console.Write(workspace);
+                bool result = await _repository.CreateWorkspaceAsync(workspace.Name,workspace.userId);
                 if (result)
                 {
                     ResponseDto response = new()
@@ -39,7 +43,7 @@ namespace messaging_service.Controllers
                 }
                 else
                 {
-                    throw new Exception("Failled to add !");
+                    throw new Exception("Failled to ad !");
                 }
             }
             catch (Exception ex)
@@ -55,7 +59,7 @@ namespace messaging_service.Controllers
 
         }
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ResponseDto>> CreateUser([FromRoute]int id)
+        public async Task<ActionResult<ResponseDto>> DeleteWorkspace([FromRoute]int id)
         {
             try
             {
@@ -120,7 +124,30 @@ namespace messaging_service.Controllers
                 };
                 return BadRequest(response);
             }
-
+        }
+        //Workspace and it's channels by Id (and the user's Id extacted from jwt Token!)
+        [HttpGet("{id}/user/{userId}")]
+        public async Task<ActionResult<ResponseDto>> GetWorkspace([FromRoute]int id, [FromRoute]int userId)
+        {
+            try
+            {
+                WorkspaceDetailDto workspace = await _repository.GetWorkspaceAsync(id,userId);
+                ResponseDto response = new()
+                {
+                    Result = workspace,
+                    IsSuccess = true,
+                    Message = "Succesfully got your workspace!",
+                };
+                return Ok(response);
+            }
+            catch(Exception ex) {
+                ResponseDto response = new()
+                {
+                    IsSuccess = false,
+                    Message = "Failed to get your workspace!"+ex.Message,
+                };
+                return BadRequest(response);
+            }
         }
 
 

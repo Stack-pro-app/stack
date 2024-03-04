@@ -1,6 +1,6 @@
-﻿namespace messaging_service.models.dto
+﻿namespace messaging_service.models.dto.Minimal
 {
-    public class UserDto
+    public class UserMinimalDto
     {
         public string Name { get; set; }
         public string Email { get; set; }
