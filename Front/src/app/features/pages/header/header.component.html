@@ -49,7 +49,10 @@
       <li><a>Download</a></li>
     </ul>
   </div>
-  <div class="btn btn-primary rounded-2xl">
+  <div *ngIf="!isLogged" class="btn btn-primary rounded-2xl">
     <a routerLink="/Login">Get Started</a>
+  </div>
+  <div *ngIf="isLogged" (click)="OnLogout()" class="btn btn-primary rounded-2xl">
+    Logout
   </div>
 </div>

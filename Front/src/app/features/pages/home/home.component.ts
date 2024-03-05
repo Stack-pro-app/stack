@@ -13,6 +13,7 @@ import { HeaderComponent } from '../header/header.component';
 })
 export class HomeComponent implements OnInit {
   loggeduser: any = '';
+  isLogged:Boolean=false;
   userEmail: any = 'Hayaouimouad@gmail.com';
   workspaces: any[] = [
     {
@@ -27,8 +28,8 @@ export class HomeComponent implements OnInit {
   decoded = this.store.getUser();
   ngOnInit(): void {
     this.loggeduser = this.store.isLogged();
-    console.log(this.loggeduser);
-    this.store.getUser();
+    console.log(this.store.getUser());
+    this.isLogged=this.store.isLogged();
     //    this.userEmail=this.decoded.email;
     
   }

@@ -2,7 +2,7 @@ using messaging_service.Data;
 using messaging_service.MappingProfiles;
 using messaging_service.Repository;
 using Microsoft.EntityFrameworkCore;
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,12 +14,14 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(name: myAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost.com:4200", "https://localhost.com")
+                          policy.WithOrigins("http://localhost:4200", "https://localhost.com")
                                 .AllowAnyHeader()
-                                .AllowAnyMethod();
+                                .AllowAnyMethod()
+                                .AllowCredentials()
+                              ;
                       });
 });
 
@@ -43,11 +45,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
 
 app.MapControllers();
 ApplyMigration();
+app.UseCors(myAllowSpecificOrigins);
+
 app.Run();
 
 void ApplyMigration()

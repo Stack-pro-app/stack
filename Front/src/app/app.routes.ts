@@ -6,6 +6,8 @@ import { PageNotFoundComponent } from './features/pages/page-not-found/page-not-
 import { WorkspacesDisplayComponent } from './features/pages/chat/workspaces-display/workspaces-display.component';
 import { InsideWorkspaceComponent } from './features/pages/chat/inside-workspace/inside-workspace.component';
 import { MainComponent } from './features/pages/main/main.component';
+import { ProfileComponent } from './features/pages/profile/profile.component';
+import { CreateWorkSpaceComponent } from './features/pages/create-work-space/create-work-space.component';
 export const routes: Routes = [
     {path:'',pathMatch:'full',redirectTo:'Home'},
     {path:'Login',component:LoginComponent,title:'Login'},
@@ -14,5 +16,7 @@ export const routes: Routes = [
     {path:'Workspaces',component:WorkspacesDisplayComponent,title:'Workspaces'},
     {path:'Workspace/:id',component:InsideWorkspaceComponent,title:'Workspace'},
     {path:'Main',title:'main',component:MainComponent},
+    {path:'Profile',title:'profile',component:ProfileComponent},
+    {path:'Create',title:'Create',component:CreateWorkSpaceComponent},
     {path:'**',pathMatch:'full',component:PageNotFoundComponent}
 ];
