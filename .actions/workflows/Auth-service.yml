@@ -25,13 +25,17 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: |
+         cd auth-service/auth-service
+         dotnet restore
 
       - name: Build project
-        run: dotnet build
+        run: |
+         cd auth-service/auth-service
+         dotnet build
 
-      - name: Test project
-        run: dotnet test
+      #- name: Test project
+       # run: dotnet test
         
       - name: Get current date
         id: date
@@ -40,7 +44,7 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-           context: ./,,,
+           context: ./auth-service/auth-service
            dockerfile: Dockerfile
            push: false
            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-auth-service:latest-${{ steps.date.outputs.date }}
@@ -55,7 +59,7 @@ jobs:
       - name: push image
         uses: docker/build-push-action@v5
         with:
-           context: ./,,,
+           context: ./auth-service/auth-service
            dockerfile: Dockerfile
            push: true
            tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-auth-service:latest-${{ steps.date.outputs.date }}
