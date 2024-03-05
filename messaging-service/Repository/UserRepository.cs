@@ -32,7 +32,7 @@ namespace messaging_service.Repository
             }
         }
 
-        public async Task<bool> DeleteUserAsync(int authId)
+        public async Task<bool> DeleteUserAsync(string authId)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace messaging_service.Repository
             }
         }
 
-        public async Task<User> GetUserAsync(int authId)
+        public async Task<User> GetUserAsync(string authId)
         {
             try
             {
@@ -191,7 +191,7 @@ namespace messaging_service.Repository
             }
         }
 
-        public async Task<IEnumerable<Workspace>> SetLoginAndGetWorkspaces(int authId)
+        public async Task<IEnumerable<Workspace>> SetLoginAndGetWorkspaces(string authId)
         {
             try
             {

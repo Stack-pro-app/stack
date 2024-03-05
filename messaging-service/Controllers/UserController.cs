@@ -59,7 +59,7 @@ namespace messaging_service.Controllers
 
         // Get User by Authentification Id
         [HttpGet("{authId}")]
-        public async Task<ActionResult<ResponseDto>> GetUser([FromRoute]int authId)
+        public async Task<ActionResult<ResponseDto>> GetUser([FromRoute]string authId)
         {
             try
             {
@@ -83,7 +83,7 @@ namespace messaging_service.Controllers
 
         //Delete User By authentification Id
         [HttpDelete("{authId}")]
-        public async Task<ActionResult<ResponseDto>> DeleteUser([FromRoute]int authId)
+        public async Task<ActionResult<ResponseDto>> DeleteUser([FromRoute]string authId)
         {
             try
             {
@@ -281,7 +281,7 @@ namespace messaging_service.Controllers
         /// This Api Sets the Login time for a user & sends back his workspaces
         /// </summary>
         [HttpGet("myworkspaces/{authId}")]
-        public async Task<ActionResult<ResponseDto>> LoginAndGetUserWorkspaces([FromRoute] int authId)
+        public async Task<ActionResult<ResponseDto>> LoginAndGetUserWorkspaces([FromRoute]string authId)
         {
             try
             {
