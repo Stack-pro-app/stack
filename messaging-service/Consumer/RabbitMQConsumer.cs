@@ -10,7 +10,7 @@ using System.Text;
 
 namespace messaging_service.Consumer
 {
-    public class RabbitMQConsumer
+    public class RabbitMQConsumer:DefaultBasicConsumer
     {
                 private readonly string _queueName;
                 private readonly ConnectionFactory _factory;
@@ -25,7 +25,7 @@ namespace messaging_service.Consumer
                     _factory = new ConnectionFactory() { HostName = "localhost" };
                     _connection = _factory.CreateConnection();
                     _channel = _connection.CreateModel();
-                    _channel.QueueDeclare(queue: _queueName);
+                    _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
                     _chatRepository = chatRepository;
                      _mapper = mapper;
                  }
@@ -52,7 +52,7 @@ namespace messaging_service.Consumer
                         
                     };
                     _channel.BasicConsume(queue: _queueName,
-                                          autoAck: false,
+                                          autoAck: true,
                                           consumer: consumer);
                 }
                 public void CloseConnection()

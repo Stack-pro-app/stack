@@ -36,8 +36,14 @@ builder.Services.AddScoped<RabbitMQConsumer>();
 
 builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile));
 var app = builder.Build();
-var rabbitMQConsumer = app.Services.GetRequiredService<RabbitMQConsumer>();
-rabbitMQConsumer.StartConsuming();
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var rabbitMQConsumer = serviceProvider.GetRequiredService<RabbitMQConsumer>();
+
+    // Start consuming messages
+    rabbitMQConsumer.StartConsuming();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -24,16 +24,23 @@ namespace gateway_chat_server.Hubs
         //Step 2: Send Messages Using this Method
         public async Task SendMessage(string root)
         {
-            Chat message= JsonConvert.DeserializeObject<Chat>(root);
-            ChatDto messageToStore = new()
+            try
             {
-                UserId = message.UserId,
-                ChannelId = message.ChannelId,
-                Message = message.Message,
-                ParentId = message.ParentId,
-            };
-            _messagePublisher.SendMessage(message);
-            await Clients.Group(message.ChannelString).SendAsync("messageReceived", root);
+                Chat message = JsonConvert.DeserializeObject<Chat>(root) ?? throw new Exception("no data");
+                ChatDto messageToStore = new()
+                {
+                    UserId = message.UserId,
+                    ChannelId = message.ChannelId,
+                    Message = message.Message,
+                    ParentId = message.ParentId,
+                };
+                _messagePublisher.SendMessage(messageToStore);
+                await Clients.Group(message.ChannelString).SendAsync("messageReceived", root);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
         //Step 3: Remove the client From the channel to keep it clean
         public async Task RemoveFromGroup(string channel)
