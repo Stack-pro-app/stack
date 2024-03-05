@@ -1,4 +1,4 @@
-name: Deploy DotNet project to Azure Function App
+name: Authentication Service CI/CD
 
 on:
   push:
@@ -16,17 +16,46 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     steps:
-    - name: 'Checkout GitHub Action'
-      uses: actions/checkout@v3
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v3
 
-    - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
 
-    - name: 'Resolve Project Dependencies Using Dotnet'
-      shell: pwsh # For Linux, use bash
-      run: |
-        pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-        dotnet build --configuration Release --output ./output
-        popd
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build project
+        run: dotnet build
+
+      - name: Test project
+        run: dotnet test
+        
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+          
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+           context: ./,,,
+           dockerfile: Dockerfile
+           push: false
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-auth-service:latest-${{ steps.date.outputs.date }}
+           
+           
+      - name: login to docker hub
+        uses: docker/login-action@v3
+        with:
+           username: ${{ secrets.DOCKER_HUB_USERNAME }}
+           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: push image
+        uses: docker/build-push-action@v5
+        with:
+           context: ./,,,
+           dockerfile: Dockerfile
+           push: true
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-auth-service:latest-${{ steps.date.outputs.date }}
