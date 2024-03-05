@@ -24,7 +24,31 @@ jobs:
         run: |
           cd Front
           npm install
+      
       - name: Build the Angular app
         run: |
           cd Front
           npm run build
+          
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+           context: ./Front
+           dockerfile: Dockerfile
+           push: false
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-app
+           
+           
+      - name: login to docker hub
+        uses: docker/login-action@v3
+        with:
+           username: ${{ secrets.DOCKER_HUB_USERNAME }}
+           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+      - name: push image
+        uses: docker/build-push-action@v5
+        with:
+           context: ./Front
+           dockerfile: Dockerfile
+           push: true
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-app
