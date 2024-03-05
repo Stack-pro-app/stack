@@ -30,13 +30,17 @@ jobs:
           cd Front
           npm run build
           
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+          
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
            context: ./Front
            dockerfile: Dockerfile
            push: false
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-app
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-app:latest-${{ steps.date.outputs.date }}
            
            
       - name: login to docker hub
@@ -51,4 +55,4 @@ jobs:
            context: ./Front
            dockerfile: Dockerfile
            push: true
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-app
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-app:latest-${{ steps.date.outputs.date }}
