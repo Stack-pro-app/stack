@@ -1,10 +1,31 @@
 import { Injectable } from '@angular/core';
+import { Workspace } from '../../Models/workspace';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WorkspaceService {
+  url: string = 'http://localhost:5149/api/Workspace';
 
-  constructor() { }
-  
+  constructor(private http: HttpClient) {}
+
+  Create(obj: Workspace): Observable<any> {
+    console.log(obj);
+    const WorkespaceDto = {
+      userId: 1,
+      name: obj.Name,
+    };
+    const CreateUrl = `${this.url}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+
+    return this.http
+      .post<any>(CreateUrl, WorkespaceDto, { headers })
+      .pipe(
+        tap((response) => console.log('CreateWorkspace Response:', response))
+      );
+  }
 }

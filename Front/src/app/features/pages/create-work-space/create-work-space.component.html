@@ -1,0 +1,203 @@
+<div class="drawer lg:drawer-open">
+  <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content flex flex-col">
+    <!-- Page content here -->
+
+    <div class="navbar bg-base-100">
+      <div class="flex-1">
+        <a class="btn btn-ghost text-xl"># {{ FirstChannelName }}</a>
+      </div>
+
+      <div class="flex-none">
+        <label
+          aria-disabled="true"
+          for="my-drawer-2"
+          class="btn btn-primary drawer-button lg:hidden"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="inline-block w-5 h-5 stroke-current"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+            ></path>
+          </svg>
+        </label>
+      </div>
+    </div>
+    <!--First Step -->
+
+    <div class="hero min-h-screen bg-base-200 flex items-center">
+      <div class="hero-content text-left flex-grow" [formGroup]="form">
+        <div *ngIf="step === 1" class="max-w-md mx-auto" data-aos="fade-right">
+          <h1 class="text-5xl font-bold">
+            What’s the name of your company or team?
+          </h1>
+          <p class="py-6">
+            This will be the name of your Slack workspace — choose something
+            that your team will recognize.
+          </p>
+
+          <textarea
+            [(ngModel)]="inputText"
+            (input)="updateWorksSpaceName()"
+            placeholder="Type something..."
+            formControlName="WName"
+            class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+          ></textarea>
+
+          <button
+            type="submit"
+            class="btn btn-primary rounded-xl"
+            (click)="onNextClick()"
+          >
+            Next
+          </button>
+        </div>
+        <div *ngIf="step === 2" class="max-w-md mx-auto" data-aos="fade-right">
+          <h1 class="text-5xl font-bold">
+            What’s your team working on right now?
+          </h1>
+          <p class="py-6">
+            This could be anything: a project, campaign, event, or the deal
+            you’re trying to close.
+          </p>
+
+          <textarea
+            [(ngModel)]="displayedText"
+            (input)="updateFirstChannel()"
+            placeholder="Ex: Budget,autumn,campaign ..."
+            formControlName="CName"
+            class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+          ></textarea>
+
+          <button
+            type="submit"
+            class="btn btn-primary rounded-xl"
+            (click)="onNextClick()"
+          >
+            Next
+          </button>
+        </div>
+        <div *ngIf="step === 3" class="max-w-md mx-auto" data-aos="fade-right">
+          <h1 class="text-5xl font-bold">
+            Who else is on the {{ WorkspaceName }} team?
+          </h1>
+          <p class="py-6">Add coworker by email</p>
+
+          <textarea
+            formControlName="coworkerEmails"
+            placeholder="Enter coworker emails"
+            class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+            (input)="onEmailInput($event)"
+          ></textarea>
+          <div *ngIf="selectedEmailDomain" class="mt-2 cursor-pointer">
+            Click to insert: {{ selectedEmailDomain }}
+          </div>
+          <button
+            *ngIf="selectedEmailDomain"
+            (click)="selectEmailDomain(selectedEmailDomain)"
+            class="btn btn-primary rounded-xl mr-3"
+          >
+            Insert
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary rounded-xl ml-2"
+            (click)="onNextClick()"
+          >
+            Next
+          </button>
+        </div>
+      </div>
+    </div>
+    <!--First Step -->
+
+    <!-- add channel here -->
+  </div>
+  <div class="drawer-side">
+    <label
+      for="my-drawer-2"
+      aria-label="close sidebar"
+      class="drawer-overlay"
+    ></label>
+    <ul class="menu p-4 w-80 min-h-full bg-base-100 text-base-content">
+      <!-- Sidebar content here -->
+      <a class="btn btn-ghost text-xl">{{ WorkspaceName }}</a>
+
+      <ul class="menu mt-10 bg-base-100 w-56 rounded-box">
+        <li>
+          <details open>
+            <summary class=" ">Channels</summary>
+            <ul>
+              <li>
+                <a>#{{ FirstChannelName }}</a>
+              </li>
+            </ul>
+          </details>
+        </li>
+      </ul>
+      <div class="divider"></div>
+
+      <div class="btm-nav">
+        <button routerLink="/Profile">
+          <a href="">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+              />
+            </svg>
+          </a>
+        </button>
+        <button class="active">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+        </button>
+        <button>
+          <a routerLink="/Home">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+              />
+            </svg>
+          </a>
+        </button>
+      </div>
+    </ul>
+  </div>
+</div>
