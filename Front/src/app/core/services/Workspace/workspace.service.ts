@@ -15,7 +15,7 @@ export class WorkspaceService {
     console.log(obj);
     const WorkespaceDto = {
       userId: 1,
-      name: obj.Name,
+      name: obj.name,
     };
     const CreateUrl = `${this.url}`;
     const headers = new HttpHeaders({
@@ -27,5 +27,9 @@ export class WorkspaceService {
       .pipe(
         tap((response) => console.log('CreateWorkspace Response:', response))
       );
+  }
+   getWorkspace(id: any,userId:any): Observable<any> {
+    const RequestUrl = `${this.url}/${id}/user/${userId}`;
+     return this.http.get( RequestUrl);
   }
 }

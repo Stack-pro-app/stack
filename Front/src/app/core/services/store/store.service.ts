@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { JwtTokenService } from '../JwtToken/jwt-token.service';
+import { AuthService } from '../Auth/auth.service';
 
 @Injectable({
   providedIn: 'root',
@@ -28,4 +29,5 @@ export class StoreService {
       return decoded;
     }
   }
+ 
 }

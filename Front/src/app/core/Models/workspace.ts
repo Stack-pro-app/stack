@@ -1,7 +1,7 @@
 export interface Workspace {
     id:Number,
-    Name:string,
-    MainChannel:string,
-    channelIds:Number[],
-    userIds:Number[]
+    name:string,
+    MainChannel:any,
+    publicChannels:Number[],
+    privateChannels:Number[]
 }

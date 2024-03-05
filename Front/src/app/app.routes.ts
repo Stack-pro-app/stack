@@ -15,7 +15,7 @@ export const routes: Routes = [
     {path:'Register',component:RegisterComponent,title:'Register'},
     {path:'Workspaces',component:WorkspacesDisplayComponent,title:'Workspaces'},
     {path:'Workspace/:id',component:InsideWorkspaceComponent,title:'Workspace'},
-    {path:'Main',title:'main',component:MainComponent},
+    {path:'Main/:id',title:'main',component:MainComponent},
     {path:'Profile',title:'profile',component:ProfileComponent},
     {path:'Create',title:'Create',component:CreateWorkSpaceComponent},
     {path:'**',pathMatch:'full',component:PageNotFoundComponent}

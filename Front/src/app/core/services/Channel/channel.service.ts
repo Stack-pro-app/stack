@@ -1,64 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Channel } from '../../Models/channel';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChannelService {
-  chanels: Channel[] = [
-    {
-      id: 1,
-      name: 'Channel 1',
-      Description: '',
-      IsPriate: false,
-      WorkspaceId: 0,
-    },
-    {
-      id: 1,
-      name: 'Channel 1',
-      Description: '',
-      IsPriate: false,
-      WorkspaceId: 0,
-    },
-    {
-      id: 1,
-      name: 'Channel 1',
-      Description: '',
-      IsPriate: false,
-      WorkspaceId: 0,
-    },
-    {
-      id: 1,
-      name: 'Channel 1',
-      Description: '',
-      IsPriate: false,
-      WorkspaceId: 0,
-    },
-    {
-      id: 1,
-      name: 'Channel 1',
-      Description: '',
-      IsPriate: false,
-      WorkspaceId: 0,
-    },
-    {
-      id: 1,
-      name: 'Channel 1',
-      Description: '',
-      IsPriate: false,
-      WorkspaceId: 0,
-    },
-  ];
+  url: string = 'http://localhost:5149/api/Channel';
+  constructor(private http: HttpClient) {}
 
-  constructor() {}
-
-  CreateChannel(channelName: string, channelPrivate: boolean) {
-    this.chanels.push({
-      id: 1,
-      name: channelName,
-      Description:'',
-      IsPriate:false,
-      WorkspaceId:0
-    });
+ CreateChannel(ChannelData:any):Observable<any> {
+    const RequestUrl= `${this.url}`;
+    return this.http.post(RequestUrl,ChannelData);
   }
+
 }
