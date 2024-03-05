@@ -13,7 +13,7 @@ namespace messaging_service.models.domain
         public ICollection<UserWorkspace>? UserWorkspaces { get; set; } = new List<UserWorkspace>();
         public ICollection<Member>? Memberships { get; set; } = new List<Member>();
         public ICollection<Chat>? Messages { get; set; } = new List<Chat>();
-        public int AuthId { get; set; }
+        public string AuthId { get; set; }
 
     }
 }

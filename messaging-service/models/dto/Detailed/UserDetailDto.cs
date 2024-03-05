@@ -9,6 +9,6 @@ namespace messaging_service.models.dto.Detailed
         public string Email { get; set; }
         public DateTime Created_at { get; set; }
         public DateTime? Last_login { get; set; }
-        public int AuthId { get; set; }
+        public string AuthId { get; set; }
     }
 }
