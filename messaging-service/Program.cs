@@ -1,3 +1,4 @@
+using messaging_service.Consumer;
 using messaging_service.Data;
 using messaging_service.MappingProfiles;
 using messaging_service.Repository;
@@ -31,9 +32,12 @@ builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<WorkspaceRepository>();
 builder.Services.AddScoped<ChatRepository>();
 builder.Services.AddScoped<ChannelRepository>();
+builder.Services.AddScoped<RabbitMQConsumer>();
 
 builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile));
 var app = builder.Build();
+var rabbitMQConsumer = app.Services.GetRequiredService<RabbitMQConsumer>();
+rabbitMQConsumer.StartConsuming();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -41,6 +45,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 app.UseCors(MyAllowSpecificOrigins);
