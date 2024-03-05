@@ -40,7 +40,7 @@ jobs:
            context: ./Front
            dockerfile: Dockerfile
            push: false
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-app:latest-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-front:latest-${{ steps.date.outputs.date }}
            
            
       - name: login to docker hub
@@ -55,4 +55,4 @@ jobs:
            context: ./Front
            dockerfile: Dockerfile
            push: true
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-app:latest-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-front:latest-${{ steps.date.outputs.date }}
