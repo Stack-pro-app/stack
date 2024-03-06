@@ -51,5 +51,5 @@ jobs:
           context: ./Front
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/lack-eureka-server:dev-${{ steps.date.outputs.date }}
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-eureka-server:dev-${{ steps.date.outputs.date }}
 
