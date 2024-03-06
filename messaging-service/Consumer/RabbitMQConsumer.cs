@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using messaging_service.Data;
 using messaging_service.models.domain;
 using messaging_service.models.dto.Requests;
 using messaging_service.Repository;
@@ -10,57 +11,65 @@ using System.Text;
 
 namespace messaging_service.Consumer
 {
-    public class RabbitMQConsumer:DefaultBasicConsumer
+    public class RabbitMQConsumer : DefaultBasicConsumer
     {
-                private readonly string _queueName;
-                private readonly ConnectionFactory _factory;
-                private readonly IConnection _connection;
-                private readonly IModel _channel;
-                private readonly ChatRepository _chatRepository;
-                private readonly IMapper _mapper;
+        private readonly string _queueName;
+        private readonly ConnectionFactory _factory;
+        private readonly IConnection _connection;
+        private readonly IModel _channel;
+        private readonly ChatRepository _chatRepository;
+        private readonly IMapper _mapper;
+        private readonly ILogger<RabbitMQConsumer> _logger;
 
-                public RabbitMQConsumer(ChatRepository chatRepository,IMapper mapper)
-                {
-                    _queueName = "messages";
-                    _factory = new ConnectionFactory() { HostName = "localhost" };
-                    _connection = _factory.CreateConnection();
-                    _channel = _connection.CreateModel();
-                    _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
-                    _chatRepository = chatRepository;
-                     _mapper = mapper;
-                 }
+        public RabbitMQConsumer(ChatRepository chatRepository, IMapper mapper, ILogger<RabbitMQConsumer> logger)
+        {
+            _queueName = "test";
+            _factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
+            _connection = _factory.CreateConnection();
+            _channel = _connection.CreateModel();
+            _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+            _chatRepository = chatRepository;
+            _mapper = mapper;
+            _logger = logger;
+        }
 
-                public void StartConsuming()
-                {
-                    var consumer = new EventingBasicConsumer(_channel);
-                    consumer.Received += async (model, ea) =>
-                    {
-                        try
-                        {
-                            var body = ea.Body.ToArray();
-                            var messageString = Encoding.UTF8.GetString(body);
+        public async Task StartConsuming()
+        {
+            var consumer = new AsyncEventingBasicConsumer(_channel);
+            consumer.Received += async (model, ea) =>
+            {
+                await HandleMessageAsync(ea);
+            };
+            _channel.BasicConsume(queue: _queueName,
+                                      autoAck: false,
+                                      consumer: consumer);
+        }
 
-                            MessageRequestDto messageDto = JsonConvert.DeserializeObject<MessageRequestDto>(messageString);
+        private async Task HandleMessageAsync(BasicDeliverEventArgs ea)
+        {
+            try
+            {
+                var body = ea.Body.ToArray();
+                var messageString = Encoding.UTF8.GetString(body);
+                _logger.LogInformation(messageString);
 
-                            Chat message = _mapper.Map<Chat>(messageDto);
-                            var result = await _chatRepository.CreateChatAsync(message);
-                            _channel.BasicAck(ea.DeliveryTag, false);
-                        } catch (Exception ex)
-                        {
-                            var result = ex.Message;
-                        }
-                        
-                    };
-                    _channel.BasicConsume(queue: _queueName,
-                                          autoAck: true,
-                                          consumer: consumer);
-                }
-                public void CloseConnection()
-                {
-                    _connection.Close();
-                    _channel.Close();
-                }
-    
+                MessageRequestDto messageDto = JsonConvert.DeserializeObject<MessageRequestDto>(messageString) ?? throw new Exception("Failed to deserialize Message");
+
+                Chat message = _mapper.Map<Chat>(messageDto);
+                _logger.LogInformation(message.ChannelId.ToString() + "|" + message.Message + "|" + message.UserId.ToString());
+                bool result = await _chatRepository.CreateChatAsync(message);
+
+                //_logger.LogInformation("Result:" + result);
+
+                _channel.BasicAck(ea.DeliveryTag, false);
+            }
+            catch (Exception ex)
+            {
+                var result = ex.Message;
+                _logger.LogInformation("Result:" + result);
+            }
+        }
+
     }
 
 }

@@ -14,23 +14,28 @@ namespace messaging_service.Repository
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger<ChatRepository> _logger;
 
-        public ChatRepository(AppDbContext context,IMapper mapper)
+        public ChatRepository(AppDbContext context,IMapper mapper, ILogger<ChatRepository> logger)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<bool> CreateChatAsync(Chat message)
         {
             try
             {
-                _context.Add(message);
+                _logger.LogInformation("entered Repository with:" + message.Message);
+                _context.Chats.Add(message);
+                _logger.LogInformation("added it:");
                 await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
+
                 throw new Exception("Failed to create chat message.", ex);
             }
         }
