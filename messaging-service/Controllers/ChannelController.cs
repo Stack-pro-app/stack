@@ -6,6 +6,7 @@ using messaging_service.Repository;
 using AutoMapper;
 using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto.Requests;
+using messaging_service.models.dto.Others;
 
 namespace messaging_service.Controllers
 {
@@ -136,11 +137,11 @@ namespace messaging_service.Controllers
 
         //Add Users To A Private Channel
         [HttpPost("AddUser/{channelId}")]
-        public async Task<ActionResult<ResponseDto>> AddToPrivateChannel([FromRoute] int channelId,[FromBody] int userId)
+        public async Task<ActionResult<ResponseDto>> AddToPrivateChannel([FromRoute] int channelId,[FromBody]UserMinDto user)
         {
             try
             {
-                bool result = await _repository.AddUserToPrivateChannel(channelId, userId);
+                bool result = await _repository.AddUserToPrivateChannel(channelId, user.userId);
                 if (!result) throw new Exception("Can't Add User To Channel");
                 ResponseDto responseDto = new()
                 {

@@ -6,6 +6,7 @@ using messaging_service.Repository;
 using AutoMapper;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Response;
+using messaging_service.models.dto.Others;
 using messaging_service.models.domain;
 using messaging_service.models.dto.Detailed;
 
@@ -93,11 +94,11 @@ namespace messaging_service.Controllers
 
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int id,[FromBody]string name)
+        public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int id,[FromBody]WorkspaceName workspace)
         {
             try
             {
-                bool result = await _repository.UpdateWorkspaceAsync(id,name);
+                bool result = await _repository.UpdateWorkspaceAsync(id,workspace.Name);
                 if (result)
                 {
                     ResponseDto response = new()
