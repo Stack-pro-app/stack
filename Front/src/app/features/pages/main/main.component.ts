@@ -5,7 +5,7 @@ import { Channel } from '../../../core/Models/channel';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ChannelService } from '../../../core/services/Channel/channel.service';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { WorkspaceService } from '../../../core/services/Workspace/workspace.service';
 import { Workspace } from '../../../core/Models/workspace';
 
@@ -37,15 +37,25 @@ export class MainComponent {
     publicChannels: [],
     privateChannels: [],
   };
+  currentChannelP: Channel = {
+    channelString:'',
+    created_at: {},
+    description: '',
+    id: 0,
+    is_private: false,
+    name: '',
+  };
   channels: any[] = [];
   currentChannel: string = '';
   constructor(
     private service: ChannelService,
     private builder: FormBuilder,
+    private router: Router,
     private route: ActivatedRoute,
     private workspaceService: WorkspaceService
   ) {}
   public channelForm!: FormGroup;
+  public workspaceForm!: FormGroup;
   onDeletechannel() {}
 
   ngOnInit() {
@@ -55,6 +65,9 @@ export class MainComponent {
       channelPrivate: this.builder.control(false),
       channelDescription: this.builder.control(''),
     });
+    this.workspaceForm = this.builder.group({
+      workspaceName: this.builder.control(''),
+    });
 
     this.workspaceService
       .getWorkspace(this.id, localStorage.getItem('userId'))
@@ -63,6 +76,16 @@ export class MainComponent {
           console.log(response);
           this.currentWorkspace = response.result;
           this.channels = this.currentWorkspace.privateChannels;
+
+          this.currentChannelP = {
+            channelString: response.result.mainChannel.channelString,
+            created_at: response.result.mainChannel.created_at,
+            description: response.result.mainChannel.description,
+            id: response.result.mainChannel.id,
+            is_private: response.result.mainChannel.is_private,
+            name: response.result.mainChannel.name,
+          };
+          console.log('Current Channel', this.currentChannelP);
           console.log(this.channels);
         },
         error: (error) => {
@@ -105,5 +128,36 @@ export class MainComponent {
       },
       complete: () => console.info('complete'),
     });
+  }
+  onDeleteChannel() {
+    this.workspaceService.Delete(this.currentWorkspace.id).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.router.navigate(['/Home']);
+      },
+      error: (error) => {
+        console.error('Login error', error);
+      },
+      complete: () => console.info('complete'),
+    });
+  }
+  onUpdateWorkspace() {
+    const name = this.workspaceForm.value.workspaceName;
+    console.log(name);
+    this.workspaceService.Update(this.currentWorkspace.id, name).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('Updating  error', error);
+      },
+      complete: () => {
+        console.info('completed');
+        this.reload();
+      },
+    });
+  }
+  onChangeChannel(channel:Channel){
+  this.currentChannelP = channel;
   }
 }

@@ -21,15 +21,30 @@ export class WorkspaceService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-
+    console.log(WorkespaceDto);
     return this.http
       .post<any>(CreateUrl, WorkespaceDto, { headers })
       .pipe(
         tap((response) => console.log('CreateWorkspace Response:', response))
       );
   }
-   getWorkspace(id: any,userId:any): Observable<any> {
+  getWorkspace(id: any, userId: any): Observable<any> {
     const RequestUrl = `${this.url}/${id}/user/${userId}`;
-     return this.http.get( RequestUrl);
+    return this.http.get(RequestUrl);
+  }
+  Delete(id: any): Observable<any> {
+    const RequestUrl = `${this.url}/${id}/`;
+    return this.http.delete(RequestUrl);
+  }
+  Update(id: any, diffname: string) {
+    const RequestUrl = `${this.url}/${id}`;
+    const data = {
+      name: diffname,
+    };
+    const headers = new HttpHeaders({
+      accept: 'text/plain',
+      'Content-Type': 'application/json',
+    });
+    return this.http.put(RequestUrl, diffname, { headers });
   }
 }
