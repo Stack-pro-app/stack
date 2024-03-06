@@ -30,7 +30,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddControllers();
-builder.Services.AddScoped<RabbitMQConsumer>();
+//builder.Services.AddScoped<RabbitMQConsumer>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,9 +42,9 @@ builder.Services.AddScoped<ChannelRepository>();
 
 builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile));
 var app = builder.Build();
-using var scope = app.Services.CreateScope();
+/*using var scope = app.Services.CreateScope();
 var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer>();
-await rabbitMQConsumer.StartConsuming();
+await rabbitMQConsumer.StartConsuming();*/
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

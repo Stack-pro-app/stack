@@ -74,7 +74,7 @@ namespace messaging_service.Controllers
             }
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<ResponseDto>> UpdateMessage([FromBody]MessageUpdateDto message)
         {
             try
