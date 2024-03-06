@@ -47,7 +47,7 @@ jobs:
            context: ./messaging-service
            dockerfile: Dockerfile
            push: false
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-messaging-servicee:latest-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-messaging-servicee:dev-${{ steps.date.outputs.date }}
            
            
       - name: login to docker hub
@@ -62,4 +62,4 @@ jobs:
            context: ./messaging-service
            dockerfile: Dockerfile
            push: true
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-messaging-service:latest-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-messaging-service:dev-${{ steps.date.outputs.date }}
