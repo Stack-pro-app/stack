@@ -47,7 +47,7 @@ jobs:
            context: ./gateway-chat-server
            dockerfile: Dockerfile
            push: false
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-gateway-chat-server:latest-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-gateway-chat-server:dev-${{ steps.date.outputs.date }}
            
            
       - name: login to docker hub
@@ -62,4 +62,4 @@ jobs:
            context: ./gateway-chat-server
            dockerfile: Dockerfile
            push: true
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-gateway-chat-server:latest-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-gateway-chat-server:dev-${{ steps.date.outputs.date }}
