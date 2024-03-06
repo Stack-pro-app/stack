@@ -5,7 +5,7 @@ using messaging_service.Repository;
 using messaging_service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
+jcdjcju
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
