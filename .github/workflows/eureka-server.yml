@@ -34,7 +34,7 @@ jobs:
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./Front
+          context: ./eureka-server
           dockerfile: Dockerfile
           push: false
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-eureka-server:latest
@@ -49,7 +49,7 @@ jobs:
       - name: push image
         uses: docker/build-push-action@v5
         with:
-          context: ./Front
+          context: ./eureka-server
           dockerfile: Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-eureka-server:latest
