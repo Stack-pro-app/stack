@@ -35,7 +35,7 @@ services:
       - slack-app
     depends_on:
         - rabbitmq
- api-geteway:
+  api-geteway:
     container_name: api-geteway
     image: oussamazaoui872/slack-api-geteway:latest
     ports:
