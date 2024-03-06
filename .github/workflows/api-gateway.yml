@@ -47,7 +47,7 @@ jobs:
            context: ./api-gateway
            dockerfile: Dockerfile
            push: false
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-api-geteway:dev-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-api-geteway:latest
            
            
       - name: login to docker hub
@@ -62,4 +62,4 @@ jobs:
            context: ./api-gateway
            dockerfile: Dockerfile
            push: true
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-api-geteway:dev-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-api-geteway:latest
