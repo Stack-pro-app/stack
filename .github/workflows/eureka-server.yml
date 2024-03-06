@@ -1,3 +1,4 @@
+
 name: eureka server CI/CD
 
 on:
@@ -52,4 +53,5 @@ jobs:
           dockerfile: Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-eureka-server:dev-${{ steps.date.outputs.date }}
+
 
