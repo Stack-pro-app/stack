@@ -1,8 +1,10 @@
 
 using gateway_chat_server.Hubs;
+using gateway_chat_server.Producer;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 // Add services to the container.
 builder.Services.AddSignalR().AddJsonProtocol();
 builder.Services.AddCors(options =>
@@ -16,6 +18,7 @@ builder.Services.AddCors(options =>
                    .AllowCredentials();
         });
 });
+builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
 
 
 

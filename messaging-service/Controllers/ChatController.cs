@@ -4,8 +4,11 @@ using messaging_service.models.domain;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using messaging_service.Repository;
+using messaging_service.Consumer;
 using AutoMapper;
 using messaging_service.models.dto.Detailed;
+using System.Threading.Channels;
+using RabbitMQ.Client.Events;
 
 namespace messaging_service.Controllers
 {
