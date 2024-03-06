@@ -4,22 +4,21 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8090
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["messaging-service.csproj", "."]
-RUN dotnet restore "./././messaging-service.csproj"
+COPY ["api-gateway.csproj", "."]
+RUN dotnet restore "./././api-gateway.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./messaging-service.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./api-gateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./messaging-service.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./api-gateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "messaging-service.dll"]
+ENTRYPOINT ["dotnet", "api-gateway.dll"]
