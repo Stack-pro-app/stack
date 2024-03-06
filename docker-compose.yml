@@ -1,5 +1,13 @@
 version: '3.8'
 services:
+  rabbitmq:
+    image: rabbitmq:3.9.11-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - slack-app
   eureka:
     container_name: eureka
     image: oussamazaoui872/slack-eureka-server:latest
@@ -15,22 +23,27 @@ services:
       - "8091:8091"
     networks:
       - slack-app
+    depends_on:
+        - rabbitmq
   messaging-service:
     container_name: messaging-server
     image: oussamazaoui872/slack-messaging-service:latest
     ports:
-      - "8082:8082"
-      - "8083:8083"
+      - "8080:8080"
+      - "8090:8083"
     networks:
       - slack-app
- rabbitmq:
-    image: rabbitmq:3.9.11-management-alpine
-    container_name: rabbitmq
+    depends_on:
+        - rabbitmq
+ api-geteway:
+    container_name: api-geteway
+    image: oussamazaoui872/slack-api-geteway:latest
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "8084:8084"
     networks:
       - slack-app
+    depends_on:
+        - eureka
 
 networks:
   slack-app:
