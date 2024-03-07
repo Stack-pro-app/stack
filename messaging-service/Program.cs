@@ -7,10 +7,15 @@ using Microsoft.EntityFrameworkCore;
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+var dbName = Environment.GetEnvironmentVariable("DB_NAME");
+var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
+var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword}";
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), sqlServerOptionsAction: sqlOptions =>
+    option.UseSqlServer(builder.Configuration.GetConnectionString(connectionString), sqlServerOptionsAction: sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure();
     });
@@ -21,16 +26,14 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("http://localhost:4200", "https://localhost.com")
+                          policy.AllowAnyOrigin()
                                 .AllowAnyHeader()
-                                .AllowAnyMethod()
-                                .AllowCredentials()
-                              ;
+                                .AllowAnyMethod();
                       });
 });
 
 builder.Services.AddControllers();
-//builder.Services.AddScoped<RabbitMQConsumer>();
+builder.Services.AddScoped<RabbitMQConsumer>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -42,9 +45,9 @@ builder.Services.AddScoped<ChannelRepository>();
 
 builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile));
 var app = builder.Build();
-/*using var scope = app.Services.CreateScope();
+using var scope = app.Services.CreateScope();
 var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer>();
-await rabbitMQConsumer.StartConsuming();*/
+await rabbitMQConsumer.StartConsuming();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -7,44 +7,66 @@ services:
       - "5672:5672"
       - "15672:15672"
     networks:
-      - slack-app
+      - backend
   eureka:
     container_name: eureka
     image: oussamazaoui872/slack-eureka-server:latest
     ports:
       - "8761:8761"
     networks:
-      - slack-app
+      - backend
   gateway-chat:
     container_name: gateway-chat
     image: oussamazaoui872/slack-gateway-chat-server:latest
     ports:
-      - "8091:8091"
+      - "8091:80"
     networks:
-      - slack-app
+      - backend
     depends_on:
-        - rabbitmq
+      - rabbitmq
+    environment:
+      - MQ_HOST=rabbitmq
   messaging-service:
     container_name: messaging-server
     image: oussamazaoui872/slack-messaging-service:latest
     ports:
-      - "8090:8090"
+      - "8090:80"
     networks:
-      - slack-app
+      - backend
+      - messaging
     depends_on:
-        - rabbitmq
-  api-geteway:
-    container_name: api-geteway
+      - rabbitmq
+      - database-1
+    environment:
+      - DB_HOST=database-1
+      - DB_NAME=stack-messaging
+      - DB_SA_PASSWORD=password
+      - MQ_HOST=rabbitmq
+  api-gateway:
+    container_name: api-gateway
     image: oussamazaoui872/slack-api-geteway:latest
     ports:
-      - "8084:8084"
+      - "8084:80"
     networks:
-      - slack-app
+      - backend
     depends_on:
-        - eureka
+      - eureka
+  database-1:
+    container_name: database-1
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - SA_PASSWORD=password
+      - ACCEPT_EULA=Y
+    networks:
+      - messaging
+
 
 networks:
-  slack-app:
+  backend:
+    driver: bridge
+  messaging:
     driver: bridge
 
 
