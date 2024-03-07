@@ -24,7 +24,11 @@ namespace messaging_service.Consumer
         public RabbitMQConsumer(ChatRepository chatRepository, IMapper mapper, ILogger<RabbitMQConsumer> logger)
         {
             _queueName = "message";
-            _factory = new ConnectionFactory() { HostName = Environment.GetEnvironmentVariable("MQ_HOST"), DispatchConsumersAsync = true };
+            _factory = new ConnectionFactory() { HostName = Environment.GetEnvironmentVariable("MQ_HOST"),
+                UserName = Environment.GetEnvironmentVariable("MQ_USER"),
+                Password = Environment.GetEnvironmentVariable("MQ_PASS"),
+                Port = 5672,
+                DispatchConsumersAsync = true };
             _connection = _factory.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
