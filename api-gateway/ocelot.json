@@ -1,200 +1,197 @@
 {
   "Routes": [
-    /*****************************************Messaging Service *************************************************/
     {
-      "UpstreamPathTemplate": "api/Channel",
+      "UpstreamPathTemplate": "/api/Channel",
       "UpstreamHttpMethod": [ "Post", "Put" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
       "DownstreamPathTemplate": "/api/Channel"
     },
     {
-      "UpstreamPathTemplate": "api/Channel/{id}",
+      "UpstreamPathTemplate": "/api/Channel/{id}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
       "DownstreamPathTemplate": "/api/Channel/{id}"
     },
     {
-      "UpstreamPathTemplate": "api/Channel/AddUser/{id}",
+      "UpstreamPathTemplate": "/api/Channel/AddUser/{id}",
       "UpstreamHttpMethod": [ "Post" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
       "DownstreamPathTemplate": "/api/Channel/AddUser/{channelId}"
     },
     {
-      "UpstreamPathTemplate": "api/Chat",
+      "UpstreamPathTemplate": "/api/Chat",
       "UpstreamHttpMethod": [ "Post" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
       "DownstreamPathTemplate": "/api/Chat"
     },
     {
-      "UpstreamPathTemplate": "api/Chat/{id}",
+      "UpstreamPathTemplate": "/api/Chat/{id}",
       "UpstreamHttpMethod": [ "Get", "Put", "Delete" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
       "DownstreamPathTemplate": "/api/Chat/{id}"
     },
     {
-      "UpstreamPathTemplate": "api/Chat/channel/{id}",
+      "UpstreamPathTemplate": "/api/Chat/channel/{id}",
       "UpstreamHttpMethod": [ "Get" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
       "DownstreamPathTemplate": "/api/Chat/channel/{channelId}"
     },
     {
-      "UpstreamPathTemplate": "api/User",
+      "UpstreamPathTemplate": "/api/User",
       "UpstreamHttpMethod": [ "Post", "Put" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
       "DownstreamPathTemplate": "/api/User"
     },
     {
-      "UpstreamPathTemplate": "api/User/{authId}",
+      "UpstreamPathTemplate": "/api/User/{authId}",
       "UpstreamHttpMethod": [ "Get", "Delete" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
       "DownstreamPathTemplate": "/api/User/{authId}"
     },
     {
-      "UpstreamPathTemplate": "api/User/Workspace",
+      "UpstreamPathTemplate": "/api/User/Workspace",
       "UpstreamHttpMethod": [ "Post", "Delete" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
       "DownstreamPathTemplate": "/api/User/Workspace"
     },
     {
-      "UpstreamPathTemplate": "api/User/channel/{channelId}",
+      "UpstreamPathTemplate": "/api/User/channel/{channelId}",
       "UpstreamHttpMethod": [ "Get" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
-      "DownstreamPathTemplate": "api/User/channel/{channelId}"
+      "DownstreamPathTemplate": "/api/User/channel/{channelId}"
     },
     {
-      "UpstreamPathTemplate": "api/User/Workspace/{workspaceId}",
+      "UpstreamPathTemplate": "/api/User/Workspace/{workspaceId}",
       "UpstreamHttpMethod": [ "Get" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
-      "DownstreamPathTemplate": "api/User/Workspace/{workspaceId}"
+      "DownstreamPathTemplate": "/api/User/Workspace/{workspaceId}"
     },
     {
-      "UpstreamPathTemplate": "api/User/email/{email}",
+      "UpstreamPathTemplate": "/api/User/email/{email}",
       "UpstreamHttpMethod": [ "Get" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
-      "DownstreamPathTemplate": "api/User/email/{email}"
+      "DownstreamPathTemplate": "/api/User/email/{email}"
     },
     {
-      "UpstreamPathTemplate": "api/User/myworkspaces/{authId}",
+      "UpstreamPathTemplate": "/api/User/myworkspaces/{authId}",
       "UpstreamHttpMethod": [ "Get" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
-      "DownstreamPathTemplate": "api/User/myworkspaces/{authId}"
+      "DownstreamPathTemplate": "/api/User/myworkspaces/{authId}"
     },
     {
-      "UpstreamPathTemplate": "api/Workspace",
+      "UpstreamPathTemplate": "/api/Workspace",
       "UpstreamHttpMethod": [ "Post" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
-      "DownstreamPathTemplate": "api/Workspace"
+      "DownstreamPathTemplate": "/api/Workspace"
     },
     {
-      "UpstreamPathTemplate": "api/Workspace/{id}",
+      "UpstreamPathTemplate": "/api/Workspace/{id}",
       "UpstreamHttpMethod": [ "Delete", "Put" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-servicei",
+          "Port": 8090
         }
       ],
-      "DownstreamPathTemplate": "api/Workspace/{id}"
+      "DownstreamPathTemplate": "/api/Workspace/{id}"
     },
     {
-      "UpstreamPathTemplate": "api/Workspace/{id}/user/{userId}",
+      "UpstreamPathTemplate": "/api/Workspace/{id}/user/{userId}",
       "UpstreamHttpMethod": [ "Get" ],
-      "Downstreamcheme": "http",
+      "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messagingwebapi",
-          "Port": 80
+          "Host": "messaging-service",
+          "Port": 8090
         }
       ],
-      "DownstreamPathTemplate": "api/Workspace/{id}/user/{userId}"
+      "DownstreamPathTemplate": "/api/Workspace/{id}/user/{userId}"
     },
-    /******************************************************End Messaging Service************************************************************************/
-    /******************************************************Gateway Chat Service********************************************************************/
     {
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
       "UpstreamPathTemplate": "/gateway/{catchAll}",
@@ -202,8 +199,8 @@
       "DownstreamScheme": "ws",
       "DownstreamHostAndPorts": [
         {
-          "Host": "gatewayserver1",
-          "Port": 80
+          "Host": "gateway-chat",
+          "Port": 8091
         }
       ]
     }
@@ -215,6 +212,6 @@
 
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:800"
+    "BaseUrl": "http://localhost:8084"
   }
 }
