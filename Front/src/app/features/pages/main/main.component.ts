@@ -38,7 +38,7 @@ export class MainComponent {
     privateChannels: [],
   };
   currentChannelP: Channel = {
-    channelString:'',
+    channelString: '',
     created_at: {},
     description: '',
     id: 0,
@@ -56,7 +56,6 @@ export class MainComponent {
   ) {}
   public channelForm!: FormGroup;
   public workspaceForm!: FormGroup;
-  onDeletechannel() {}
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -129,7 +128,7 @@ export class MainComponent {
       complete: () => console.info('complete'),
     });
   }
-  onDeleteChannel() {
+  onDeleteWorkspace() {
     this.workspaceService.Delete(this.currentWorkspace.id).subscribe({
       next: (response) => {
         console.log(response);
@@ -157,7 +156,41 @@ export class MainComponent {
       },
     });
   }
-  onChangeChannel(channel:Channel){
-  this.currentChannelP = channel;
+  onChangeChannel(channel: Channel) {
+    this.currentChannelP = channel;
+  }
+  onDeleteChannel() {
+    this.service.Delete(this.currentChannelP.id).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('Updating  error', error);
+      },
+      complete: () => {
+        console.info('completed');
+        this.reload();
+      },
+    });;
+  }
+  onUpdateChannel() {
+    const data = {
+      id:this.currentChannelP.id,
+      name: this.channelForm.value.channelName,
+      description:this.currentChannelP.description,
+      is_private:this.channelForm.value.channelPrivate
+    };
+    this.service.Update(data).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('Updating  error', error);
+      },
+      complete: () => {
+        console.info('completed');
+        this.reload();
+      },
+    });
   }
 }

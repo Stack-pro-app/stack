@@ -5,8 +5,80 @@
 
     <div class="navbar bg-base-100">
       <div class="flex-1">
-        <a class="btn btn-ghost text-xl"># {{ currentChannelP.name }}</a>
+        <a class="btn btn-ghost text-xl" onclick="my_modal_8.showModal()"
+          ># {{ currentChannelP.name }}</a
+        >
       </div>
+      <dialog id="my_modal_8" class="modal modal-bottom sm:modal-middle">
+        <div class="modal-box">
+          <form
+            [formGroup]="channelForm"
+            (ngSubmit)="onUpdateChannel()"
+            class="card-body"
+            method="dialog"
+          >
+            <div class="form-control">
+              <label class="label">
+                <span class="label-text">New Channel Name : </span>
+              </label>
+              <input
+                formControlName="channelName"
+                type="text"
+                placeholder="Channel name: ..."
+                class="input input-bordered"
+                required
+              />
+            </div>
+            <div class="form-control">
+              <label class="label">
+                <input
+                  formControlName="channelPrivate"
+                  type="checkbox"
+                  class="checkbox"
+                />
+                <span class="label-text mr-auto ml-2">private</span>
+              </label>
+            </div>
+            <div class="form-control mt-6">
+              <button type="submit" class="btn btn-warning my-2 w-1/3 ml-auto">
+                Edit
+              </button>
+              <button
+                type="submit"
+                onclick="my_modal_9.showModal()"
+                class="btn btn-error w-1/3 ml-auto"
+              >
+                Delete
+              </button>
+              <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
+            </div>
+            <!-- Open the modal using ID.showModal() method -->
+
+            <dialog id="my_modal_9" class="modal">
+              <div class="modal-box">
+                <h3 class="font-bold text-lg">Confirmation</h3>
+                <p class="py-4">
+                  Are You sure You want to delete the current Working Space
+                </p>
+                <div class="modal-action">
+                  <form method="dialog">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button
+                      class="btn btn-error mr-2"
+                      (click)="onDeleteChannel()"
+                    >
+                      Delete
+                    </button>
+                    <button class="btn">Close</button>
+                  </form>
+                </div>
+              </div>
+            </dialog>
+          </form>
+          <form method="dialog"></form>
+        </div>
+      </dialog>
+
       <!-- Open the modal using ID.showModal() method -->
       <dialog id="my_modal_1" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
@@ -16,6 +88,74 @@
             class="card-body"
             method="dialog"
           >
+            <div class="form-control mt-6">
+              <div class="dropdown mb-72">
+                <div tabindex="0" role="button" class="btn m-1">
+                  Theme
+                  <svg
+                    width="12px"
+                    height="12px"
+                    class="h-2 w-2 fill-current opacity-60 inline-block"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 2048 2048"
+                  >
+                    <path
+                      d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"
+                    ></path>
+                  </svg>
+                </div>
+                <ul
+                  tabindex="0"
+                  class="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52"
+                >
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Default"
+                      value="default"
+                    />
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Retro"
+                      value="retro"
+                    />
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Cyberpunk"
+                      value="cyberpunk"
+                    />
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Valentine"
+                      value="valentine"
+                    />
+                  </li>
+                  <li>
+                    <input
+                      type="radio"
+                      name="theme-dropdown"
+                      class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+                      aria-label="Aqua"
+                      value="aqua"
+                    />
+                  </li>
+                </ul>
+              </div>
+            </div>
             <div class="form-control">
               <label class="label">
                 <span class="label-text">WorkSpace Name : </span>
@@ -41,6 +181,7 @@
               </button>
               <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
             </div>
+
             <!-- Open the modal using ID.showModal() method -->
 
             <dialog id="my_modal_3" class="modal">
@@ -54,7 +195,7 @@
                     <!-- if there is a button in form, it will close the modal -->
                     <button
                       class="btn btn-error mr-2"
-                      (click)="onDeleteChannel()"
+                      (click)="onDeleteWorkspace()"
                     >
                       Delete
                     </button>
@@ -88,8 +229,8 @@
         </label>
       </div>
     </div>
-    <app-channel></app-channel>
-    <app-input></app-input>
+    <app-channel [currentChannelP]="currentChannelP"></app-channel>
+    <app-input [currentChannelP]="currentChannelP"></app-input>
     <!-- add channel here -->
     <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
       <div class="modal-box">
