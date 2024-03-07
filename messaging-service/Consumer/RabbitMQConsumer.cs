@@ -24,9 +24,9 @@ namespace messaging_service.Consumer
         public RabbitMQConsumer(ChatRepository chatRepository, IMapper mapper, ILogger<RabbitMQConsumer> logger)
         {
             _queueName = "message";
-            _factory = new ConnectionFactory() { HostName = Environment.GetEnvironmentVariable("MQ_HOST"),
-                UserName = Environment.GetEnvironmentVariable("MQ_USER"),
-                Password = Environment.GetEnvironmentVariable("MQ_PASS"),
+            _factory = new ConnectionFactory() { HostName = "rabbitmq",
+                UserName = "user",
+                Password = "password",
                 Port = 5672,
                 DispatchConsumersAsync = true };
             _connection = _factory.CreateConnection();

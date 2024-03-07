@@ -13,7 +13,7 @@ namespace gateway_chat_server.Producer
         {
             _logger.LogInformation("Send Message Excuted");
             var factory = new ConnectionFactory {
-                HostName = Environment.GetEnvironmentVariable("MQ_HOST"),
+                HostName = "rabbitmq",
                 UserName = "user",
                 Password = "password",
                 Port = 5672
