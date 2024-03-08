@@ -27,7 +27,7 @@ services:
     container_name: gateway-chat
     image: oussamazaoui872/slack-gateway-chat-server:latest
     ports:
-      - "8091:8091"
+      - "8091:80"
     networks:
       - backend
     depends_on:
@@ -41,7 +41,7 @@ services:
     container_name: messaging-server
     image: oussamazaoui872/slack-messaging-service:latest
     ports:
-      - "8090:8090"
+      - "8090:80"
     networks:
       - backend
       - messaging
@@ -53,12 +53,11 @@ services:
       - DB_NAME=stack-messaging
       - DB_SA_PASSWORD=password@12345#
       - MQ_HOST=rabbitmq
-    restart: on-failure 
   api-gateway:
     container_name: api-gateway
     image: oussamazaoui872/slack-api-geteway:latest
     ports:
-      - "8084:8084"
+      - "8084:80"
     networks:
       - backend
     depends_on:
