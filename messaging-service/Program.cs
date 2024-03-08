@@ -47,6 +47,7 @@ builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer>();
+rabbitMQConsumer.SetConnection();
 await rabbitMQConsumer.StartConsuming();
 
 // Configure the HTTP request pipeline.

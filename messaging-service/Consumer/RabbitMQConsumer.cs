@@ -13,29 +13,36 @@ namespace messaging_service.Consumer
 {
     public class RabbitMQConsumer : DefaultBasicConsumer
     {
-        private readonly string _queueName;
-        private readonly ConnectionFactory _factory;
-        private readonly IConnection _connection;
-        private readonly IModel _channel;
+        private string _queueName;
+        private ConnectionFactory _factory;
+        private IConnection _connection;
+        private IModel _channel;
         private readonly ChatRepository _chatRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<RabbitMQConsumer> _logger;
 
         public RabbitMQConsumer(ChatRepository chatRepository, IMapper mapper, ILogger<RabbitMQConsumer> logger)
         {
-            _queueName = "message";
-            _factory = new ConnectionFactory() { HostName = "rabbitmq",
-                UserName = "user",
-                Password = "password",
-                Port = 5672,
-                DispatchConsumersAsync = true };
-            _connection = _factory.CreateConnection();
-            _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
             _chatRepository = chatRepository;
             _mapper = mapper;
             _logger = logger;
            
+        }
+
+        public void SetConnection()
+        {
+            _queueName = "message";
+            _factory = new ConnectionFactory()
+            {
+                HostName = "rabbitmq",
+                UserName = "user",
+                Password = "password",
+                Port = 5672,
+                DispatchConsumersAsync = true
+            };
+            _connection = _factory.CreateConnection();
+            _channel = _connection.CreateModel();
+            _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
         }
 
         public async Task StartConsuming()
@@ -59,6 +66,10 @@ namespace messaging_service.Consumer
                 _logger.LogInformation(messageString);
 
                 MessageRequestDto messageDto = JsonConvert.DeserializeObject<MessageRequestDto>(messageString) ?? throw new Exception("Failed to deserialize Message");
+                if (messageDto == null)
+                {
+                    throw new Exception("Failed to deserialize Message");
+                }
 
                 Chat message = _mapper.Map<Chat>(messageDto);
                 _logger.LogInformation(message.ChannelId.ToString() + "|" + message.Message + "|" + message.UserId.ToString());
