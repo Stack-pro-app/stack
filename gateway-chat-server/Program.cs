@@ -34,7 +34,6 @@ if (app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 
 app.UseRouting();
 
@@ -42,4 +41,4 @@ app.UseAuthorization();
 
 app.MapHub<ChannelHub>("/channelHub");
 
-app.Run("http://localhost:8091");
+app.Run();
