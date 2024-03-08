@@ -13,7 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
     var dbName = Environment.GetEnvironmentVariable("DB_NAME");
     var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
-    var connectionString = $"Data Source={dbHost};Initial Catalog={dbName};User ID=sa;Password={dbPassword};MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=True;Encrypt=True";
+    var connectionString = $"Server={dbHost};Initial Catalog={dbName};User Id=sa;Password={dbPassword};MultipleActiveResultSets=true;Integrated Security=True;TrustServerCertificate=True;Encrypt=True";
     option.UseSqlServer(builder.Configuration.GetConnectionString(connectionString), sqlServerOptionsAction: sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure();
