@@ -63,6 +63,6 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors(myAllowSpecificOrigins);
 
-app.Run();
+app.Run("http://localhost:8090");
 
 

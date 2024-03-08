@@ -12,4 +12,4 @@ var app = builder.Build();
 await app.UseOcelot();
 
 
-app.Run();
+app.Run("http://localhost:8084");
