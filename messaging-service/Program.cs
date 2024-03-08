@@ -13,7 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
     var dbName = Environment.GetEnvironmentVariable("DB_NAME");
     var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
-    string connectionString = "Server=192.168.1.100;Initial Catalog=stack-messaging;User Id=mssql;Password=password@12345#";
+    string connectionString = "Server=database-1;Initial Catalog=stack-messaging;User Id=mssql;Password=password@12345#";
     option.UseSqlServer(builder.Configuration.GetConnectionString(connectionString), sqlServerOptionsAction: sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure();
