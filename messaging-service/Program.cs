@@ -61,22 +61,9 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors(myAllowSpecificOrigins);
 
-ApplyMigration();
 app.Run();
 
 
 
-void ApplyMigration()
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        if (_db.Database.GetPendingMigrations().Count() > 0)
-        {
-            _db.Database.Migrate();
-        }
-    }
-}
 
 
