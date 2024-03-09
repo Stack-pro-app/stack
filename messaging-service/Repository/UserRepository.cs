@@ -4,6 +4,7 @@ using messaging_service.models.domain;
 using messaging_service.models.dto.Detailed;
 using messaging_service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace messaging_service.Repository
 {
@@ -25,9 +26,8 @@ namespace messaging_service.Repository
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error creating user: {ex.Message}");
                 throw;
             }
         }
@@ -36,14 +36,13 @@ namespace messaging_service.Repository
         {
             try
             {
-                var userToDelete = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == authId) ?? throw new InvalidOperationException("User not found.");
+                var userToDelete = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == authId) ?? throw new ValidationException("User not found.");
                 _context.Users.Remove(userToDelete);
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error deleting user: {ex.Message}");
                 throw;
             }
         }
@@ -53,15 +52,14 @@ namespace messaging_service.Repository
             try
             {
                 var target = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == user.AuthId);
-                if (target == null) throw new InvalidOperationException("Invalid User");
+                if (target == null) throw new ValidationException("Invalid User");
                 target.Name = user.Name;
                 target.Email = user.Email;
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error updating user: {ex.Message}");
                 throw;
             }
         }
@@ -70,12 +68,11 @@ namespace messaging_service.Repository
         {
             try
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == authId) ?? throw new InvalidOperationException("User not found.");
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == authId) ?? throw new ValidationException("User not found.");
                 return user;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting user: {ex.Message}");
                 throw;
             }
         }
@@ -95,9 +92,8 @@ namespace messaging_service.Repository
                     .ToListAsync();
                 return usersByChannel;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting users by channel: {ex.Message}");
                 throw;
             }
         }
@@ -110,9 +106,8 @@ namespace messaging_service.Repository
                 IEnumerable<UserDetailDto> usersDetails = _mapper.Map<IEnumerable<User>,IEnumerable<UserDetailDto>>(users);
                 return usersDetails;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error getting users by workspace: {ex.Message}");
                 throw;
             }
         }
@@ -122,7 +117,7 @@ namespace messaging_service.Repository
             try
             {
                 var IsValidWorkspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == workspaceId);
-                if (IsValidWorkspace == null) throw new InvalidOperationException("Workspace Invalid");
+                if (IsValidWorkspace == null) throw new ValidationException("Workspace Invalid");
                 List<string> results = new List<string>();
                 foreach (var Id in usersId)
                 {
@@ -137,7 +132,6 @@ namespace messaging_service.Repository
                         WorkspaceId = workspaceId,
                         UserId = Id,
                     };
-                    Console.WriteLine($"User {userWorkspace.WorkspaceId}");
 
                     var result = await _context.UsersWorkspaces.AddAsync(userWorkspace);
                     if (result.State != EntityState.Added) { results.Add("Failed To Add User with ID:" + Id); }
@@ -150,9 +144,8 @@ namespace messaging_service.Repository
                 return results;
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error Addin users to workspace: {ex.Message}");
                 throw;
             }
 
@@ -164,16 +157,16 @@ namespace messaging_service.Repository
             {
                 foreach (var Id in usersId)
                 {
-                    UserWorkspace result = await _context.UsersWorkspaces.FirstOrDefaultAsync(w => w.WorkspaceId == workspaceId && w.UserId == Id) ?? throw new Exception("The User is already not a member");
+                    UserWorkspace result = await _context.UsersWorkspaces.FirstOrDefaultAsync(w => w.WorkspaceId == workspaceId && w.UserId == Id) ?? throw new ValidationException("The User is already not a member");
                     _context.UsersWorkspaces.Remove(result);
-                    results.Add("Succesfully deleted");
+                    results.Add("Succesfully deleted !");
                 }
                 await _context.SaveChangesAsync();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                results.Add("Failed To delete :" + ex.Message);
+                results.Add("Failed To delete !");
                 throw;
             }
             return results;
@@ -182,10 +175,10 @@ namespace messaging_service.Repository
         {
             try
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception("User not found");
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email) ?? throw new ValidationException("User not found");
                 return user;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -195,13 +188,13 @@ namespace messaging_service.Repository
         {
             try
             {
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new Exception("User not found");
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new ValidationException("User not found");
                 user.Last_login = DateTime.Now;
                 await _context.SaveChangesAsync();
                 IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == 1).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
                 return workspaces;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

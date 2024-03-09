@@ -33,6 +33,10 @@ namespace messaging_service.Data
             .Property(c => c.ChannelString)
             .HasDefaultValueSql("NEWID()");
 
+            modelBuilder.Entity<Workspace>()
+            .HasIndex(w => new { w.Name, w.AdminId })
+            .IsUnique();
+
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)
                 .IsUnique();

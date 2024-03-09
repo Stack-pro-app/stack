@@ -6,6 +6,7 @@ using messaging_service.models.dto.Detailed;
 using messaging_service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 
 namespace messaging_service.Repository
 {
@@ -35,7 +36,7 @@ namespace messaging_service.Repository
         {
             try
             {
-                Channel channel = await _context.Channels.FirstOrDefaultAsync(x => x.Id == channelId) ?? throw new InvalidOperationException("Invalid Channel");
+                Channel channel = await _context.Channels.FirstOrDefaultAsync(x => x.Id == channelId) ?? throw new ValidationException("Invalid Channel");
                 _context.Channels.Remove(channel);
                 await _context.SaveChangesAsync();
                 return true;
@@ -47,7 +48,7 @@ namespace messaging_service.Repository
         {
             try
             {
-                Channel channel = await _context.Channels.FirstOrDefaultAsync(x => x.Id == channelId) ?? throw new InvalidOperationException("Invalid Channel");
+                Channel channel = await _context.Channels.FirstOrDefaultAsync(x => x.Id == channelId) ?? throw new ValidationException("Invalid Channel");
                 ChannelDetailDto channelMinimalDto = _mapper.Map<ChannelDetailDto>(channel);
                 return channelMinimalDto;
             }
@@ -58,7 +59,7 @@ namespace messaging_service.Repository
         {
             try
             {
-                IEnumerable<Channel> channels = await _context.Channels.Where(x => x.WorkspaceId == workspaceId).ToListAsync()?? throw new Exception("Invalid Workspace");
+                IEnumerable<Channel> channels = await _context.Channels.Where(x => x.WorkspaceId == workspaceId).ToListAsync()?? throw new ValidationException("Invalid Workspace");
                 IEnumerable<ChannelMinimalDto> channelsMinimalDto = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(channels);
                 return channelsMinimalDto;
             }
@@ -69,7 +70,7 @@ namespace messaging_service.Repository
         {
             try
             {
-                Channel validChannel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channel.Id) ?? throw new Exception("Invalid Channel");
+                Channel validChannel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channel.Id) ?? throw new ValidationException("Invalid Channel");
                 if(!channel.Description.IsNullOrEmpty()) validChannel.Description = channel.Description;
                 if(!channel.Name.IsNullOrEmpty()) validChannel.Name = channel.Name;
                 if(channel.Is_private != null) validChannel.Is_private = channel.Is_private;
@@ -84,15 +85,34 @@ namespace messaging_service.Repository
         {
             try
             {
-                Channel Channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId) ?? throw new Exception("Invalid Channel!");
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new Exception("Invalid User!");
+                Channel Channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId) ?? throw new ValidationException("Invalid Channel!");
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new ValidationException("Invalid User!");
                 
                 Member member = new()
                 {
                     ChannelId = channelId,
                     UserId = userId,
                 };
-                _context.Add(member);
+                _context.Members.Add(member);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public async Task<bool> RemoveUserFromPrivateChannel(int channelId, int userId)
+        {
+            try
+            {
+                Channel Channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId) ?? throw new ValidationException("Invalid Channel!");
+                User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new ValidationException("Invalid User!");
+
+                Member member = new()
+                {
+                    ChannelId = channelId,
+                    UserId = userId,
+                };
+                _context.Members.Remove(member);
                 await _context.SaveChangesAsync();
                 return true;
             }

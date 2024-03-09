@@ -1,5 +1,6 @@
 using messaging_service.Consumer;
 using messaging_service.Data;
+using messaging_service.Exceptions;
 using messaging_service.MappingProfiles;
 using messaging_service.Repository;
 using messaging_service.Repository.Interfaces;
@@ -38,10 +39,18 @@ builder.Services.AddScoped<RabbitMQConsumer>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<WorkspaceRepository>();
-builder.Services.AddScoped<ChatRepository>();
-builder.Services.AddScoped<ChannelRepository>();
+builder.Services.AddScoped<UserRepository>()
+    .AddProblemDetails()
+    .AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddScoped<WorkspaceRepository>()
+    .AddProblemDetails()
+    .AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddScoped<ChatRepository>()
+    .AddProblemDetails()
+    .AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddScoped<ChannelRepository>()
+    .AddProblemDetails()
+    .AddExceptionHandler<GlobalExceptionHandler>();
 
 
 builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile));
@@ -59,7 +68,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
+app.UseStatusCodePages();
+app.UseExceptionHandler();
 app.MapControllers();
 app.UseCors(myAllowSpecificOrigins);
 
