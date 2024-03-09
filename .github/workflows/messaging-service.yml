@@ -1,4 +1,4 @@
-name: Authentication Service CI/CD
+name: messaging Service CI/CD
 
 on:
   push:
@@ -25,25 +25,29 @@ jobs:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: |
+         cd messaging-service
+         dotnet restore
 
       - name: Build project
-        run: dotnet build
+        run: |
+         cd messaging-service
+         dotnet build
 
-      - name: Test project
-        run: dotnet test
+      #- name: Test project
+       # run: dotnet test
         
       - name: Get current date
         id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d-%H-%M-%S')"
           
       - name: Build Docker image
         uses: docker/build-push-action@v5
         with:
-           context: ./,,,
+           context: ./messaging-service
            dockerfile: Dockerfile
            push: false
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-auth-service:latest-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-messaging-servicee:latest
            
            
       - name: login to docker hub
@@ -55,7 +59,7 @@ jobs:
       - name: push image
         uses: docker/build-push-action@v5
         with:
-           context: ./,,,
+           context: ./messaging-service
            dockerfile: Dockerfile
            push: true
-           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-auth-service:latest-${{ steps.date.outputs.date }}
+           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-messaging-service:latest

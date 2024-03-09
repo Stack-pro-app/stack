@@ -1,27 +1,21 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using gateway_chat_server.Models;
 using Newtonsoft.Json;
+using gateway_chat_server.Producer;
 namespace gateway_chat_server.Hubs
 {
     public class ChannelHub : Hub
 
     {
-        private readonly ILogger<ChannelHub> _logger;
+        private readonly IMessageProducer _messagePublisher;
 
-        public ChannelHub(ILogger<ChannelHub> logger)
+        public ChannelHub(IMessageProducer messagePublisher)
         {
-            _logger = logger;
-        }
-        public async Task SendMessage(string root)
-        {
-            _logger.LogInformation("Messaging method worked ");
-            Chat? message= JsonConvert.DeserializeObject<Chat>(root);
-            _logger.LogInformation(message.Message);
-            _logger.LogInformation(root);
+            _messagePublisher = messagePublisher;
 
-            await Clients.Group(message.ChannelString.ToString()).SendAsync("messageReceived", root);
-            
         }
+        // We Can also track if a user is online using these methods
+        // Step 1: Add the client to the channel (everytime)
         public async Task AddToGroup(string channel)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, channel);
@@ -29,6 +23,28 @@ namespace gateway_chat_server.Hubs
             await Clients.Group(channel).SendAsync("Send", $"{Context.ConnectionId} has joined the group {channel}.");
         }
 
+        //Step 2: Send Messages Using this Method
+        public async Task SendMessage(string root)
+        {
+            try
+            {
+                Chat message = JsonConvert.DeserializeObject<Chat>(root) ?? throw new Exception("no data");
+                ChatDto messageToStore = new()
+                {
+                    UserId = message.UserId,
+                    ChannelId = message.ChannelId,
+                    Message = message.Message,
+                    ParentId = message.ParentId,
+                };
+                _messagePublisher.SendMessage(messageToStore);
+                await Clients.Group(message.ChannelString).SendAsync("messageReceived", root);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+        //Step 3: Remove the client From the channel to keep it clean
         public async Task RemoveFromGroup(string channel)
         {
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, channel);

@@ -1,0 +1,84 @@
+version: '3.8'
+services:
+  front:
+    image: oussamazaoui872/slack-front:latest
+    container_name: front
+    ports:
+      - "80:80"
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password  
+    networks:
+      - backend
+  eureka:
+    container_name: eureka
+    image: oussamazaoui872/slack-eureka-server:latest
+    ports:
+      - "8761:8761"
+    networks:
+      - backend
+  gateway-chat:
+    container_name: gateway-chat
+    image: oussamazaoui872/slack-gateway-chat-server:latest
+    ports:
+      - "8091:8091"
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+    environment:
+      - MQ_HOST=rabbitmq
+      - MQ_USER=user
+      - MQ_PASS=password 
+      - MQ_PORT=5672
+  messaging-service:
+    container_name: messaging-server
+    image: oussamazaoui872/slack-messaging-service:latest
+    ports:
+      - "8090:8090"
+    networks:
+      - backend
+      - messaging
+    depends_on:
+      - rabbitmq
+      - database-1
+    environment:
+      - DB_HOST=database-1
+      - DB_NAME=stack-messaging
+      - DB_SA_PASSWORD=password@12345#
+      - MQ_HOST=rabbitmq
+  api-gateway:
+    container_name: api-gateway
+    image: oussamazaoui872/slack-api-geteway:latest
+    ports:
+      - "8084:8084"
+    networks:
+      - backend
+    depends_on:
+      - eureka
+  database-1:
+    container_name: database-1
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - SA_PASSWORD=password@12345#
+      - ACCEPT_EULA=Y
+    networks:
+      - messaging
+
+
+networks:
+  backend:
+    driver: bridge
+  messaging:
+    driver: bridge
+
+
+
