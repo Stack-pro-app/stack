@@ -20,12 +20,21 @@ namespace messaging_service.Consumer
         private readonly ChatRepository _chatRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<RabbitMQConsumer> _logger;
+        private string hostName;
+        private string userName;
+        private string password;
+        private string port;
+
 
         public RabbitMQConsumer(ChatRepository chatRepository, IMapper mapper, ILogger<RabbitMQConsumer> logger)
         {
             _chatRepository = chatRepository;
             _mapper = mapper;
             _logger = logger;
+            hostName = Environment.GetEnvironmentVariable("MQ_HOST");
+            userName = Environment.GetEnvironmentVariable("MQ_USER");
+            password = Environment.GetEnvironmentVariable("MQ_PASSWORD");
+            port = Environment.GetEnvironmentVariable("MQ_PORT");
            
         }
 
@@ -34,9 +43,10 @@ namespace messaging_service.Consumer
             _queueName = "message";
             _factory = new ConnectionFactory()
             {
-                HostName = "rabbitmq",
-                UserName = "user",
-                Password = "password",
+                //HostName = "rabbitmq",
+                //UserName = "user",
+                //Password = "password",
+                HostName = "localhost",
                 Port = 5672,
                 DispatchConsumersAsync = true
             };
