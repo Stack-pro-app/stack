@@ -18,6 +18,7 @@
     "@angular/platform-browser": "^17.2.0",
     "@angular/platform-browser-dynamic": "^17.2.0",
     "@angular/router": "^17.2.0",
+    "@microsoft/signalr": "^8.0.0",
     "aos": "^2.3.4",
     "jwt-decode": "^4.0.0",
     "rxjs": "~7.8.0",
@@ -40,5 +41,11 @@
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "~5.3.2"
+  },
+  "browser": {
+    "http": false,
+    "https": false,
+    "url": false,
+    "util": false
   }
 }

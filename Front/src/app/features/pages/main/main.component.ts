@@ -1,11 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { ChannelComponent } from '../../../shared/components/channel/channel.component';
 import { Channel } from '../../../core/Models/channel';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ChannelService } from '../../../core/services/Channel/channel.service';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { WorkspaceService } from '../../../core/services/Workspace/workspace.service';
+import { Workspace } from '../../../core/Models/workspace';
+import { SignalrService } from '../../../core/services/signalr/signalr.service';
 
 @Component({
   selector: 'app-main',
@@ -20,28 +23,190 @@ import { RouterLink } from '@angular/router';
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
-export class MainComponent {
-  channels: Channel[];
-  currentChannel: string;
-  constructor(private service: ChannelService, private builder: FormBuilder) {
-    this.channels = service.chanels;
-    this.currentChannel = this.channels[0].name;
-  }
+export class MainComponent implements OnInit , OnChanges {
+  id: string | null = '';
+  channelRequest: any = {
+    name: '',
+    description: '',
+    is_private: false,
+    workspaceId: 0,
+  };
+  currentWorkspace: Workspace = {
+    id: 0,
+    name: '',
+    MainChannel: {},
+    publicChannels: [],
+    privateChannels: [],
+  };
+  currentChannelP: Channel = {
+    channelString: '',
+    created_at: {},
+    description: '',
+    id: 0,
+    is_private: false,
+    name: '',
+  };
+  channels:Channel[] = [];
+  constructor(
+    private signalrService : SignalrService,
+    private service: ChannelService,
+    private builder: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private workspaceService: WorkspaceService
+  ) {}
   public channelForm!: FormGroup;
-  onDeletechannel() {}
-
+  public workspaceForm!: FormGroup;
+receivedMessage :any;
+ngOnChanges(changes: SimpleChanges): void {
+     if (
+       changes['currentChannelP'] &&
+       changes['currentChannelP'].currentValue
+     ) {
+const messageDto = {
+  userId: localStorage.getItem('userId'),
+  channelId: 14,
+  ChannelString: '1D96A361-E812-460E-A21D-429B0C62F935',
+  message: 'this.messageForm.value.message',
+};
+this.signalrService.sendMessage(messageDto);
+     }
+}
   ngOnInit() {
+     
+
+    this.id = this.route.snapshot.paramMap.get('id');
     this.channelForm = this.builder.group({
       channelName: this.builder.control(''),
       channelPrivate: this.builder.control(false),
+      channelDescription: this.builder.control(''),
+    });
+    this.workspaceForm = this.builder.group({
+      workspaceName: this.builder.control(''),
+    });
+
+    this.workspaceService
+      .getWorkspace(this.id, localStorage.getItem('userId'))
+      .subscribe({
+        next: (response) => {
+          this.currentWorkspace = response.result;
+          console.log("Wos" ,this.currentWorkspace);
+          
+          this.channels = this.currentWorkspace.privateChannels;
+
+          this.currentChannelP = {
+            channelString: response.result.mainChannel.channelString,
+            created_at: response.result.mainChannel.created_at,
+            description: response.result.mainChannel.description,
+            id: response.result.mainChannel.id,
+            is_private: response.result.mainChannel.is_private,
+            name: response.result.mainChannel.name,
+          };
+          console.log(this.currentChannelP);
+          console.log(this.channels);
+          
+
+          
+        },
+        error: (error) => {
+          console.error('Login error', error);
+        },
+      });
+  }
+  reload() {
+    this.workspaceService
+      .getWorkspace(this.id, localStorage.getItem('userId'))
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+          this.currentWorkspace = response.result;
+          this.channels = this.currentWorkspace.privateChannels;
+          for (let chanel of this.currentWorkspace.publicChannels) {
+            this.channels.push(chanel);
+          }
+
+        },
+        error: (error) => {
+          console.error('Reload error', error);
+        },
+      });
+  }
+  onCreateChannel() {
+    this.channelRequest.name = this.channelForm.value.channelName;
+    this.channelRequest.workspaceId = this.currentWorkspace.id;
+    this.channelRequest.is_private = this.channelForm.value.channelPrivate;
+    this.channelRequest.description = this.channelForm.value.channelDescription;
+    this.service.CreateChannel(this.channelRequest).subscribe({
+      next: (response) => {
+        this.reload();
+      },
+      error: (error) => {
+        console.error('Login error', error);
+      },
+      complete: () => console.info('complete'),
     });
   }
-
-  onCreateChannel() {
-    let channel = this.channelForm.value;
-    if (channel.channelName === '') {
-      return;
-    }
-    this.service.CreateChannel(channel.channelName, channel.channelPrivate);
+  onDeleteWorkspace() {
+    this.workspaceService.Delete(this.currentWorkspace.id).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.router.navigate(['/Home']);
+      },
+      error: (error) => {
+        console.error('Login error', error);
+      },
+      complete: () => console.info('complete'),
+    });
+  }
+  onUpdateWorkspace() {
+    const name = this.workspaceForm.value.workspaceName;
+    console.log(name);
+    this.workspaceService.Update(this.currentWorkspace.id, name).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('Updating  error', error);
+      },
+      complete: () => {
+        this.reload();
+      },
+    });
+  }
+  onChangeChannel(channel: Channel) {
+    this.currentChannelP = channel;
+    console.log("HEEEEEEEEEEEREE",this.currentChannelP);
+  }
+  onDeleteChannel() {
+    this.service.Delete(this.currentChannelP.id).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('Updating  error', error);
+      },
+      complete: () => {
+        this.reload();
+      },
+    });;
+  }
+  onUpdateChannel() {
+    const data = {
+      id:this.currentChannelP.id,
+      name: this.channelForm.value.channelName,
+      description:this.currentChannelP.description,
+      is_private:this.channelForm.value.channelPrivate
+    };
+    this.service.Update(data).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('Updating  error', error);
+      },
+      complete: () => {
+        this.reload();
+      },
+    });
   }
 }

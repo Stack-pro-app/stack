@@ -11,5 +11,6 @@ namespace gateway_chat_server.Models
         public string ChannelString { get; set; }
         public string Message { get; set; }
         public int? ParentId { get; set; }
+
     }
 }

@@ -1,7 +1,8 @@
 export interface Channel {
-  id:Number,
-  name: string;
-  Description:string,
-  IsPriate:Boolean,
-  WorkspaceId:Number
+  channelString : string,
+  created_at: any,
+  description: string,
+  id: number,
+  is_private: Boolean,
+  name:string,
 }
