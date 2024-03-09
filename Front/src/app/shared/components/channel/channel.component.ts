@@ -10,6 +10,7 @@ import { MessageComponent } from '../message/message.component';
 import { ChannelService } from '../../../core/services/Channel/channel.service';
 import { ChatService } from '../../../core/services/Chat/chat.service';
 import { Channel } from '../../../core/Models/channel';
+import { SignalrService } from '../../../core/services/signalr/signalr.service';
 
 @Component({
   selector: 'app-channel',
@@ -19,33 +20,42 @@ import { Channel } from '../../../core/Models/channel';
   styleUrl: './channel.component.css',
 })
 export class ChannelComponent implements OnInit, OnChanges {
-  @Input({ required: true }) currentChannelP: any;
+  @Input({ required: true }) currentChannelP!: Channel;
   messages: any[] = [];
   //add the messaging service here
-  constructor(private service: ChatService) {}
+  constructor(private service: ChatService,
+    private signalrService : SignalrService) {}
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
-      console.log('changes here', this.currentChannelP);
-      this.getMessages();
+     console.log("Changed WorkSpace Chanel" ,changes['currentChannelP']);
+          console.log(' ChanelStr', this.currentChannelP.channelString);
+
+      this.signalrService.joinChannel(this.currentChannelP.channelString);
+
+    //  this.getMessages();
     }
   }
   ngOnInit(): void {
-    console.log('heeeeeeeelo');
-    this.getMessages();
-    console.log('Received channel : ', this.currentChannelP);
+     this.signalrService.startConnection().subscribe(() => {
+            this.signalrService.joinChannel(this.currentChannelP.channelString);
+
+       this.signalrService.receiveMessage().subscribe((message) => {
+        this.messages.push(message)         ;
+       });
+     });
+   // this.getMessages();
   }
-  getMessages() {
+ /* getMessages() {
     this.service.GetMessages(this.currentChannelP.id, 1).subscribe({
       next: (response) => {
         this.messages = response.result;
-        console.log(this.messages);
+        console.log("The messages",this.messages);
       },
       error: (error) => {
         console.error('Getting Messages  error', error);
       },
       complete: () => {
-        console.info('completed');
       },
     });
-  }
+  }*/
 }

@@ -77,7 +77,7 @@ export class CreateWorkSpaceComponent implements OnInit {
       this.service.Create(this.WorkspaceRequest).subscribe({
         next: (response) => {
           console.log(response);
-          this.router.navigate(['/Main']);
+          this.router.navigate(['/Home']);
         },
         error: (error) => {
           console.error('Create  error', error);

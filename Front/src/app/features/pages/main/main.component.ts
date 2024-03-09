@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { ChannelComponent } from '../../../shared/components/channel/channel.component';
 import { Channel } from '../../../core/Models/channel';
@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { WorkspaceService } from '../../../core/services/Workspace/workspace.service';
 import { Workspace } from '../../../core/Models/workspace';
+import { SignalrService } from '../../../core/services/signalr/signalr.service';
 
 @Component({
   selector: 'app-main',
@@ -22,7 +23,7 @@ import { Workspace } from '../../../core/Models/workspace';
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
-export class MainComponent {
+export class MainComponent implements OnInit , OnChanges {
   id: string | null = '';
   channelRequest: any = {
     name: '',
@@ -45,9 +46,9 @@ export class MainComponent {
     is_private: false,
     name: '',
   };
-  channels: any[] = [];
-  currentChannel: string = '';
+  channels:Channel[] = [];
   constructor(
+    private signalrService : SignalrService,
     private service: ChannelService,
     private builder: FormBuilder,
     private router: Router,
@@ -56,8 +57,24 @@ export class MainComponent {
   ) {}
   public channelForm!: FormGroup;
   public workspaceForm!: FormGroup;
-
+receivedMessage :any;
+ngOnChanges(changes: SimpleChanges): void {
+     if (
+       changes['currentChannelP'] &&
+       changes['currentChannelP'].currentValue
+     ) {
+const messageDto = {
+  userId: localStorage.getItem('userId'),
+  channelId: 14,
+  ChannelString: '1D96A361-E812-460E-A21D-429B0C62F935',
+  message: 'this.messageForm.value.message',
+};
+this.signalrService.sendMessage(messageDto);
+     }
+}
   ngOnInit() {
+     
+
     this.id = this.route.snapshot.paramMap.get('id');
     this.channelForm = this.builder.group({
       channelName: this.builder.control(''),
@@ -72,8 +89,9 @@ export class MainComponent {
       .getWorkspace(this.id, localStorage.getItem('userId'))
       .subscribe({
         next: (response) => {
-          console.log(response);
           this.currentWorkspace = response.result;
+          console.log("Wos" ,this.currentWorkspace);
+          
           this.channels = this.currentWorkspace.privateChannels;
 
           this.currentChannelP = {
@@ -84,13 +102,15 @@ export class MainComponent {
             is_private: response.result.mainChannel.is_private,
             name: response.result.mainChannel.name,
           };
-          console.log('Current Channel', this.currentChannelP);
+          console.log(this.currentChannelP);
           console.log(this.channels);
+          
+
+          
         },
         error: (error) => {
           console.error('Login error', error);
         },
-        complete: () => console.info('complete'),
       });
   }
   reload() {
@@ -104,12 +124,11 @@ export class MainComponent {
           for (let chanel of this.currentWorkspace.publicChannels) {
             this.channels.push(chanel);
           }
-          console.log(this.channels);
+
         },
         error: (error) => {
-          console.error('Login error', error);
+          console.error('Reload error', error);
         },
-        complete: () => console.info('complete'),
       });
   }
   onCreateChannel() {
@@ -119,7 +138,6 @@ export class MainComponent {
     this.channelRequest.description = this.channelForm.value.channelDescription;
     this.service.CreateChannel(this.channelRequest).subscribe({
       next: (response) => {
-        console.log(response);
         this.reload();
       },
       error: (error) => {
@@ -151,13 +169,13 @@ export class MainComponent {
         console.error('Updating  error', error);
       },
       complete: () => {
-        console.info('completed');
         this.reload();
       },
     });
   }
   onChangeChannel(channel: Channel) {
     this.currentChannelP = channel;
+    console.log("HEEEEEEEEEEEREE",this.currentChannelP);
   }
   onDeleteChannel() {
     this.service.Delete(this.currentChannelP.id).subscribe({
@@ -168,7 +186,6 @@ export class MainComponent {
         console.error('Updating  error', error);
       },
       complete: () => {
-        console.info('completed');
         this.reload();
       },
     });;
@@ -188,7 +205,6 @@ export class MainComponent {
         console.error('Updating  error', error);
       },
       complete: () => {
-        console.info('completed');
         this.reload();
       },
     });

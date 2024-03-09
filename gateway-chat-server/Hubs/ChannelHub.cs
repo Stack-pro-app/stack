@@ -4,12 +4,23 @@ using Newtonsoft.Json;
 namespace gateway_chat_server.Hubs
 {
     public class ChannelHub : Hub
-    {
 
+    {
+        private readonly ILogger<ChannelHub> _logger;
+
+        public ChannelHub(ILogger<ChannelHub> logger)
+        {
+            _logger = logger;
+        }
         public async Task SendMessage(string root)
         {
-            Chat message= JsonConvert.DeserializeObject<Chat>(root);
-            await Clients.Group(message.ChannelId.ToString()).SendAsync("messageReceived", root);
+            _logger.LogInformation("Messaging method worked ");
+            Chat? message= JsonConvert.DeserializeObject<Chat>(root);
+            _logger.LogInformation(message.Message);
+            _logger.LogInformation(root);
+
+            await Clients.Group(message.ChannelString.ToString()).SendAsync("messageReceived", root);
+            
         }
         public async Task AddToGroup(string channel)
         {

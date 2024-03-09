@@ -8,8 +8,8 @@ namespace gateway_chat_server.Models
     {
         public string UserId { get; set; }
         public string ChannelId { get; set; }
+        public string ChannelString { get; set; }
         public string Message { get; set; }
         public string? ParentId { get; set; }
-        public ICollection<string>? TaggedIds { get; set; }
     }
 }

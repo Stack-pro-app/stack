@@ -12,6 +12,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ChatService } from '../../../core/services/Chat/chat.service';
+import { SignalrService } from '../../../core/services/signalr/signalr.service';
 
 @Component({
   selector: 'app-input',
@@ -22,7 +23,7 @@ import { ChatService } from '../../../core/services/Chat/chat.service';
 })
 export class InputComponent implements OnInit, OnChanges {
   @Input({ required: true }) currentChannelP: any;
-  constructor(private builder: FormBuilder, private service: ChatService) {}
+  constructor(private builder: FormBuilder, private service: ChatService,private signalrService : SignalrService) {}
   public messageForm!: FormGroup;
   messageDto: any = {
     userId: 1,
@@ -32,7 +33,6 @@ export class InputComponent implements OnInit, OnChanges {
   };
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
-      console.log('changes here', this.currentChannelP);
     }
   }
 
@@ -40,6 +40,8 @@ export class InputComponent implements OnInit, OnChanges {
     this.messageForm = this.builder.group({
       message: this.builder.control(''),
     });
+   
+    
   }
 
   onSend() {
@@ -49,7 +51,14 @@ export class InputComponent implements OnInit, OnChanges {
       message: this.messageForm.value.message,
       parentId: null,
     };
-    
+     const signalmessageDto = {
+       userId: localStorage.getItem('userId'),
+       channelId: this.currentChannelP.id,
+       ChannelString: this.currentChannelP.channelString,
+       message: this.messageForm.value.message,
+       parentId: null,
+     };
+    this.signalrService.sendMessage(signalmessageDto);
     this.service.SendMessage(this.messageDto).subscribe({
       next: (response) => {
         console.log(response);
