@@ -38,21 +38,32 @@ namespace messaging_service.Consumer
            
         }
 
-        public void SetConnection()
+        public bool SetConnection()
         {
             _queueName = "message";
             _factory = new ConnectionFactory()
             {
-                //HostName = "rabbitmq",
-                //UserName = "user",
-                //Password = "password",
+                //HostName = hostName,
+                //UserName = userName,
+                //Password = password,
+                //Port = int.Parse(port),
                 HostName = "localhost",
                 Port = 5672,
                 DispatchConsumersAsync = true
             };
-            _connection = _factory.CreateConnection();
-            _channel = _connection.CreateModel();
-            _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+            try
+            {
+                _connection = _factory.CreateConnection();
+                _channel = _connection.CreateModel();
+                _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
+            
         }
 
         public async Task StartConsuming()
