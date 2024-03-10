@@ -35,10 +35,10 @@ services:
     environment:
       - MQ_HOST=rabbitmq
       - MQ_USER=user
-      - MQ_PASS=password 
+      - MQ_PASSWORD=password 
       - MQ_PORT=5672
   messaging-service:
-    container_name: messaging-server
+    container_name: messaging-service
     image: oussamazaoui872/slack-messaging-service:latest
     ports:
       - "8090:8080"
@@ -54,7 +54,7 @@ services:
       - DB_SA_PASSWORD=password@12345#
       - MQ_HOST=rabbitmq
       - MQ_USER=user
-      - MQ_PASS=password
+      - MQ_PASSWORD=password
       - MQ_PORT=5672
   api-gateway:
     container_name: api-gateway
