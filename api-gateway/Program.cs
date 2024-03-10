@@ -3,7 +3,7 @@ using Ocelot.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("Ocelot.json",optional: false, reloadOnChange: true)
+    .AddJsonFile("ocelot.json",optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 
 builder.Services.AddSignalR();
