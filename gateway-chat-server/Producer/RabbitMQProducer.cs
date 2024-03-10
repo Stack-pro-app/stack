@@ -6,9 +6,6 @@ namespace gateway_chat_server.Producer
 {
     public class RabbitMQProducer : IMessageProducer
     {
-        private readonly ILogger _logger;
-
-        public RabbitMQProducer(ILogger<RabbitMQProducer> logger) { _logger = logger; }
         public void SendMessage<T>(T message)
         {
             var factory = new ConnectionFactory {

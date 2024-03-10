@@ -43,12 +43,12 @@ namespace messaging_service.Consumer
             _queueName = "message";
             _factory = new ConnectionFactory()
             {
-                //HostName = hostName,
-                //UserName = userName,
-                //Password = password,
-                //Port = int.Parse(port),
-                HostName = "localhost",
-                Port = 5672,
+                HostName = hostName,
+                UserName = userName,
+                Password = password,
+                Port = int.Parse(port),
+                //HostName = "localhost",
+                //Port = 5672,
                 DispatchConsumersAsync = true
             };
             try
