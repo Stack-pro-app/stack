@@ -7,6 +7,7 @@ using AutoMapper;
 using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Others;
+using System.ComponentModel.DataAnnotations;
 
 namespace messaging_service.Controllers
 {
@@ -29,7 +30,7 @@ namespace messaging_service.Controllers
             {
                 Channel channel = _mapper.Map<Channel>(channelDto);
                 var result = await _repository.CreateChannelAsync(channel);
-                if (!result) throw new Exception("Can't create Channel");
+                if (!result) throw new ValidationException("Can't create Channel");
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -38,12 +39,12 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Failed To Create Channel!"+ex.Message,
+                    Message = "Failed To Create Channel!",
                     Result = null,
                 };
                 return BadRequest(response);
@@ -57,7 +58,7 @@ namespace messaging_service.Controllers
             try
             {
                 bool result = await _repository.DeleteChannelAsync(id);
-                if (!result) throw new Exception("Can't Delete Channel");
+                if (!result) throw new ValidationException("Can't Delete Channel");
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -66,12 +67,12 @@ namespace messaging_service.Controllers
                     
              return Ok(response);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Failed To Create Channel!" + ex.Message,
+                    Message = "Failed To Delete Channel!",
                     Result = null,
                 };
                 return BadRequest(response);
@@ -86,7 +87,7 @@ namespace messaging_service.Controllers
             {
                 Channel channel = _mapper.Map<Channel>(channelDto);
                 bool result = await _repository.UpdateChannelAsync(channel);
-                if (!result) throw new Exception("Can't Update Channel");
+                if (!result) throw new ValidationException("Can't Update Channel");
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -95,12 +96,12 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Failed To Update Channel!" + ex.Message,
+                    Message = "Failed To Update Channel!",
                     Result = null,
                 };
                 return BadRequest(response);
@@ -123,12 +124,12 @@ namespace messaging_service.Controllers
                 return Ok(response);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Failed To Find Channel!" + ex.Message,
+                    Message = "Failed To Find Channel!",
                     Result = null,
                 };
                 return BadRequest(response);
@@ -142,7 +143,7 @@ namespace messaging_service.Controllers
             try
             {
                 bool result = await _repository.AddUserToPrivateChannel(channelId, user.userId);
-                if (!result) throw new Exception("Can't Add User To Channel");
+                if (!result) throw new ValidationException("Can't Add User To Channel");
                 ResponseDto responseDto = new()
                 {
                     IsSuccess = true,
@@ -151,12 +152,39 @@ namespace messaging_service.Controllers
                 return Ok(responseDto);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Failed To Add User To Channel!" + ex.Message,
+                    Message = "Failed To Add User To Channel!",
+                    Result = null,
+                };
+                return BadRequest(response);
+            }
+        }
+
+        [HttpDelete("RemoveUser/{channelId}")]
+        public async Task<ActionResult<ResponseDto>> RemoveFromPrivateChannel([FromRoute] int channelId, [FromBody] UserMinDto user)
+        {
+            try
+            {
+                bool result = await _repository.RemoveUserFromPrivateChannel(channelId, user.userId);
+                if (!result) throw new ValidationException("Can't Add User To Channel");
+                ResponseDto responseDto = new()
+                {
+                    IsSuccess = true,
+                    Message = "User Removed From Channel Successfully",
+                };
+                return Ok(responseDto);
+
+            }
+            catch (Exception)
+            {
+                ResponseDto response = new()
+                {
+                    IsSuccess = false,
+                    Message = "Failed To Remove User From Channel!",
                     Result = null,
                 };
                 return BadRequest(response);

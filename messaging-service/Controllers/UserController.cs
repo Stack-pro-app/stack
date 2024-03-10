@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using messaging_service.models.dto.Minimal;
 using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto.Requests;
+using System.ComponentModel.DataAnnotations;
 
 
 namespace messaging_service.Controllers
@@ -46,12 +47,12 @@ namespace messaging_service.Controllers
                 }
                 else
                 {
-                    throw new Exception("Failled to add !");
+                    throw new ValidationException("Failled to add !");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
 
         }
@@ -64,7 +65,7 @@ namespace messaging_service.Controllers
             try
             {
                 var user = await _userRepository.GetUserAsync(authId);
-                if (user == null) throw new Exception("No User Was Found");
+                if (user == null) throw new ValidationException("No User Was Found");
                 var userResponseDto = _mapper.Map<UserDetailDto>(user);
                 ResponseDto response = new()
                 {
@@ -74,9 +75,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
 
@@ -88,7 +89,7 @@ namespace messaging_service.Controllers
             try
             {
                 bool result = await _userRepository.DeleteUserAsync(authId);
-                if (!result) throw new Exception("Failed To Delete !");
+                if (!result) throw new ValidationException("Failed To Delete !");
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -97,9 +98,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
 
@@ -112,7 +113,7 @@ namespace messaging_service.Controllers
             {
                 var user = _mapper.Map<User>(userDto);
                 bool result = await _userRepository.UpdateUserAsync(user);
-                if (!result) throw new Exception("can't find user");
+                if (!result) throw new ValidationException("can't find user");
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -120,9 +121,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
 
@@ -137,7 +138,7 @@ namespace messaging_service.Controllers
             try
             {
                 IEnumerable<string> result = await _userRepository.AddUsersToWorkspace(usersDto.WorkspaceId, usersDto.UsersId);
-                if (!result.Any()) throw new Exception("Can't Add Users To Workspace");
+                if (!result.Any()) throw new ValidationException("Can't Add Users To Workspace");
                 ResponseDto response = new()
                 {
                     Result = result.ToList(),
@@ -146,15 +147,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ResponseDto response = new()
-                {
-                    Result = null,
-                    IsSuccess = false,
-                    Message = ex.Message,
-                };
-                return BadRequest(response);
+                throw;
             }
 
         }
@@ -167,7 +162,7 @@ namespace messaging_service.Controllers
             try
             {
                 IEnumerable<UserDetailDto> users = await _userRepository.GetUsersByWorkspaceAsync(workspaceId);
-                if (users.IsNullOrEmpty()) throw new Exception("Can't find any users");
+                if (users.IsNullOrEmpty()) throw new ValidationException("Can't find any users");
                 ResponseDto response = new()
                 {
                     Result = users.ToList(),
@@ -176,15 +171,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(users);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
-                ResponseDto response = new()
-                {
-                    Result = null,
-                    IsSuccess = false,
-                    Message = ex.Message,
-                };
-                return BadRequest(response);
+                throw;
             }
         }
         // Get Users In a Channel by channelId
@@ -196,7 +185,7 @@ namespace messaging_service.Controllers
                 IEnumerable<User> users = await _userRepository.GetUsersByChannelAsync(channelId);
                 IEnumerable<UserDetailDto> usersDto = users.Select(user => _mapper.Map<UserDetailDto>(user));
                 Console.WriteLine(usersDto);
-                if (users.IsNullOrEmpty()) throw new Exception("Can't find any users");
+                if (users.IsNullOrEmpty()) throw new ValidationException("Can't find any users");
                 ResponseDto response = new()
                 {
                     Result = usersDto,
@@ -205,15 +194,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(users);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ResponseDto response = new()
-                {
-                    Result = null,
-                    IsSuccess = false,
-                    Message = ex.Message,
-                };
-                return BadRequest(response);
+                throw;
             }
         }
 
@@ -225,24 +208,18 @@ namespace messaging_service.Controllers
             try
             {
                 IEnumerable<string> result = await _userRepository.RemoveUserFromWorkspace(usersDto.WorkspaceId, usersDto.UsersId);
-                if (!result.Any()) throw new Exception("Can't Add Users To Workspace");
+                if (!result.Any()) throw new ValidationException("Can't Add Users To Workspace");
                 ResponseDto response = new()
                 {
                     Result = result.ToList(),
                     IsSuccess = true,
-                    Message = " Deleted Users From Workspace",
+                    Message = "Deleted Users From Workspace",
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ResponseDto response = new()
-                {
-                    Result = null,
-                    IsSuccess = false,
-                    Message = ex.Message,
-                };
-                return BadRequest(response);
+                throw;
             }
         }
 
@@ -254,7 +231,7 @@ namespace messaging_service.Controllers
             try
             {
                 var user = await _userRepository.GetUserByEmailAsync(email);
-                if (user == null) throw new Exception("No User Was Found");
+                if (user == null) throw new ValidationException("No User Was Found");
                 var userResponseDto = _mapper.Map<UserDetailDto>(user);
                 ResponseDto response = new()
                 {
@@ -264,15 +241,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ResponseDto response = new()
-                {
-                    Result = null,
-                    IsSuccess = false,
-                    Message = ex.Message,
-                };
-                return BadRequest(response);
+                throw;
             }
         }
 
@@ -286,9 +257,9 @@ namespace messaging_service.Controllers
             try
             {
                 User user = await _userRepository.GetUserAsync(authId);
-                if (user == null) throw new Exception("No User Was Found");
+                if (user == null) throw new ValidationException("No User Was Found");
                 UserDetailDto userResponseDto = _mapper.Map<UserDetailDto>(user);
-                IEnumerable<Workspace> workspacs = await _userRepository.SetLoginAndGetWorkspaces(authId) ?? throw new Exception("Can't find user or workpaces");
+                IEnumerable<Workspace> workspacs = await _userRepository.SetLoginAndGetWorkspaces(authId) ?? throw new ValidationException("Can't find user or workpaces");
                // IEnumerable<WorkspaceMinimalDto> workspacesDto = _mapper.Map<IEnumerable<WorkspaceMinimalDto>>(workspaces);
                 ResponseDto response = new()
                 {
@@ -302,9 +273,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                throw;
             }
         }
 
