@@ -1,10 +1,12 @@
-
+using Amazon.S3;
 using gateway_chat_server.Hubs;
 using gateway_chat_server.Producer;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
 // Add services to the container.
 builder.Services.AddSignalR().AddJsonProtocol();
 
