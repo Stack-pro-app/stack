@@ -61,20 +61,21 @@ namespace gateway_chat_server.Controllers
             };
             string url = _s3Client.GetPreSignedURL(urlRequest);
 
-            FileRequestDto fileRequest = new()
+            ChatDto fileRequest = new()
             {
-                ChannelString = file.ChannelString,
+                ChannelId = file.ChannelId,
                 UserId = file.UserId,
-                FileName = file.FormFile.FileName,
-                Url = url,
+                Attachement_Name = file.FormFile.FileName,
+                Attachement_Url = url,
+                Message = file.Message
             };
 
-            _producer.SendFile(fileRequest);
+            _producer.SendMessage(fileRequest);
 
             string jsonData = JsonConvert.SerializeObject(fileRequest);
             
 
-            await _hubContext.Clients.Group(fileRequest.ChannelString).SendAsync("fileReceived", jsonData);
+            await _hubContext.Clients.Group(file.ChannelString).SendAsync("fileReceived", jsonData);
 
 
             return Ok(fileRequest);

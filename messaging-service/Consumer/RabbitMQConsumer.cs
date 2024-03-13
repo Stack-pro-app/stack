@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace messaging_service.Consumer
@@ -43,11 +44,11 @@ namespace messaging_service.Consumer
             _queueName = "message";
             _factory = new ConnectionFactory()
             {
-                HostName = hostName,
-                UserName = userName,
-                Password = password,
-                Port = int.Parse(port),
-                //HostName = "localhost",
+                //HostName = hostName,
+                //UserName = userName,
+                //Password = password,
+                //Port = int.Parse(port),
+                HostName = "localhost",
                 //Port = 5672,
                 DispatchConsumersAsync = true
             };
@@ -86,11 +87,9 @@ namespace messaging_service.Consumer
                 var messageString = Encoding.UTF8.GetString(body);
                 _logger.LogInformation(messageString);
 
-                MessageRequestDto messageDto = JsonConvert.DeserializeObject<MessageRequestDto>(messageString) ?? throw new Exception("Failed to deserialize Message");
-                if (messageDto == null)
-                {
-                    throw new Exception("Failed to deserialize Message");
-                }
+                MessageRequestDto messageDto = JsonConvert.DeserializeObject<MessageRequestDto>(messageString) ?? throw new ValidationException("Failed to deserialize Message");
+
+                if (messageDto.Message.IsNullOrEmpty() && messageDto.Attachement_Url.IsNullOrEmpty()) throw new ValidationException("Empty Message");
 
                 Chat message = _mapper.Map<Chat>(messageDto);
                 _logger.LogInformation(message.ChannelId.ToString() + "|" + message.Message + "|" + message.UserId.ToString());

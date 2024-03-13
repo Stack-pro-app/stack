@@ -9,6 +9,8 @@ using AutoMapper;
 using messaging_service.models.dto.Detailed;
 using System.Threading.Channels;
 using RabbitMQ.Client.Events;
+using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 
 namespace messaging_service.Controllers
 {
@@ -30,6 +32,7 @@ namespace messaging_service.Controllers
         {
             try
             {
+                if (messageRequestDto.Message.IsNullOrEmpty() && messageRequestDto.Attachement_Url.IsNullOrEmpty()) throw new ValidationException("Empty Message!");
                 Chat message = _mapper.Map<Chat>(messageRequestDto);
                 bool result = await _chatRepository.CreateChatAsync(message);
                     ResponseDto response = new()
