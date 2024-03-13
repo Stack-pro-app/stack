@@ -14,6 +14,19 @@ var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Services.AddCors(options =>
 {
+    options.AddPolicy("MyAllowSpecificOrigins",
+        builder =>
+        {
+            builder
+                .WithOrigins("null") // Allow requests from "null" origin
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // Allow credentials if needed (e.g., for SignalR)
+        });
+});
+/*
+builder.Services.AddCors(options =>
+{
     options.AddPolicy(name:MyAllowSpecificOrigins,
         policy =>
         {
@@ -24,7 +37,7 @@ builder.Services.AddCors(options =>
                 
         });
 });
-
+*/
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
 var app = builder.Build();
 
