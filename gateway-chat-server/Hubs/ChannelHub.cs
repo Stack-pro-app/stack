@@ -45,19 +45,6 @@ namespace gateway_chat_server.Hubs
             }
         }
 
-        //Optional: Send File
-        public async Task SendFile(string root)
-        {
-            try
-            {
-                Chat message = JsonConvert.DeserializeObject<Chat>(root) ?? throw new Exception("no data");
-                await Clients.Group(message.ChannelString).SendAsync("fileReceived", root);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
         //Step 3: Remove the client From the channel to keep it clean
         public async Task RemoveFromGroup(string channel)
         {

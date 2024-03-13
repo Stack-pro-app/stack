@@ -9,16 +9,17 @@ builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
 builder.Services.AddAWSService<IAmazonS3>();
 // Add services to the container.
 builder.Services.AddSignalR().AddJsonProtocol();
-
-var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("MyAllowSpecificOrigins",
+    options.AddPolicy("AllOrigins",
         builder =>
         {
             builder
-                .WithOrigins("null") // Allow requests from "null" origin
+                .WithOrigins("http://localhost", "https://localhost","null") // Allow requests from "null" origin
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials(); // Allow credentials if needed (e.g., for SignalR)
@@ -41,6 +42,12 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+app.UseCors("AllOrigins");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -50,12 +57,13 @@ if (app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
 app.UseRouting();
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.MapControllers();
 app.MapHub<ChannelHub>("/channelHub");
-app.UseCors(MyAllowSpecificOrigins);
+app.MapHub<FileHub>("/fileHub");
+
 
 app.Run();
