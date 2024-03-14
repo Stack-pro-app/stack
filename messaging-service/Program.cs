@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
+
     var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
     var dbName = Environment.GetEnvironmentVariable("DB_NAME");
     var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
@@ -60,6 +61,7 @@ builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer>();
+
 while (!rabbitMQConsumer.SetConnection()) ;
 await rabbitMQConsumer.StartConsuming();
 
