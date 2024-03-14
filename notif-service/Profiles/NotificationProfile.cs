@@ -8,6 +8,9 @@ namespace notif_service.Profiles
         public NotificationProfile() { 
             CreateMap<NotificationDto, Notification>();
             CreateMap<Notification, NotificationDto>();
+            CreateMap<Notification,NotificationDtoV2>();
+            CreateMap<NotificationDtoV2, Notification>();
+
         }
     }
 }
