@@ -7,7 +7,7 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class WorkspaceService {
-  url: string = 'http://localhost:5149/api/Workspace';
+  url: string = 'https://localhost:8193/api/Workspace';
 
   constructor(private http: HttpClient) {}
 

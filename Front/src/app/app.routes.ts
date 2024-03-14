@@ -7,6 +7,7 @@ import { PageNotFoundComponent } from './features/pages/page-not-found/page-not-
 import { MainComponent } from './features/pages/main/main.component';
 import { ProfileComponent } from './features/pages/profile/profile.component';
 import { CreateWorkSpaceComponent } from './features/pages/create-work-space/create-work-space.component';
+import { VideoCallComponent } from './features/pages/VideoCall/video-call/video-call.component';
 export const routes: Routes = [
     {path:'',pathMatch:'full',redirectTo:'Home'},
     {path:'Login',component:LoginComponent,title:'Login'},
@@ -15,5 +16,6 @@ export const routes: Routes = [
     {path:'Main/:id',title:'main',component:MainComponent},
     {path:'Profile',title:'profile',component:ProfileComponent},
     {path:'Create',title:'Create',component:CreateWorkSpaceComponent},
+    {path:'Call/:ChannelString',title:'Call',component:VideoCallComponent},
     {path:'**',pathMatch:'full',component:PageNotFoundComponent}
 ];
