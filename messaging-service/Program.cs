@@ -10,15 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
-    var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
-    var dbName = Environment.GetEnvironmentVariable("DB_NAME");
-    var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
-    string connectionString = "Server=database-1,1433;Initial Catalog=stack-messaging;User Id=SA;Password=password@12345#;Trusted_Connection=false;TrustServerCertificate=True";
-    option.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
-    {
-        sqlOptions.EnableRetryOnFailure();
-    });
-});
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+} );
 
 builder.Services.AddCors(options =>
 {
@@ -44,10 +37,10 @@ builder.Services.AddScoped<ChannelRepository>();
 
 builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile));
 var app = builder.Build();
-using var scope = app.Services.CreateScope();
+/*using var scope = app.Services.CreateScope();
 var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer>();
 rabbitMQConsumer.SetConnection();
-await rabbitMQConsumer.StartConsuming();
+await rabbitMQConsumer.StartConsuming();*/
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
