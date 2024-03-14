@@ -9,6 +9,8 @@ using AutoMapper;
 using messaging_service.models.dto.Detailed;
 using System.Threading.Channels;
 using RabbitMQ.Client.Events;
+using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 
 namespace messaging_service.Controllers
 {
@@ -30,6 +32,8 @@ namespace messaging_service.Controllers
         {
             try
             {
+                if (messageRequestDto.Message.IsNullOrEmpty() && messageRequestDto.Attachement_Url.IsNullOrEmpty()) throw new ValidationException("Empty Message!");
+                if (messageRequestDto.MessageId == null) messageRequestDto.MessageId = Guid.NewGuid();
                 Chat message = _mapper.Map<Chat>(messageRequestDto);
                 bool result = await _chatRepository.CreateChatAsync(message);
                     ResponseDto response = new()
@@ -39,23 +43,23 @@ namespace messaging_service.Controllers
                     };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
                     Message = "Failed To Store Your Message!"
                 };
-                return BadRequest(ex.Message);
+                return BadRequest(response);
             }
         }
         [HttpDelete("{messageId}")]
-        public async Task<ActionResult<ResponseDto>> DeleteMessage([FromRoute]int messageId)
+        public async Task<ActionResult<ResponseDto>> DeleteMessage([FromRoute]Guid messageId)
         {
             try
             {
-                bool result = await _chatRepository.DeleteChatPartAsync(messageId);
-                //bool result = await _chatRepository.DeleteChatPermAsync(messageId); // If You want to delete Permenantly!
+                //bool result = await _chatRepository.DeleteChatPartAsync(messageId);
+                bool result = await _chatRepository.DeleteChatPermAsync(messageId); // If You want to delete Permenantly!
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -63,14 +67,14 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Failed To Store Your Message!"
+                    Message = "Failed To Delete Your Message!"
                 };
-                return BadRequest(ex.Message);
+                return BadRequest(response);
             }
         }
 
@@ -79,7 +83,7 @@ namespace messaging_service.Controllers
         {
             try
             {
-                bool result = await _chatRepository.UpdateChatAsync(message.Id, message.Message);
+                bool result = await _chatRepository.UpdateChatAsync(message.MessageId, message.Message);
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -87,14 +91,14 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
                     Message = "Failed To update Your Message!"
                 };
-                return BadRequest(ex.Message);
+                return BadRequest(response);
             }
         }
         [HttpGet("{id}")]
@@ -111,12 +115,12 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Can't find the Message!"+ex.Message
+                    Message = "Can't find the Message!"
                 };
                 return BadRequest(response);
             }
@@ -135,12 +139,12 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Can't find the Messages!" + ex.Message
+                    Message = "Can't find the Messages!"
                 };
                 return BadRequest(response);
             }

@@ -7,7 +7,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/Channel"
@@ -19,7 +19,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/Channel/{id}"
@@ -31,7 +31,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/Channel/AddUser/{channelId}"
@@ -43,7 +43,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/Chat"
@@ -55,7 +55,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/Chat/{id}"
@@ -67,22 +67,23 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/Chat/channel/{channelId}"
     },
     {
-      "UpstreamPathTemplate": "/api/User",
-      "UpstreamHttpMethod": [ "Post", "Put" ],
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/User"
+      "DownstreamPathTemplate": "/api/User",
+      "UpstreamPathTemplate": "/api/User",
+      "UpstreamHttpMethod": [ "Post", "Put" ]
+
     },
     {
       "UpstreamPathTemplate": "/api/User/{authId}",
@@ -91,7 +92,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/User/{authId}"
@@ -103,7 +104,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/User/Workspace"
@@ -115,7 +116,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/User/channel/{channelId}"
@@ -127,7 +128,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/User/Workspace/{workspaceId}"
@@ -139,7 +140,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/User/email/{email}"
@@ -151,7 +152,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/User/myworkspaces/{authId}"
@@ -163,7 +164,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/Workspace"
@@ -174,8 +175,8 @@
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "messaging-servicei",
-          "Port": 8090
+          "Host": "messaging-service",
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/Workspace/{id}"
@@ -187,7 +188,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "messaging-service",
-          "Port": 8090
+          "Port": 8080
         }
       ],
       "DownstreamPathTemplate": "/api/Workspace/{id}/user/{userId}"
@@ -200,7 +201,7 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "gateway-chat",
-          "Port": 8091
+          "Port": 8080
         }
       ]
     }
@@ -212,6 +213,6 @@
 
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:8084"
+    "BaseUrl": "http://localhost:8084/"
   }
 }

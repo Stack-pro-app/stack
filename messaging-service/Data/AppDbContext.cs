@@ -1,6 +1,7 @@
 ﻿using messaging_service.models.domain;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
+using System.Xml;
 
 
 namespace messaging_service.Data
@@ -32,6 +33,10 @@ namespace messaging_service.Data
             modelBuilder.Entity<Channel>()
             .Property(c => c.ChannelString)
             .HasDefaultValueSql("NEWID()");
+
+            modelBuilder.Entity<Workspace>()
+            .HasIndex(w => new { w.Name, w.AdminId })
+            .IsUnique();
 
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)

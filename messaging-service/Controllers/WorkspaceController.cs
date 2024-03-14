@@ -9,6 +9,7 @@ using messaging_service.models.dto.Response;
 using messaging_service.models.dto.Others;
 using messaging_service.models.domain;
 using messaging_service.models.dto.Detailed;
+using System.ComponentModel.DataAnnotations;
 
 namespace messaging_service.Controllers
 {
@@ -44,18 +45,12 @@ namespace messaging_service.Controllers
                 }
                 else
                 {
-                    throw new Exception("Failled to ad !");
+                    throw new ValidationException("Failed to ad !");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ResponseDto response = new()
-                {
-                    Result = null,
-                    IsSuccess = false,
-                    Message = ex.Message,
-                };
-                return BadRequest(response);
+                throw;
             }
 
         }
@@ -78,18 +73,12 @@ namespace messaging_service.Controllers
                 }
                 else
                 {
-                    throw new Exception("Failed to Delete !");
+                    throw new ValidationException("Failed to Delete !");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ResponseDto response = new()
-                {
-                    Result = null,
-                    IsSuccess = false,
-                    Message = ex.Message,
-                };
-                return BadRequest(response);
+                throw;
             }
 
         }
@@ -112,18 +101,12 @@ namespace messaging_service.Controllers
                 }
                 else
                 {
-                    throw new Exception("Failed to Update Name !");
+                    throw new ValidationException("Failed to Update Name !");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ResponseDto response = new()
-                {
-                    Result = null,
-                    IsSuccess = false,
-                    Message = ex.Message,
-                };
-                return BadRequest(response);
+                throw;
             }
         }
         //Workspace and it's channels by Id (and the user's Id extacted from jwt Token!)
@@ -141,11 +124,11 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch(Exception ex) {
+            catch(Exception) {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Failed to get your workspace!"+ex.Message,
+                    Message = "Failed to get your workspace!",
                 };
                 return BadRequest(response);
             }

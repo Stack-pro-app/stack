@@ -1,4 +1,5 @@
 ﻿using messaging_service.models.domain;
+using messaging_service.models.dto.Others;
 using messaging_service.Repository.Interfaces;
 using messaging_service.Data;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,10 @@ using AutoMapper;
 using messaging_service.models.dto.Minimal;
 using System;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
+using Amazon.S3;
+using messaging_service.Producer;
+using messaging_service.Models.Dto.Others;
 
 namespace messaging_service.Repository
 {
@@ -15,28 +20,30 @@ namespace messaging_service.Repository
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger<ChatRepository> _logger;
+        private readonly IAmazonS3 _S3client;
+        private readonly IRabbitMQProducer _producer;
 
-        public ChatRepository(AppDbContext context,IMapper mapper, ILogger<ChatRepository> logger)
+        public ChatRepository(AppDbContext context,IMapper mapper, ILogger<ChatRepository> logger,IAmazonS3 client,IRabbitMQProducer producer)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _S3client=client;
+            _producer = producer;
         }
 
         public async Task<bool> CreateChatAsync(Chat message)
         {
             try
             {
-                _logger.LogInformation("entered Repository with:" + message.Message);
                 _context.Chats.Add(message);
-                _logger.LogInformation("added it:");
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw new Exception("Failed to create chat message.", ex);
+                throw;
             }
         }
 
@@ -44,14 +51,14 @@ namespace messaging_service.Repository
         {
             try
             {
-                var message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new InvalidOperationException("Message Inexistant");
+                var message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new ValidationException("Message Inexistant");
                 message.Is_deleted = true;
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("Failed to delete chat message partially.", ex);
+                throw;
             }
         }
 
@@ -59,14 +66,31 @@ namespace messaging_service.Repository
         {
             try
             {
-                Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId) ?? throw new InvalidOperationException("Message Inexistant");
+                Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId) ?? throw new ValidationException("Message Inexistant");
+                await _S3client.DeleteObjectAsync("stack-messaging-service", message.Attachement_Key);
                 _context.Chats.Remove(message);
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("Failed to delete chat message permenantly.", ex);
+                throw;
+            }
+        }
+
+        public async Task<bool> DeleteChatPermAsync(Guid messageId)
+        {
+            try
+            {
+                Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.MessageId == messageId) ?? throw new ValidationException("Message Inexistant");
+                await _S3client.DeleteObjectAsync("stack-messaging-service", message.Attachement_Key);
+                _context.Chats.Remove(message);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
 
@@ -82,7 +106,7 @@ namespace messaging_service.Repository
 
                 return messageDetailDtos;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -93,27 +117,27 @@ namespace messaging_service.Repository
         {
             try
             {
-                Chat message = await _context.Chats.Include(m => m.User).Include(m => m.Parent).FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new InvalidOperationException("Message Inexistant");
+                Chat message = await _context.Chats.Include(m => m.User).Include(m => m.Parent).FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new ValidationException("Message Inexistant");
                 MessageDetailDto messageDetailDto = _mapper.Map<MessageDetailDto>(message);
                 return messageDetailDto;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
         }
 
-        public async Task<bool> UpdateChatAsync(int messageId, string message)
+        public async Task<bool> UpdateChatAsync(Guid messageId, string message)
         {
             try
             {
-                var msg = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new InvalidOperationException("Message Inexistant");
+                var msg = await _context.Chats.FirstOrDefaultAsync(x => x.MessageId == messageId && x.Is_deleted == false) ?? throw new ValidationException("Message Inexistant");
                 msg.Message = message;
                 msg.Modified_at = DateTime.Now;
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

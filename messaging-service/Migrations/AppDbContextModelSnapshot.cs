@@ -76,6 +76,15 @@ namespace messaging_service.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Attachement_Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachement_Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Attachement_Url")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ChannelId")
                         .HasColumnType("int");
 
@@ -88,9 +97,11 @@ namespace messaging_service.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Message")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("MessageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("Modified_at")
                         .HasColumnType("datetime2");
@@ -230,6 +241,9 @@ namespace messaging_service.Migrations
                         .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name", "AdminId")
+                        .IsUnique();
 
                     b.ToTable("Workspaces", "chat");
                 });
