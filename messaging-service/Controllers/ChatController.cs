@@ -57,8 +57,8 @@ namespace messaging_service.Controllers
         {
             try
             {
-                bool result = await _chatRepository.DeleteChatPartAsync(messageId);
-                //bool result = await _chatRepository.DeleteChatPermAsync(messageId); // If You want to delete Permenantly!
+                //bool result = await _chatRepository.DeleteChatPartAsync(messageId);
+                bool result = await _chatRepository.DeleteChatPermAsync(messageId); // If You want to delete Permenantly!
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -71,7 +71,7 @@ namespace messaging_service.Controllers
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Failed To Store Your Message!"
+                    Message = "Failed To Delete Your Message!"
                 };
                 return BadRequest(response);
             }

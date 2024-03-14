@@ -8,5 +8,7 @@
         public int? ParentId { get; set; }
         public string? Attachement_Url { get; set; }
         public string? Attachement_Name { get; set; }
+        public string? Attachement_Key { get; set; }
+
     }
 }

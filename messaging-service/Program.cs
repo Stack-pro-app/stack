@@ -1,3 +1,4 @@
+using Amazon.S3;
 using messaging_service.Consumer;
 using messaging_service.Data;
 using messaging_service.Exceptions;
@@ -32,6 +33,9 @@ builder.Services.AddCors(options =>
                                 .AllowAnyMethod();
                       });
 });
+
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();

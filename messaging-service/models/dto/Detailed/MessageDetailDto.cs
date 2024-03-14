@@ -13,5 +13,8 @@ namespace messaging_service.models.dto.Detailed
         public DateTime Created_at { get; set; }
         public int ParentId { get; set; }
         public MessageMinimalDto? Parent { get; set; }
+        public string? Attachement_Url { get; set; }
+        public string? Attachement_Name { get; set; }
+        public string? Attachement_Key { get; set; }
     }
 }

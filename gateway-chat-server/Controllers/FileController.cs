@@ -25,7 +25,7 @@ namespace gateway_chat_server.Controllers
         {
                 _hubContext = hubContext;
                 _s3Client = s3Client;
-            _producer = producer;
+                _producer = producer;
         }
 
         [HttpPost]
@@ -67,6 +67,7 @@ namespace gateway_chat_server.Controllers
                 UserId = file.UserId,
                 Attachement_Name = file.FormFile.FileName,
                 Attachement_Url = url,
+                Attachement_Key = filePath,
                 Message = file.Message
             };
 

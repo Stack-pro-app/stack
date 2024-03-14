@@ -19,5 +19,6 @@ namespace messaging_service.models.domain
         public ICollection<Chat>? Children { get; set; }
         public string? Attachement_Url { get; set; }
         public string? Attachement_Name { get; set; }
+        public string? Attachement_Key { get; set; }
     }
 }
