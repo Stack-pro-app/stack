@@ -2,9 +2,12 @@
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client;
 using System.Text;
+using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.SignalR;
 using notif_service.Services;
 using notif_service.Models;
 using Newtonsoft.Json;
+using notif_service.Hubs;
 
 namespace notif_service.Consumer
 {
@@ -17,17 +20,21 @@ namespace notif_service.Consumer
         private readonly IMapper _mapper;
         private readonly ILogger<RabbitMQConsumer> _logger;
         private readonly INotificationService _notificationService;
+        private readonly EmailService _emailService;
+        private readonly IHubContext<NotificationHub> _notificationHub;
         private string hostName;
         private string userName;
         private string password;
         private string port;
 
 
-        public RabbitMQConsumer( IMapper mapper, ILogger<RabbitMQConsumer> logger,INotificationService notificationService)
+        public RabbitMQConsumer( IMapper mapper, ILogger<RabbitMQConsumer> logger,INotificationService notificationService,EmailService emailService,IHubContext<NotificationHub> notificationHub)
         {
             _mapper = mapper;
             _logger = logger;
             _notificationService = notificationService;
+            _emailService = emailService;
+            _notificationHub = notificationHub;
             hostName = Environment.GetEnvironmentVariable("MQ_HOST");
             userName = Environment.GetEnvironmentVariable("MQ_USER");
             password = Environment.GetEnvironmentVariable("MQ_PASSWORD");
@@ -86,7 +93,16 @@ namespace notif_service.Consumer
 
                 Notification notification = _mapper.Map<Notification>(messageString);
 
-                await _notificationService.AddNotificationAsync(notification);
+                string notificationJson = await _notificationService.AddNotificationAsync(notification);
+                
+                await _notificationHub.Clients.Group(notificationDto.UserId)
+                    .SendAsync("notificationReceived", notificationJson);
+
+                await _emailService.SendEmailType1(notificationDto.MailTo, notificationDto.Message,
+                    notificationDto.Title,notificationDto.Action);
+
+
+                
 
                 _channel.BasicAck(ea.DeliveryTag, false);
             }

@@ -1,6 +1,7 @@
 ﻿using notif_service.Models;
 using MongoDB.Driver;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 
 namespace notif_service.Services
 {
@@ -14,7 +15,12 @@ namespace notif_service.Services
             var database = mongoClient.GetDatabase(notificationOptions.Value.DatabaseName);
             _notifications = database.GetCollection<Notification>(notificationOptions.Value.NotificationsCollectionName);
         }
-        public async Task AddNotificationAsync(Notification notification) => await _notifications.InsertOneAsync(notification);
+        public async Task<string> AddNotificationAsync(Notification notification)
+        {
+            await _notifications.InsertOneAsync(notification);
+
+            return notification.ToJson();
+        }
 
         public async Task<IEnumerable<Notification>> GetMoreNotificationsAsync(string userId, int page)
         {

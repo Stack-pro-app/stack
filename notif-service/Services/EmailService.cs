@@ -10,14 +10,14 @@ namespace notif_service.Services
 
         public EmailService() { }
 
-        public async Task SendEmailType1 (string email, string message, string title) {
+        public async Task SendEmailType1 (string email, string message, string title,string action = "https://google.com") {
             string subject = "title";
 
             string textBody = "Amazon SES Test (.NET)\r\n"
                                             + "This email was sent through Amazon SES "
                                             + "using the AWS SDK for .NET.";
 
-            string htmlBody = @"<html>
+            string htmlBody = $@"<html>
 <head></head>
 <body>
   <td class=""esd-stripe"" align=""center"">
@@ -35,10 +35,10 @@ namespace notif_service.Services
            <td align=""center"" class=""esd-block-image es-p10t es-p10b"" style=""font-size: 0px;""><a target=""_blank""><img src=""https://fezfrpm.stripocdn.email/content/guids/CABINET_8625d407e854d8c155bdf950350ad580ff9e95c38c3754500f60d0c50a3adec1/images/image.png"" alt="""" style=""display:block"" width=""195"" class=""adapt-img""></a></td>
           </tr>
           <tr>
-           <td align=""center"" class=""esd-block-text es-p15t es-p15b es-m-txt-c"" esd-links-underline=""none""><h1>Title</h1></td>
+           <td align=""center"" class=""esd-block-text es-p15t es-p15b es-m-txt-c"" esd-links-underline=""none""><h1>{title}</h1></td>
           </tr>
           <tr>
-           <td align=""left"" class=""esd-block-text es-p10t es-p10b""><p style=""font-size: 16px;"" align=""center"">{}</p></td>
+           <td align=""left"" class=""esd-block-text es-p10t es-p10b""><p style=""font-size: 16px;"" align=""center"">{message}</p></td>
           </tr>
          </tbody>
         </table></td>
@@ -56,7 +56,7 @@ namespace notif_service.Services
         <table cellpadding=""0"" cellspacing=""0"" width=""100%"" style=""border-radius: 5px; border-collapse: separate;"">
          <tbody>
           <tr>
-           <td align=""center"" class=""esd-block-button es-p10t es-p10b""><span class=""es-button-border"" style=""border-radius:6px;background:#333333""><a href="""" class=""es-button"" target=""_blank"" style=""border-left-width:30px;border-right-width:30px;border-radius:6px;background:#333333;mso-border-alt:10px solid #333333"">Check Now</a></span></td>
+           <td align=""center"" class=""esd-block-button es-p10t es-p10b""><span class=""es-button-border"" style=""border-radius:6px;background:#333333""><a href=""{action}"" class=""es-button"" target=""_blank"" style=""border-left-width:30px;border-right-width:30px;border-radius:6px;background:#333333;mso-border-alt:10px solid #333333"">Check Now</a></span></td>
           </tr>
           <tr>
            <td align=""left"" class=""esd-block-text es-p20t es-p10b""><p style=""line-height: 150%;"">Got a question? Email us at&nbsp;<a target=""_blank"" href=""mailto:"">support@stack.com</a>&nbsp;or give us a call at&nbsp;<a target=""_blank"" style=""line-height: 150%;"" href=""tel:"">+000 123 456</a>.</p><p><br>Thanks,</p><p>Stack Team!</p></td>
