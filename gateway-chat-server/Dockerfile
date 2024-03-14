@@ -7,19 +7,18 @@ EXPOSE 8080
 EXPOSE 8081
 EXPOSE 8091
 
-RUN apt-get update && \
-    apt-get install -y \
-    python3 \
-    python3-pip
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y python3 python3-pip && \
+    pip3 install awscli && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install AWS CLI using pip
-RUN pip3 install awscli
-
-# Configure AWS CLI (you may choose to provide these values through environment variables instead)
-RUN aws configure set aws_access_key_id AKIAYI4HD5JJE7IVFNXH
-RUN aws configure set aws_secret_access_key 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
-RUN aws configure set default_region us-east-1
-RUN aws configure set default_output_format json
+RUN --mount=type=secret,id=aws_access_key cat /run/secrets/aws_access_key > /tmp/aws_access_key && \
+    --mount=type=secret,id=aws_secret_key cat /run/secrets/aws_secret_key > /tmp/aws_secret_key && \
+    aws configure set aws_access_key_id $(cat /tmp/aws_access_key) && \
+    aws configure set aws_secret_access_key $(cat /tmp/aws_secret_key) && \
+    aws configure set default_region us-east-1 && \
+    aws configure set default_output_format json
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -38,3 +37,6 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "gateway-chat-server.dll"]
+
+RUN rm /tmp/aws_secret_key && \
+    rm /tmp/aws_access_key
