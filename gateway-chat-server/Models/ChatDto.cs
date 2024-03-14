@@ -4,6 +4,7 @@
     {
         public int UserId { get; set; }
         public int ChannelId { get; set; }
+        public Guid MessageId { get; set; }
         public string? Message { get; set; }
         public int? ParentId { get; set; }
         public string? Attachement_Url { get; set; }

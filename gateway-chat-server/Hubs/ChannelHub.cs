@@ -35,6 +35,7 @@ namespace gateway_chat_server.Hubs
                     ChannelId = message.ChannelId,
                     Message = message.Message,
                     ParentId = message.ParentId,
+                    MessageId = Guid.NewGuid()
                 };
                 _messagePublisher.SendMessage(messageToStore);
                 await Clients.Group(message.ChannelString).SendAsync("messageReceived", root);

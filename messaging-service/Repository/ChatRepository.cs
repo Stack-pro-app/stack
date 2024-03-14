@@ -75,6 +75,22 @@ namespace messaging_service.Repository
             }
         }
 
+        public async Task<bool> DeleteChatPermAsync(Guid messageId)
+        {
+            try
+            {
+                Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.MessageId == messageId) ?? throw new ValidationException("Message Inexistant");
+                await _S3client.DeleteObjectAsync("stack-messaging-service", message.Attachement_Key);
+                _context.Chats.Remove(message);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<MessageDetailDto>> GetChannelLastMessagesAsync(int channelId,int page)
         {
             try
@@ -108,11 +124,11 @@ namespace messaging_service.Repository
             }
         }
 
-        public async Task<bool> UpdateChatAsync(int messageId, string message)
+        public async Task<bool> UpdateChatAsync(Guid messageId, string message)
         {
             try
             {
-                var msg = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new ValidationException("Message Inexistant");
+                var msg = await _context.Chats.FirstOrDefaultAsync(x => x.MessageId == messageId && x.Is_deleted == false) ?? throw new ValidationException("Message Inexistant");
                 msg.Message = message;
                 msg.Modified_at = DateTime.Now;
                 await _context.SaveChangesAsync();

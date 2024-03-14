@@ -5,6 +5,7 @@ namespace messaging_service.models.dto.Detailed
     public class MessageDetailDto
     {
         public int Id { get; set; }
+        public Guid MessageId { get; set; }
         public int UserId { get; set; }
         public UserMinimalDto User { get; set; }
         public int ChannelId { get; set; }

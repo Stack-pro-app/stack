@@ -68,7 +68,8 @@ namespace gateway_chat_server.Controllers
                 Attachement_Name = file.FormFile.FileName,
                 Attachement_Url = url,
                 Attachement_Key = filePath,
-                Message = file.Message
+                Message = file.Message,
+                MessageId = Guid.NewGuid()
             };
 
             _producer.SendMessage(fileRequest);

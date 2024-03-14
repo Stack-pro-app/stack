@@ -33,6 +33,7 @@ namespace messaging_service.Controllers
             try
             {
                 if (messageRequestDto.Message.IsNullOrEmpty() && messageRequestDto.Attachement_Url.IsNullOrEmpty()) throw new ValidationException("Empty Message!");
+                if (messageRequestDto.MessageId == null) messageRequestDto.MessageId = Guid.NewGuid();
                 Chat message = _mapper.Map<Chat>(messageRequestDto);
                 bool result = await _chatRepository.CreateChatAsync(message);
                     ResponseDto response = new()
@@ -53,7 +54,7 @@ namespace messaging_service.Controllers
             }
         }
         [HttpDelete("{messageId}")]
-        public async Task<ActionResult<ResponseDto>> DeleteMessage([FromRoute]int messageId)
+        public async Task<ActionResult<ResponseDto>> DeleteMessage([FromRoute]Guid messageId)
         {
             try
             {
@@ -82,7 +83,7 @@ namespace messaging_service.Controllers
         {
             try
             {
-                bool result = await _chatRepository.UpdateChatAsync(message.Id, message.Message);
+                bool result = await _chatRepository.UpdateChatAsync(message.MessageId, message.Message);
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
