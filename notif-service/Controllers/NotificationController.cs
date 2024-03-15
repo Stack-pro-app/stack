@@ -13,9 +13,13 @@ namespace notif_service.Controllers
     {
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
-        public NotificationController(INotificationService notificationService,IMapper mapper) {
+        private readonly IMailService _emailService;
+        private readonly ILogger<NotificationController> _logger;
+        public NotificationController(INotificationService notificationService,IMapper mapper,IMailService emailService,ILogger<NotificationController> logger) {
             _notificationService = notificationService;
             _mapper = mapper;
+            _emailService = emailService;
+            _logger = logger;
         }
         [HttpGet("Unseen/{authId}")]
         public async Task<ActionResult<ResponseDto>> GetUnseenNotifications([FromRoute] string authId)
@@ -76,13 +80,22 @@ namespace notif_service.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ResponseDto>> AddNotification([FromBody]NotificationDto notificationDto)
+        public async Task<ActionResult<ResponseDto>> AddNotification([FromBody]NotificationDtoV2 notificationDto)
         {
             ResponseDto response = new ResponseDto();
             try
             {
-                Notification notification = _mapper.Map<Notification>(notificationDto);
-                await _notificationService.AddNotificationAsync(notification);
+                //Notification notification = _mapper.Map<Notification>(notificationDto);
+                //await _notificationService.AddNotificationAsync(notification);
+                MailRequest mailRequest = new()
+                {
+                    ToEmail = notificationDto.MailTo,
+                    Body = notificationDto.Message,
+                    Subject = notificationDto.Title
+                };
+                _logger.LogInformation(mailRequest.ToString());
+                await _emailService.SendEmailAsync(mailRequest);
+
                 response.IsSuccess = true;
                 response.Message = "Notifications Added!";
                 return Ok(response);

@@ -4,13 +4,12 @@ using Amazon.SimpleEmail.Model;
 
 namespace notif_service.Services
 {
-    public class EmailService
+    public class EmailService:IEmailService
     {
+
         static readonly string senderAddress = "no-reply@stack-ensat.com";
 
-        public EmailService() { }
-
-        public async Task SendEmailType1 (string email, string message, string title,string action = "https://google.com") {
+        public async Task SendEmailType1 (string email, string message, string title,string action ) {
             string subject = "title";
 
             string textBody = "Amazon SES Test (.NET)\r\n"

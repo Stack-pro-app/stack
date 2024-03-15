@@ -20,7 +20,7 @@ namespace notif_service.Consumer
         private readonly IMapper _mapper;
         private readonly ILogger<RabbitMQConsumer> _logger;
         private readonly INotificationService _notificationService;
-        private readonly EmailService _emailService;
+        private readonly IMailService _emailService;
         private readonly IHubContext<NotificationHub> _notificationHub;
         private string hostName;
         private string userName;
@@ -28,7 +28,7 @@ namespace notif_service.Consumer
         private string port;
 
 
-        public RabbitMQConsumer( IMapper mapper, ILogger<RabbitMQConsumer> logger,INotificationService notificationService,EmailService emailService,IHubContext<NotificationHub> notificationHub)
+        public RabbitMQConsumer( IMapper mapper, ILogger<RabbitMQConsumer> logger,INotificationService notificationService,IMailService emailService,IHubContext<NotificationHub> notificationHub)
         {
             _mapper = mapper;
             _logger = logger;
@@ -97,9 +97,6 @@ namespace notif_service.Consumer
                 
                 await _notificationHub.Clients.Group(notificationDto.UserId)
                     .SendAsync("notificationReceived", notificationJson);
-
-                await _emailService.SendEmailType1(notificationDto.MailTo, notificationDto.Message,
-                    notificationDto.Title,notificationDto.Action);
 
 
                 
