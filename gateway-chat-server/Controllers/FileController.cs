@@ -29,7 +29,7 @@ namespace gateway_chat_server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadFile(FileDto file)
+        public async Task<IActionResult> UploadFile([FromBody] FileDto file)
         {
             if (file == null || file.FormFile.Length == 0)
             {

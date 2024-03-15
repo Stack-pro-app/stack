@@ -5,7 +5,7 @@ import { AuthService } from '../../../core/services/Auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { ChatUser } from '../../../core/Models/chat-user';
-import { UserService } from '../../../core/services/user.service';
+import { UserService } from '../../../core/services/User/user.service';
 import { MainComponent } from '../main/main.component';
 @Component({
   selector: 'app-home',
@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
       complete: () => console.info('complete'),
     });
 
-   
+
   }
   OnLogout() {
     this.service.logout();

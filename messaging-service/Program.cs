@@ -3,10 +3,11 @@ using messaging_service.Consumer;
 using messaging_service.Data;
 using messaging_service.Exceptions;
 using messaging_service.MappingProfiles;
+using messaging_service.Producer;
 using messaging_service.Repository;
 using Microsoft.EntityFrameworkCore;
-var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
@@ -29,7 +30,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: myAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.AllowAnyOrigin()
+                          policy.WithOrigins("http://localhost:4200")
+                          .AllowCredentials()
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
                       });
@@ -40,6 +42,7 @@ builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();
+builder.Services.AddScoped<IRabbitMQProducer,RabbitMQProducer>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

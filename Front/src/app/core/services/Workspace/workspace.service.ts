@@ -7,14 +7,16 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class WorkspaceService {
-  url: string = 'https://localhost:8193/api/Workspace';
+  url: string = 'http://localhost:8084/api/Workspace';
+  urlU: string = 'http://localhost:8084/api/User';
+
 
   constructor(private http: HttpClient) {}
 
   Create(obj: Workspace): Observable<any> {
     console.log(obj);
     const WorkespaceDto = {
-      userId: 1,
+      userId: localStorage.getItem("userId"),
       name: obj.name,
     };
     const CreateUrl = `${this.url}`;

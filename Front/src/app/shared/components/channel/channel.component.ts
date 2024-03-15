@@ -21,6 +21,7 @@ import { SignalrService } from '../../../core/services/signalr/signalr.service';
 })
 export class ChannelComponent implements OnInit, OnChanges {
   @Input({ required: true }) currentChannelP!: Channel;
+  @Input({ required: true }) showFileUpload!: Boolean;
   messages: any[] = [];
   //add the messaging service here
   constructor(private service: ChatService,
@@ -34,6 +35,11 @@ export class ChannelComponent implements OnInit, OnChanges {
 
     //  this.getMessages();
     }
+    if (changes['showFileUpload'] && changes['showFileUpload'].currentValue) {
+      console.log("button Clicked");
+
+     //  this.getMessages();
+     }
   }
   ngOnInit(): void {
      this.signalrService.startConnection().subscribe(() => {

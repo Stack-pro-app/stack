@@ -8,6 +8,7 @@ import { MainComponent } from './features/pages/main/main.component';
 import { ProfileComponent } from './features/pages/profile/profile.component';
 import { CreateWorkSpaceComponent } from './features/pages/create-work-space/create-work-space.component';
 import { VideoCallComponent } from './features/pages/VideoCall/video-call/video-call.component';
+import { FileUploadComponent } from './shared/components/file-upload/file-upload.component';
 export const routes: Routes = [
     {path:'',pathMatch:'full',redirectTo:'Home'},
     {path:'Login',component:LoginComponent,title:'Login'},
@@ -17,5 +18,6 @@ export const routes: Routes = [
     {path:'Profile',title:'profile',component:ProfileComponent},
     {path:'Create',title:'Create',component:CreateWorkSpaceComponent},
     {path:'Call/:ChannelString',title:'Call',component:VideoCallComponent},
+    {path:'Drag',component:FileUploadComponent},
     {path:'**',pathMatch:'full',component:PageNotFoundComponent}
 ];

@@ -16,7 +16,7 @@ export class SignalrService {
 
   constructor() {
     this.hubConnection = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:5058/channelHub')
+      .withUrl('http://localhost:8091/channelHub')
       .build();
 
    

@@ -9,6 +9,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { WorkspaceService } from '../../../core/services/Workspace/workspace.service';
 import { Workspace } from '../../../core/Models/workspace';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
+import { FileUploadComponent } from '../../../shared/components/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-main',
@@ -19,11 +20,13 @@ import { SignalrService } from '../../../core/services/signalr/signalr.service';
     ChannelComponent,
     ReactiveFormsModule,
     CommonModule,
+    FileUploadComponent
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
 export class MainComponent implements OnInit , OnChanges {
+  showFileUpload:Boolean = false;
   id: string | null = '';
   channelRequest: any = {
     name: '',
@@ -35,8 +38,8 @@ export class MainComponent implements OnInit , OnChanges {
     id: 0,
     name: '',
     MainChannel: {},
-    publicChannels: [],
-    privateChannels: [],
+    channels: [],
+
   };
   currentChannelP: Channel = {
     channelString: '',
@@ -63,36 +66,41 @@ ngOnChanges(changes: SimpleChanges): void {
        changes['currentChannelP'] &&
        changes['currentChannelP'].currentValue
      ) {
-const messageDto = {
-  userId: localStorage.getItem('userId'),
-  channelId: 14,
-  ChannelString: '1D96A361-E812-460E-A21D-429B0C62F935',
-  message: 'this.messageForm.value.message',
-};
-this.signalrService.sendMessage(messageDto);
+// const messageDto = {
+//   userId: localStorage.getItem('userId'),
+//   channelId: 14,
+//   ChannelString: '1D96A361-E812-460E-A21D-429B0C62F935',
+//   message: 'this.messageForm.value.message',
+// };
+// this.signalrService.sendMessage(messageDto);
      }
 }
   ngOnInit() {
-     
+
 
     this.id = this.route.snapshot.paramMap.get('id');
+
+
     this.channelForm = this.builder.group({
       channelName: this.builder.control(''),
       channelPrivate: this.builder.control(false),
       channelDescription: this.builder.control(''),
     });
+
+    /////
     this.workspaceForm = this.builder.group({
       workspaceName: this.builder.control(''),
     });
-
+///
     this.workspaceService
       .getWorkspace(this.id, localStorage.getItem('userId'))
       .subscribe({
         next: (response) => {
           this.currentWorkspace = response.result;
           console.log("Wos" ,this.currentWorkspace);
-          
-          this.channels = this.currentWorkspace.privateChannels;
+
+          this.channels = this.currentWorkspace.channels;
+
 
           this.currentChannelP = {
             channelString: response.result.mainChannel.channelString,
@@ -104,14 +112,20 @@ this.signalrService.sendMessage(messageDto);
           };
           console.log(this.currentChannelP);
           console.log(this.channels);
-          
 
-          
+
+
         },
         error: (error) => {
           console.error('Login error', error);
         },
       });
+  }
+
+  handleButtonClick(value: boolean): void {
+    this.showFileUpload = !this.showFileUpload;
+    console.log(this.showFileUpload);
+
   }
   reload() {
     this.workspaceService
@@ -120,10 +134,7 @@ this.signalrService.sendMessage(messageDto);
         next: (response) => {
           console.log(response);
           this.currentWorkspace = response.result;
-          this.channels = this.currentWorkspace.privateChannels;
-          for (let chanel of this.currentWorkspace.publicChannels) {
-            this.channels.push(chanel);
-          }
+          this.channels = this.currentWorkspace.channels;
 
         },
         error: (error) => {
@@ -175,7 +186,7 @@ this.signalrService.sendMessage(messageDto);
   }
   onChangeChannel(channel: Channel) {
     this.currentChannelP = channel;
-    console.log("HEEEEEEEEEEEREE",this.currentChannelP);
+    console.log("HEEEEEEEEEEEREE",channel);
   }
   onDeleteChannel() {
     this.service.Delete(this.currentChannelP.id).subscribe({

@@ -1,68 +1,68 @@
 {
-  "hash": "23977b78",
-  "configHash": "342e198a",
-  "lockfileHash": "1024703b",
-  "browserHash": "3bda6431",
+  "hash": "51ffa0ca",
+  "configHash": "32799844",
+  "lockfileHash": "787170da",
+  "browserHash": "b6a533b7",
   "optimized": {
     "@angular/common": {
       "src": "../../../../../node_modules/@angular/common/fesm2022/common.mjs",
       "file": "@angular_common.js",
-      "fileHash": "47d99115",
+      "fileHash": "9b35380e",
       "needsInterop": false
     },
     "@angular/common/http": {
       "src": "../../../../../node_modules/@angular/common/fesm2022/http.mjs",
       "file": "@angular_common_http.js",
-      "fileHash": "623ec7b0",
+      "fileHash": "76f18e79",
       "needsInterop": false
     },
     "@angular/core": {
       "src": "../../../../../node_modules/@angular/core/fesm2022/core.mjs",
       "file": "@angular_core.js",
-      "fileHash": "0b1ec39c",
+      "fileHash": "3e02867b",
       "needsInterop": false
     },
     "@angular/forms": {
       "src": "../../../../../node_modules/@angular/forms/fesm2022/forms.mjs",
       "file": "@angular_forms.js",
-      "fileHash": "6778209b",
+      "fileHash": "63eb029f",
       "needsInterop": false
     },
     "@angular/platform-browser": {
       "src": "../../../../../node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs",
       "file": "@angular_platform-browser.js",
-      "fileHash": "a8e783cf",
+      "fileHash": "083cf747",
       "needsInterop": false
     },
     "@angular/router": {
       "src": "../../../../../node_modules/@angular/router/fesm2022/router.mjs",
       "file": "@angular_router.js",
-      "fileHash": "4c80c443",
+      "fileHash": "54b72b1f",
       "needsInterop": false
     },
     "@microsoft/signalr": {
       "src": "../../../../../node_modules/@microsoft/signalr/dist/esm/index.js",
       "file": "@microsoft_signalr.js",
-      "fileHash": "168bcb6c",
-      "needsInterop": false
-    },
-    "jwt-decode": {
-      "src": "../../../../../node_modules/jwt-decode/build/esm/index.js",
-      "file": "jwt-decode.js",
-      "fileHash": "8b6fb91a",
-      "needsInterop": false
-    },
-    "rxjs": {
-      "src": "../../../../../node_modules/rxjs/dist/esm5/index.js",
-      "file": "rxjs.js",
-      "fileHash": "ec3b7157",
+      "fileHash": "1a32b6ab",
       "needsInterop": false
     },
     "@zegocloud/zego-uikit-prebuilt": {
       "src": "../../../../../node_modules/@zegocloud/zego-uikit-prebuilt/zego-uikit-prebuilt.js",
       "file": "@zegocloud_zego-uikit-prebuilt.js",
-      "fileHash": "d9ada379",
+      "fileHash": "6ad4c700",
       "needsInterop": true
+    },
+    "jwt-decode": {
+      "src": "../../../../../node_modules/jwt-decode/build/esm/index.js",
+      "file": "jwt-decode.js",
+      "fileHash": "fad3df98",
+      "needsInterop": false
+    },
+    "rxjs": {
+      "src": "../../../../../node_modules/rxjs/dist/esm5/index.js",
+      "file": "rxjs.js",
+      "fileHash": "e0c7e936",
+      "needsInterop": false
     }
   },
   "chunks": {

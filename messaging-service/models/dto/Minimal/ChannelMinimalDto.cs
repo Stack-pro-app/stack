@@ -6,6 +6,7 @@ namespace messaging_service.models.dto.Minimal
     public class ChannelMinimalDto
     {
         public int Id { get; set; }
+        public string ChannelString { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
 

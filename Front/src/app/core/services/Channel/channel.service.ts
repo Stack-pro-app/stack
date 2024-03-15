@@ -8,7 +8,7 @@ import { Observable, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class ChannelService {
-  url: string = 'https://localhost:8193/api/Channel';
+  url: string = 'http://localhost:8084/api/Channel';
   constructor(private http: HttpClient) {}
 
   CreateChannel(ChannelData: any): Observable<any> {
@@ -26,5 +26,9 @@ export class ChannelService {
         });
         return this.http.put(RequestUrl , data,{headers});
 
+  }
+  getChannel(id:Number):Observable<any>{
+    const RequestUrl = `${this.url}/${id}`;
+    return this.http.get(RequestUrl);
   }
 }

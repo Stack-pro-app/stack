@@ -191,7 +191,7 @@ namespace messaging_service.Repository
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new ValidationException("User not found");
                 user.Last_login = DateTime.Now;
                 await _context.SaveChangesAsync();
-                IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == 1).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
+                IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == user.Id).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
                 return workspaces;
             }
             catch (Exception)

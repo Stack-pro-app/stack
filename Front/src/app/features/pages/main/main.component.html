@@ -252,8 +252,12 @@
         </button>
       </div>
     </div>
-    <app-channel [currentChannelP]="currentChannelP"></app-channel>
-    <app-input [currentChannelP]="currentChannelP"></app-input>
+    
+    <app-channel *ngIf="!showFileUpload" [currentChannelP]="currentChannelP" [showFileUpload]="showFileUpload"></app-channel>
+    <button *ngIf="showFileUpload" class="btn btn-primary w-20"  (click)="handleButtonClick(true)">Cancel</button>
+
+    <app-file-upload *ngIf="showFileUpload"></app-file-upload>
+    <app-input  *ngIf="!showFileUpload"  [currentChannelP]="currentChannelP" (uploadFile)="handleButtonClick($event)"></app-input>
     <!-- add channel here -->
     <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
       <div class="modal-box">
