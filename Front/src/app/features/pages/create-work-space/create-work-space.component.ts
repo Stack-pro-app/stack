@@ -34,6 +34,7 @@ export class CreateWorkSpaceComponent implements OnInit {
     emails: [],
   };
   selectedEmailDomain: string = '';
+  userIds :number[] = [];
 
   emailDomains: string[] = ['gmail.com', 'example.com'];
   constructor(
@@ -74,23 +75,14 @@ export class CreateWorkSpaceComponent implements OnInit {
       /* */
       this.WorkspaceRequest.name = this.form.value.WName;
       this.WorkspaceRequest.MainChannel = this.form.value.CName;
-      this.service.Create(this.WorkspaceRequest).subscribe({
-        next: (response) => {
-          console.log(response);
-          this.router.navigate(['/Home']);
-        },
-        error: (error) => {
-          console.error('Create  error', error);
-        },
-        complete: () => console.info('complete'),
-      });
+
       // Reset the form or navigate to the next component/page as needed
       this.step = 3;
     } else if (this.step === 3) {
       this.form.get('coworkerEmails')?.value.split(',');
       console.log('Emails', this.form.value.coworkerEmails);
 
-      
+
     }
   }
 
@@ -114,20 +106,68 @@ export class CreateWorkSpaceComponent implements OnInit {
       this.selectedEmailDomain = '';
     }
   }
-
   selectEmailDomain(domain: string): void {
-    // Insert the selected domain into the textarea
+    // Get the current value of the textarea
     const currentTextareaValue = this.form.get('coworkerEmails')?.value;
-    const cursorPosition = (document.activeElement as HTMLTextAreaElement)
-      .selectionEnd;
+
+    if (!currentTextareaValue) {
+      console.error('Textarea value is undefined or null.');
+      return;
+    }
+
+    // Get the cursor position within the textarea
+    const textareaElement = document.activeElement as HTMLTextAreaElement;
+    const cursorPosition = textareaElement.selectionStart;
+
+    // Check if cursor position is within bounds
+    if (cursorPosition === undefined || cursorPosition < 0 || cursorPosition > currentTextareaValue.length) {
+      console.error('Cursor position is out of bounds.');
+      return;
+    }
+
+    // Construct the updated value with the selected email domain inserted
     const updatedValue =
       currentTextareaValue.substring(0, cursorPosition) +
       domain +
       currentTextareaValue.substring(cursorPosition);
 
+    // Update the value of the textarea in the form
     this.form.get('coworkerEmails')?.setValue(updatedValue);
-    this.selectedEmailDomain = '';
+
+    // Set the cursor position after the inserted email domain
+    const newCursorPosition = cursorPosition + domain.length;
+    textareaElement.setSelectionRange(newCursorPosition, newCursorPosition);
   }
+
+
+  extractEmail(text: string, cursorPosition: number): string {
+    // Check if the text is defined
+    if (!text) {
+      return '';
+    }
+
+    // Search for the beginning and end of the email address based on cursor position
+    let startIndex = cursorPosition;
+    let endIndex = cursorPosition;
+
+    // Move the start index backward until the beginning of the email or whitespace is found
+    while (startIndex > 0 && /\S/.test(text[startIndex - 1])) {
+      startIndex--;
+    }
+
+    // Move the end index forward until the end of the email or whitespace is found
+    while (endIndex < text.length && /\S/.test(text[endIndex])) {
+      endIndex++;
+    }
+
+    // Extract the email address substring
+    const email = text.substring(startIndex, endIndex);
+
+    return email;
+  }
+
+
+
 
   get CNmae(): FormControl {
     return this.form.get('CName') as FormControl;

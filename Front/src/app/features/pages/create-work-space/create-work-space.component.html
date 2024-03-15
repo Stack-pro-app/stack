@@ -90,21 +90,9 @@
           </h1>
           <p class="py-6">Add coworker by email</p>
 
-          <textarea
-            placeholder="Enter coworker emails"
-            class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-            (input)="onEmailInput($event)"
-          ></textarea>
-          <div *ngIf="selectedEmailDomain" class="mt-2 cursor-pointer">
-            Click to insert: {{ selectedEmailDomain }}
-          </div>
-          <button
-            *ngIf="selectedEmailDomain"
-            (click)="selectEmailDomain(selectedEmailDomain)"
-            class="btn btn-primary rounded-xl mr-3"
-          >
-            Insert
-          </button>
+          <textarea formControlName="coworkerEmails" (input)="onEmailInput($event)"></textarea>
+<button (click)="selectEmailDomain(selectedEmailDomain)">Add</button>
+
           <button
             type="submit"
             class="btn btn-primary rounded-xl ml-2"
