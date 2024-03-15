@@ -82,7 +82,9 @@ namespace messaging_service.Repository
                 ChannelDetailDto mainDetail = _mapper.Map<ChannelDetailDto>(mainChannel);
                 //Get the minimal public channels
                 IEnumerable<Channel> publicChannels = channel.Where(c=>c.Name != "main" && c.Is_private == false ).ToList();
-                IEnumerable<ChannelMinimalDto> channelsDto = _mapper.Map<IEnumerable<Channel>,IEnumerable<ChannelMinimalDto>>(publicChannels);
+                IEnumerable<Channel> privateChannels = await _context.Members.Where(m=>m.UserId == userId).Include(m=>m.Channel).Select(m=>m.Channel).Where(c=>c.WorkspaceId == workspaceId).ToListAsync();
+                IEnumerable<Channel> channels = publicChannels.Concat(privateChannels);
+                IEnumerable<ChannelMinimalDto> channelsDto = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(channels);
                 WorkspaceDetailDto detail = new()
                 {
                     Id = workspace.Id,
