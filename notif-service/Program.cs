@@ -6,6 +6,19 @@ using notif_service.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+/*
+NotificationDatabaseSettings NotificationDatabase = new()
+{
+    ConnectionString = $"mongodb://{Environment.GetEnvironmentVariable("DB_USER")}:{Environment.GetEnvironmentVariable("DB_PASSWORD")}@{Environment.GetEnvironmentVariable("DB_HOST")}:{Environment.GetEnvironmentVariable("DB_PORT")}",
+    DatabaseName = "notifications-service",
+    NotificationsCollectionName = "Notifications"
+};
+builder.Services.Configure<NotificationDatabaseSettings>(options =>
+{
+    options.ConnectionString = NotificationDatabase.ConnectionString;
+    options.DatabaseName = NotificationDatabase.DatabaseName;
+    options.NotificationsCollectionName = NotificationDatabase.NotificationsCollectionName;
+});*/
 builder.Services.Configure<NotificationDatabaseSettings>(builder.Configuration.GetSection("NotificationDatabase"));
 builder.Services.AddAutoMapper(typeof(NotificationProfile));
 builder.Services.AddScoped<INotificationService,NotificationService>();
