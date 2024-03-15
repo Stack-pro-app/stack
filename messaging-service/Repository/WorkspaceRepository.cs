@@ -81,8 +81,8 @@ namespace messaging_service.Repository
                 Channel mainChannel = channel.FirstOrDefault(c => c.Name == "main") ?? throw new ValidationException("Invalid Workspace");
                 ChannelDetailDto mainDetail = _mapper.Map<ChannelDetailDto>(mainChannel);
                 //Get the minimal public channels
-                IEnumerable<Channel> channels = channel.Where(c=>c.Name != "main").ToList();
-                IEnumerable<ChannelMinimalDto> channelsDto = _mapper.Map<IEnumerable<Channel>,IEnumerable<ChannelMinimalDto>>(channels);
+                IEnumerable<Channel> publicChannels = channel.Where(c=>c.Name != "main" && c.Is_private == false ).ToList();
+                IEnumerable<ChannelMinimalDto> channelsDto = _mapper.Map<IEnumerable<Channel>,IEnumerable<ChannelMinimalDto>>(publicChannels);
                 WorkspaceDetailDto detail = new()
                 {
                     Id = workspace.Id,
