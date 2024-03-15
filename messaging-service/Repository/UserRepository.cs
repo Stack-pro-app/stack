@@ -150,6 +150,44 @@ namespace messaging_service.Repository
             }
 
         }
+        public async Task<IEnumerable<string>> AddUsersToWorkspace(int workspaceId, ICollection<string> emails)
+        {
+            try
+            {
+                var IsValidWorkspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == workspaceId);
+                if (IsValidWorkspace == null) throw new ValidationException("Workspace Invalid");
+                List<string> results = new List<string>();
+                foreach (var email in emails)
+                {
+                    var IsValidUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+                    if (IsValidUser == null)
+                    {
+                        results.Add("Failed To Add User with Email:" + email);
+                        continue;
+                    }
+                    UserWorkspace userWorkspace = new()
+                    {
+                        WorkspaceId = workspaceId,
+                        UserId = IsValidUser.Id,
+                    };
+
+                    var result = await _context.UsersWorkspaces.AddAsync(userWorkspace);
+                    if (result.State != EntityState.Added) { results.Add("Failed To Add User with Email:" + email); }
+                    else
+                    {
+                        results.Add("Successfully Added User with Email:" + email);
+                    }
+                }
+                await _context.SaveChangesAsync();
+                return results;
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
         public async Task<IEnumerable<string>> RemoveUserFromWorkspace(int workspaceId, ICollection<int> usersId)
         {
             List<String> results = new List<String>();

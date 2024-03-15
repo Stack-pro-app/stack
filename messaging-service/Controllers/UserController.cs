@@ -137,7 +137,32 @@ namespace messaging_service.Controllers
         {
             try
             {
+                if (usersDto.Emails.IsNullOrEmpty()) throw new ValidationException("Empty Request or wrong data");
                 IEnumerable<string> result = await _userRepository.AddUsersToWorkspace(usersDto.WorkspaceId, usersDto.UsersId);
+                if (!result.Any()) throw new ValidationException("Can't Add Users To Workspace");
+                ResponseDto response = new()
+                {
+                    Result = result.ToList(),
+                    IsSuccess = true,
+                    Message = " Added Users To Workspace",
+                };
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+        }
+        
+        // Add multiple Users To a WorkSpace
+        [HttpPost("Workspace/byEmail")]
+        public async Task<ActionResult<ResponseDto>> AddUsersToWorkspaceByEmail([FromBody]UsersWorkSpaceDto usersDto)
+        {
+            try
+            {
+                if(usersDto.Emails.IsNullOrEmpty()) throw new ValidationException("Empty Request or wrong data");
+                IEnumerable<string> result = await _userRepository.AddUsersToWorkspace(usersDto.WorkspaceId, usersDto.Emails);
                 if (!result.Any()) throw new ValidationException("Can't Add Users To Workspace");
                 ResponseDto response = new()
                 {
