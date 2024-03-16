@@ -13,13 +13,13 @@ namespace notif_service.Controllers
     {
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
-        private readonly IMailService _emailService;
         private readonly ILogger<NotificationController> _logger;
-        public NotificationController(INotificationService notificationService,IMapper mapper,IMailService emailService,ILogger<NotificationController> logger) {
+        IEmailService _emailService;
+        public NotificationController(INotificationService notificationService,IMapper mapper,ILogger<NotificationController> logger,IEmailService emailService) {
             _notificationService = notificationService;
             _mapper = mapper;
-            _emailService = emailService;
             _logger = logger;
+            _emailService = emailService;
         }
         [HttpGet("Unseen/{authId}")]
         public async Task<ActionResult<ResponseDto>> GetUnseenNotifications([FromRoute] string authId)
@@ -87,14 +87,9 @@ namespace notif_service.Controllers
             {
                 //Notification notification = _mapper.Map<Notification>(notificationDto);
                 //await _notificationService.AddNotificationAsync(notification);
-                MailRequest mailRequest = new()
-                {
-                    ToEmail = notificationDto.MailTo,
-                    Body = notificationDto.Message,
-                    Subject = notificationDto.Title
-                };
-                _logger.LogInformation(mailRequest.ToString());
-                await _emailService.SendEmailAsync(mailRequest);
+
+                var message = new Message(new string[] { "redtius@gmail.com" }, "Test email", "This is the content from our email.");
+                await _emailService.SendEmail(message);
 
                 response.IsSuccess = true;
                 response.Message = "Notifications Added!";

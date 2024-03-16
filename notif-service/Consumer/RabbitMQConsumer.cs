@@ -20,7 +20,6 @@ namespace notif_service.Consumer
         private readonly IMapper _mapper;
         private readonly ILogger<RabbitMQConsumer> _logger;
         private readonly INotificationService _notificationService;
-        private readonly IMailService _emailService;
         private readonly IHubContext<NotificationHub> _notificationHub;
         private string hostName;
         private string userName;
@@ -28,12 +27,11 @@ namespace notif_service.Consumer
         private string port;
 
 
-        public RabbitMQConsumer( IMapper mapper, ILogger<RabbitMQConsumer> logger,INotificationService notificationService,IMailService emailService,IHubContext<NotificationHub> notificationHub)
+        public RabbitMQConsumer( IMapper mapper, ILogger<RabbitMQConsumer> logger,INotificationService notificationService,IHubContext<NotificationHub> notificationHub)
         {
             _mapper = mapper;
             _logger = logger;
             _notificationService = notificationService;
-            _emailService = emailService;
             _notificationHub = notificationHub;
             hostName = Environment.GetEnvironmentVariable("MQ_HOST");
             userName = Environment.GetEnvironmentVariable("MQ_USER");
