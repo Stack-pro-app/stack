@@ -15,7 +15,7 @@ export const routes: Routes = [
   { path: 'Home', component: HomeComponent, title: 'Home' },
   { path: 'Register', component: RegisterComponent, title: 'Register' },
   { path: 'Welcome', title: 'Welcome', component: WelcomeComponent },
-  { path: 'Main/:id', title: 'main', component: MainComponent },
+  { path: 'Main', title: 'main', component: MainComponent },
   { path: 'Profile', title: 'profile', component: ProfileComponent },
   { path: 'Create', title: 'Create', component: CreateWorkSpaceComponent },
   { path: 'Call/:ChannelString', title: 'Call', component: VideoCallComponent },
