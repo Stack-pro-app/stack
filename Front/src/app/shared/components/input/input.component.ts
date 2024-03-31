@@ -23,7 +23,11 @@ import { SignalrService } from '../../../core/services/signalr/signalr.service';
 })
 export class InputComponent implements OnInit, OnChanges {
   @Input({ required: true }) currentChannelP: any;
-  constructor(private builder: FormBuilder, private service: ChatService,private signalrService : SignalrService) {}
+  constructor(
+    private builder: FormBuilder,
+    private service: ChatService,
+    private signalrService: SignalrService
+  ) {}
   public messageForm!: FormGroup;
   messageDto: any = {
     userId: 1,
@@ -40,8 +44,6 @@ export class InputComponent implements OnInit, OnChanges {
     this.messageForm = this.builder.group({
       message: this.builder.control(''),
     });
-   
-    
   }
 
   onSend() {
@@ -51,13 +53,13 @@ export class InputComponent implements OnInit, OnChanges {
       message: this.messageForm.value.message,
       parentId: null,
     };
-     const signalmessageDto = {
-       userId: localStorage.getItem('userId'),
-       channelId: this.currentChannelP.id,
-       ChannelString: this.currentChannelP.channelString,
-       message: this.messageForm.value.message,
-       parentId: null,
-     };
+    const signalmessageDto = {
+      userId: localStorage.getItem('userId'),
+      channelId: this.currentChannelP.id,
+      ChannelString: this.currentChannelP.channelString,
+      message: this.messageForm.value.message,
+      parentId: null,
+    };
     this.signalrService.sendMessage(signalmessageDto);
     this.service.SendMessage(this.messageDto).subscribe({
       next: (response) => {
@@ -70,6 +72,7 @@ export class InputComponent implements OnInit, OnChanges {
         console.info('completed');
       },
     });
+    this.messageForm.reset();
   }
   get message(): FormControl {
     return this.messageForm.get('message') as FormControl;

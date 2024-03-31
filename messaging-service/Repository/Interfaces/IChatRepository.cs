@@ -8,7 +8,8 @@ namespace messaging_service.Repository.Interfaces
         Task<bool> CreateChatAsync(Chat message);
         Task<bool> DeleteChatPartAsync(int messageId);
         Task<bool> DeleteChatPermAsync(int messageId);
-        Task<bool> UpdateChatAsync(int messageId, string message);
+        Task<bool> DeleteChatPermAsync(Guid messageId);
+        Task<bool> UpdateChatAsync(Guid messageId, string message);
         Task<MessageDetailDto> GetMessageAsync(int messageId);
         Task<IEnumerable<MessageDetailDto>> GetChannelLastMessagesAsync(int channelId,int page);
     }

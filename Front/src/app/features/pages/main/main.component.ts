@@ -2,7 +2,12 @@ import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { ChannelComponent } from '../../../shared/components/channel/channel.component';
 import { Channel } from '../../../core/Models/channel';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ChannelService } from '../../../core/services/Channel/channel.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -23,7 +28,7 @@ import { SignalrService } from '../../../core/services/signalr/signalr.service';
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
-export class MainComponent implements OnInit , OnChanges {
+export class MainComponent implements OnInit, OnChanges {
   id: string | null = '';
   channelRequest: any = {
     name: '',
@@ -46,9 +51,21 @@ export class MainComponent implements OnInit , OnChanges {
     is_private: false,
     name: '',
   };
-  channels:Channel[] = [];
+  users: any[] = [
+   
+    {
+      img: 'https://i.ibb.co/XJ5y9WM/me.jpg',
+
+      name: 'Reda Mountassir',
+    },
+    {
+      img: null,
+      name: 'enma No Katana',
+    },
+  ];
+  channels: Channel[] = [];
   constructor(
-    private signalrService : SignalrService,
+    private signalrService: SignalrService,
     private service: ChannelService,
     private builder: FormBuilder,
     private router: Router,
@@ -57,24 +74,20 @@ export class MainComponent implements OnInit , OnChanges {
   ) {}
   public channelForm!: FormGroup;
   public workspaceForm!: FormGroup;
-receivedMessage :any;
-ngOnChanges(changes: SimpleChanges): void {
-     if (
-       changes['currentChannelP'] &&
-       changes['currentChannelP'].currentValue
-     ) {
-const messageDto = {
-  userId: localStorage.getItem('userId'),
-  channelId: 14,
-  ChannelString: '1D96A361-E812-460E-A21D-429B0C62F935',
-  message: 'this.messageForm.value.message',
-};
-this.signalrService.sendMessage(messageDto);
-     }
-}
+  public userForm!: FormGroup;
+  receivedMessage: any;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
+      const messageDto = {
+        userId: localStorage.getItem('userId'),
+        channelId: 14,
+        ChannelString: '1D96A361-E812-460E-A21D-429B0C62F935',
+        message: 'this.messageForm.value.message',
+      };
+      this.signalrService.sendMessage(messageDto);
+    }
+  }
   ngOnInit() {
-     
-
     this.id = this.route.snapshot.paramMap.get('id');
     this.channelForm = this.builder.group({
       channelName: this.builder.control(''),
@@ -84,14 +97,20 @@ this.signalrService.sendMessage(messageDto);
     this.workspaceForm = this.builder.group({
       workspaceName: this.builder.control(''),
     });
+    this.userForm = this.builder.group({
+      userEmail: this.builder.control(
+        '',
+        Validators.compose([Validators.required, Validators.email])
+      ),
+    });
 
     this.workspaceService
       .getWorkspace(this.id, localStorage.getItem('userId'))
       .subscribe({
         next: (response) => {
           this.currentWorkspace = response.result;
-          console.log("Wos" ,this.currentWorkspace);
-          
+          console.log('Wos', this.currentWorkspace);
+
           this.channels = this.currentWorkspace.privateChannels;
 
           this.currentChannelP = {
@@ -104,9 +123,6 @@ this.signalrService.sendMessage(messageDto);
           };
           console.log(this.currentChannelP);
           console.log(this.channels);
-          
-
-          
         },
         error: (error) => {
           console.error('Login error', error);
@@ -124,7 +140,6 @@ this.signalrService.sendMessage(messageDto);
           for (let chanel of this.currentWorkspace.publicChannels) {
             this.channels.push(chanel);
           }
-
         },
         error: (error) => {
           console.error('Reload error', error);
@@ -175,7 +190,7 @@ this.signalrService.sendMessage(messageDto);
   }
   onChangeChannel(channel: Channel) {
     this.currentChannelP = channel;
-    console.log("HEEEEEEEEEEEREE",this.currentChannelP);
+    console.log('HEEEEEEEEEEEREE', this.currentChannelP);
   }
   onDeleteChannel() {
     this.service.Delete(this.currentChannelP.id).subscribe({
@@ -188,14 +203,14 @@ this.signalrService.sendMessage(messageDto);
       complete: () => {
         this.reload();
       },
-    });;
+    });
   }
   onUpdateChannel() {
     const data = {
-      id:this.currentChannelP.id,
+      id: this.currentChannelP.id,
       name: this.channelForm.value.channelName,
-      description:this.currentChannelP.description,
-      is_private:this.channelForm.value.channelPrivate
+      description: this.currentChannelP.description,
+      is_private: this.channelForm.value.channelPrivate,
     };
     this.service.Update(data).subscribe({
       next: (response) => {
@@ -209,4 +224,12 @@ this.signalrService.sendMessage(messageDto);
       },
     });
   }
+  onAddUser() {
+    console.log(this.userForm.value);
+    // TODO Add the logc for adding user to ws
+  }
+  onRemoveUser(data: any) {
+    //Todo Remove User
+  }
+  
 }

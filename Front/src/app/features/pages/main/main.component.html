@@ -227,11 +227,86 @@
             ></path>
           </svg>
         </label>
+        <button class="btn btn-ghost btn-circle">
+          <a [routerLink]="['/Call', currentChannelP.channelString]">
+            <div class="indicator">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-6 h-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
+                />
+              </svg>
+              <!-- add if a video call is online  -->
+
+              <span class="badge badge-xs badge-primary indicator-item"></span>
+            </div>
+          </a>
+        </button>
+        <button
+          class="btn btn-ghost btn-circle"
+          onclick="my_modal_11.showModal()"
+        >
+          <div class="">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+              />
+            </svg>
+
+            <!-- add if a video call is online  -->
+          </div>
+        </button>
       </div>
     </div>
     <app-channel [currentChannelP]="currentChannelP"></app-channel>
     <app-input [currentChannelP]="currentChannelP"></app-input>
     <!-- add channel here -->
+    <dialog id="my_modal_11" class="modal modal-bottom sm:modal-middle">
+      <div class="modal-box">
+        <form
+          [formGroup]="userForm"
+          (ngSubmit)="onAddUser()"
+          class="card-body"
+          method="dialog"
+        >
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">User Email : </span>
+            </label>
+            <input
+              formControlName="userEmail"
+              type="email"
+              placeholder="Enter UserEmail ..."
+              class="input input-bordered"
+              required
+            />
+          </div>
+
+          <div class="form-control mt-6">
+            <button type="submit" class="btn w-1/3 ml-auto">Add User</button>
+            <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
+          </div>
+        </form>
+        <form method="dialog"></form>
+      </div>
+    </dialog>
     <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
       <div class="modal-box">
         <form
@@ -291,7 +366,7 @@
     ></label>
     <ul class="menu p-4 w-80 min-h-full bg-base-100 text-base-content">
       <!-- Sidebar content here -->
-      <a class="btn btn-ghost text-xl">{{ currentWorkspace.name }}</a>
+      <a class="btn btn-ghost text-xl">{{ currentWorkspace.name }}Workspace </a>
 
       <ul class="menu mt-10 bg-base-100 w-56 rounded-box">
         <li>
@@ -301,23 +376,127 @@
               <li *ngFor="let channel of channels">
                 <a (click)="onChangeChannel(channel)"># {{ channel.name }} </a>
               </li>
-              <li>
-                <button class="btn w-" onclick="my_modal_5.showModal()">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-6 h-6"
+
+              <li class="" onclick="my_modal_5.showModal()">
+                <div class="flex items-center">
+                  <button class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      class="w-4 h-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                    <span class="ml-1 text-sm">Add Channel</span>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details open>
+            <summary class=" ">Direct Messages</summary>
+            <ul>
+              <li *ngFor="let user of users" class="py-1">
+                <div class="flex items-center">
+                  <img
+                    *ngIf="user.img != null"
+                    [src]="user.img"
+                    alt="User Avatar"
+                    class="w-6 h-6 rounded-full mr-2"
+                  />
+                  <div
+                    *ngIf="user.img == null"
+                    class="w-6 h-6 rounded-full mr-2 flex items-center justify-center bg-gray-300 text-gray-600"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      d="M12 4.5v15m7.5-7.5h-15"
-                    />
-                  </svg>
-                </button>
+                    {{ user.name.charAt(0).toUpperCase() }}
+                  </div>
+                  <a routerLink="/Profile">
+                    <span class="font-semibold text-sm">{{ user.name }} </span>
+                  </a>
+                </div>
+              </li>
+              <li class="py-1">
+                <div class="flex items-center">
+                  <img
+                    src='https://i.ibb.co/XJ5y9WM/me.jpg'
+                    alt="User Avatar"
+                    class="w-6 h-6 rounded-full mr-2"
+                  />
+
+                  <a routerLink="/Profile">
+                    <span class="font-semibold text-sm"
+                      >hayaoui Mouad (you)
+                    </span>
+                  </a>
+                </div>
+              </li>
+              <li class="" onclick="my_modal_11.showModal()">
+                <div class="flex items-center">
+                  <button class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      class="w-4 h-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                    <span class="ml-1 text-sm">Add coworkers</span>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </details>
+        </li>
+        <li>
+          <details open>
+            <summary class=" ">Apps</summary>
+            <ul>
+              <li class="py-1">
+                <div class="flex items-center">
+                  <img
+                    src="https://i.ibb.co/Qc5fmj1/drive.png"
+                    alt="User Avatar"
+                    class="w-6 h-6 rounded-full mr-2"
+                  />
+
+                  <a routerLink="">
+                    <span class="font-semibold text-sm">Google Drive </span>
+                  </a>
+                </div>
+              </li>
+              <li class="">
+                <div class="flex items-center">
+                  <button class="flex items-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      class="w-4 h-4"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M12 4.5v15m7.5-7.5h-15"
+                      />
+                    </svg>
+                    <span class="ml-1 text-sm">Add apps</span>
+                  </button>
+                </div>
               </li>
             </ul>
           </details>

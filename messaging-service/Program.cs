@@ -1,3 +1,4 @@
+using Amazon.S3;
 using messaging_service.Consumer;
 using messaging_service.Data;
 using messaging_service.Exceptions;
@@ -10,12 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
+
     var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
     var dbName = Environment.GetEnvironmentVariable("DB_NAME");
     var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD");
 
-    string connectionString = $"Server={dbHost},1433;Database={dbName};User Id=SA;Password={dbPassword};Trusted_Connection=false;TrustServerCertificate=True";
-    //string connectionString = "Server=localhost;Database=dev;Trusted_Connection=true;TrustServerCertificate=True";
+    //string connectionString = $"Server={dbHost},1433;Database={dbName};User Id=SA;Password={dbPassword};Trusted_Connection=false;TrustServerCertificate=True";
+    string connectionString = "Server=localhost;Database=dev;Trusted_Connection=true;TrustServerCertificate=True";
     option.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure();
@@ -32,6 +34,9 @@ builder.Services.AddCors(options =>
                                 .AllowAnyMethod();
                       });
 });
+
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();
@@ -56,6 +61,7 @@ builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer>();
+
 while (!rabbitMQConsumer.SetConnection()) ;
 await rabbitMQConsumer.StartConsuming();
 
