@@ -1,11 +1,7 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using notif_service.Models;
 using notif_service.Services;
-using System.Net;
-using System.Net.Mail;
 
 namespace notif_service.Controllers
 {
@@ -87,11 +83,8 @@ namespace notif_service.Controllers
             ResponseDto response = new ResponseDto();
             try
             {
-                //Notification notification = _mapper.Map<Notification>(notificationDto);
-                //await _notificationService.AddNotificationAsync(notification);
-
-                var message = new Message(new string[] { "redtius@gmail.com" }, "Test email", "This is the content from our email.");
-                //await _emailService.SendEmail(message);
+                Notification notif = _mapper.Map<Notification>(notificationDto);
+                await _notificationService.AddNotificationAsync(notif);
 
                 response.IsSuccess = true;
                 response.Message = "Notifications Added!";
@@ -103,22 +96,6 @@ namespace notif_service.Controllers
                 response.Message = "Failed to add notifications!";
                 return BadRequest(response);
             }
-        }
-
-        [HttpPost("SendMail")]
-        public async Task<ActionResult<ResponseDto>> SendMail([FromBody]MailData mailData)
-        {
-            try
-            {
-                var client = new SmtpClient("sandbox.smtp.mailtrap.io", 2525)
-                {
-                    Credentials = new NetworkCredential("44436faf1fdd17", "53adac813a5a1f"),
-                    EnableSsl = true
-                };
-                client.Send("from@example.com", "redtius@gmail.com", "Hello world", "testbody");
-                return Ok();
-            }
-            catch(Exception) { return BadRequest(); }
         }
 
 
