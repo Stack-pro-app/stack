@@ -21,15 +21,13 @@ namespace messaging_service.Repository
         private readonly IMapper _mapper;
         private readonly ILogger<ChatRepository> _logger;
         private readonly IAmazonS3 _S3client;
-        private readonly IRabbitMQProducer _producer;
 
-        public ChatRepository(AppDbContext context,IMapper mapper, ILogger<ChatRepository> logger,IAmazonS3 client,IRabbitMQProducer producer)
+        public ChatRepository(AppDbContext context,IMapper mapper, ILogger<ChatRepository> logger,IAmazonS3 client)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
             _S3client=client;
-            _producer = producer;
         }
 
         public async Task<bool> CreateChatAsync(Chat message)
