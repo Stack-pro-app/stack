@@ -22,6 +22,7 @@ builder.Services.Configure<NotificationDatabaseSettings>(options =>
     options.NotificationsCollectionName = NotificationDatabase.NotificationsCollectionName;
 });*/
 builder.Services.Configure<NotificationDatabaseSettings>(builder.Configuration.GetSection("NotificationDatabase"));
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("EmailConfiguration"));
 builder.Services.AddAutoMapper(typeof(NotificationProfile));
 builder.Services.AddScoped<INotificationService,NotificationService>();
 var emailConfig = builder.Configuration

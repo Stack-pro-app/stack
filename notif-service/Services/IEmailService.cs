@@ -4,7 +4,7 @@ namespace notif_service.Services
 {
     public interface IEmailService
     {
-        Task SendEmail(Message message);
+        Task SendEmail(MailData message);
         
     }
 }

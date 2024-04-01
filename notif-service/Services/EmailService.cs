@@ -11,10 +11,10 @@ namespace notif_service.Services
         {
             _emailConfig = emailConfig;
         }
-        public async Task SendEmail(Message message)
+        public async Task SendEmail(MailData message)
         {
-            var emailMessage = CreateEmailMessage(message);
-            await Send(emailMessage);
+            //var emailMessage = CreateEmailMessage(message);
+           // await Send(emailMessage);
         }
 
         private MimeMessage CreateEmailMessage(Message message)
@@ -35,7 +35,7 @@ namespace notif_service.Services
                 try
                 {
                     await client.ConnectAsync(_emailConfig.SmtpServer, _emailConfig.Port, false);
-                    await client.AuthenticateAsync(_emailConfig.UserName, _emailConfig.Password);
+                    await client.AuthenticateAsync(_emailConfig.Username, _emailConfig.Password);
 
                     await client.SendAsync(mailMessage);
                 }
