@@ -35,8 +35,8 @@ builder.Services.AddCors(options =>
                       });
 });
 
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
-builder.Services.AddAWSService<IAmazonS3>();
+//builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+//builder.Services.AddAWSService<IAmazonS3>();
 
 builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();
