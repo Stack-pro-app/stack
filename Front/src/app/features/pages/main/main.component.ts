@@ -14,6 +14,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { WorkspaceService } from '../../../core/services/Workspace/workspace.service';
 import { Workspace } from '../../../core/Models/workspace';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-main',
@@ -29,6 +30,7 @@ import { SignalrService } from '../../../core/services/signalr/signalr.service';
   styleUrl: './main.component.css',
 })
 export class MainComponent implements OnInit, OnChanges {
+  searchTerm: string = '';
   id: string | null = '';
   channelRequest: any = {
     name: '',
@@ -52,7 +54,6 @@ export class MainComponent implements OnInit, OnChanges {
     name: '',
   };
   users: any[] = [
-   
     {
       img: 'https://i.ibb.co/XJ5y9WM/me.jpg',
 
@@ -63,9 +64,11 @@ export class MainComponent implements OnInit, OnChanges {
       name: 'enma No Katana',
     },
   ];
+  CUsers!: any[];
   channels: Channel[] = [];
   constructor(
     private signalrService: SignalrService,
+    private userService: UserService,
     private service: ChannelService,
     private builder: FormBuilder,
     private router: Router,
@@ -123,6 +126,7 @@ export class MainComponent implements OnInit, OnChanges {
           };
           console.log(this.currentChannelP);
           console.log(this.channels);
+          this.onGetUsers();
         },
         error: (error) => {
           console.error('Login error', error);
@@ -145,6 +149,7 @@ export class MainComponent implements OnInit, OnChanges {
           console.error('Reload error', error);
         },
       });
+    this.onGetUsers();
   }
   onCreateChannel() {
     this.channelRequest.name = this.channelForm.value.channelName;
@@ -225,11 +230,47 @@ export class MainComponent implements OnInit, OnChanges {
     });
   }
   onAddUser() {
-    console.log(this.userForm.value);
-    // TODO Add the logc for adding user to ws
+    let userId = 0;
+    this.userService.FindUserByEmail(this.userForm.value.userEmail).subscribe({
+      next: (response) => {
+        console.log(response.result.id);
+        userId = response.result.id;
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {
+        this.userService
+          .addUserToWorkSpace(userId, this.currentWorkspace.id)
+          .subscribe({
+            next: (response) => {},
+            error: (error) => {
+              console.error('get Users  error', error);
+            },
+            complete: () => {
+              this.reload();
+            },
+          });
+      },
+    });
   }
   onRemoveUser(data: any) {
     //Todo Remove User
   }
-  
+  onGetUsers() {
+    this.userService.getUersFromWorkSpace(this.currentWorkspace.id).subscribe({
+      next: (response) => {
+        this.CUsers = response;
+        console.log('Users', this.CUsers);
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {},
+    });
+  }
+  onDeleteUserFromWs(id: any) {
+    console.log('deleted user : ', id);
+  }
+  filterItems() {}
 }

@@ -20,16 +20,15 @@ namespace messaging_service.Repository
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger<ChatRepository> _logger;
-        //private readonly IAmazonS3 _S3client;
+        private readonly IAmazonS3 _S3client;
 
-        public ChatRepository(AppDbContext context,IMapper mapper, ILogger<ChatRepository> logger
-            //,IAmazonS3 client
+        public ChatRepository(AppDbContext context,IMapper mapper, ILogger<ChatRepository> logger,IAmazonS3 client
             )
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
-            //_S3client=client;
+            _S3client=client;
         }
 
         public async Task<bool> CreateChatAsync(Chat message)
@@ -67,7 +66,7 @@ namespace messaging_service.Repository
             try
             {
                 Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId) ?? throw new ValidationException("Message Inexistant");
-                //await _S3client.DeleteObjectAsync("stack-messaging-service", message.Attachement_Key);
+               await _S3client.DeleteObjectAsync("stack-messaging-service", message.Attachement_Key);
                 _context.Chats.Remove(message);
                 await _context.SaveChangesAsync();
                 return true;
@@ -83,7 +82,7 @@ namespace messaging_service.Repository
             try
             {
                 Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.MessageId == messageId) ?? throw new ValidationException("Message Inexistant");
-                //await _S3client.DeleteObjectAsync("stack-messaging-service", message.Attachement_Key);
+                await _S3client.DeleteObjectAsync("stack-messaging-service", message.Attachement_Key);
                 _context.Chats.Remove(message);
                 await _context.SaveChangesAsync();
                 return true;

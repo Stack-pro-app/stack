@@ -1,6 +1,7 @@
 using Amazon.S3;
 using gateway_chat_server.Hubs;
 using gateway_chat_server.Producer;
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
@@ -13,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddCors(options =>
+/*builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllOrigins",
         builder =>
@@ -24,7 +25,7 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod()
                 .AllowCredentials(); // Allow credentials if needed (e.g., for SignalR)
         });
-});
+});*/
 /*
 builder.Services.AddCors(options =>
 {
@@ -39,6 +40,19 @@ builder.Services.AddCors(options =>
         });
 });
 */
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost")
+                              .AllowAnyHeader()
+                              .AllowAnyMethod()
+                              .AllowCredentials();
+                      });
+});
+
+
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
 var app = builder.Build();
 
@@ -47,7 +61,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors("AllOrigins");
+//app.UseCors("AllOrigins");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -64,6 +78,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.MapHub<ChannelHub>("/channelHub");
 app.MapHub<FileHub>("/fileHub");
+app.UseCors(myAllowSpecificOrigins);
 
 
 app.Run();
