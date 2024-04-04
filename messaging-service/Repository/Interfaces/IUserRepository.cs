@@ -12,7 +12,7 @@ namespace messaging_service.Repository.Interfaces
         Task<IEnumerable<User>> GetUsersByChannelAsync(int channelId);
         Task<IEnumerable<UserDetailDto>> GetUsersByWorkspaceAsync(int workspaceId);
         Task<IEnumerable<string>> AddUsersToWorkspace(int workspaceId, ICollection<int> usersId);
-        Task<IEnumerable<string>> RemoveUserFromWorkspace(int workspaceId, ICollection<int> usersId);
+        Task RemoveUserFromWorkspace(int workspaceId, int userId);
         Task<IEnumerable<Workspace>> SetLoginAndGetWorkspaces(string authId);
         Task<User> GetUserByEmailAsync(string email);
     }

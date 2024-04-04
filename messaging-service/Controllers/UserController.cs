@@ -202,18 +202,17 @@ namespace messaging_service.Controllers
 
 
         //  Multiple Users From a workspace by workspaceId & UsersIds
-        [HttpDelete("Workspace")]
-        public async Task<ActionResult<ResponseDto>> RemoveUsersFromWorkspace([FromBody]UsersWorkSpaceDto usersDto)
+        [HttpDelete("{id}/Workspace/{workspaceId}")]
+        public async Task<ActionResult<ResponseDto>> RemoveUsersFromWorkspace([FromRoute]int id, [FromRoute] int workspaceId)
         {
             try
             {
-                IEnumerable<string> result = await _userRepository.RemoveUserFromWorkspace(usersDto.WorkspaceId, usersDto.UsersId);
-                if (!result.Any()) throw new ValidationException("Can't Add Users To Workspace");
+                await _userRepository.RemoveUserFromWorkspace(workspaceId, id);
                 ResponseDto response = new()
                 {
-                    Result = result.ToList(),
+                    Result = null,
                     IsSuccess = true,
-                    Message = "Deleted Users From Workspace",
+                    Message = "Succesfully Deleted User From Workspace",
                 };
                 return Ok(response);
             }
