@@ -150,26 +150,18 @@ namespace messaging_service.Repository
             }
 
         }
-        public async Task<IEnumerable<string>> RemoveUserFromWorkspace(int workspaceId, ICollection<int> usersId)
+        public async Task RemoveUserFromWorkspace(int workspaceId, int userId)
         {
-            List<String> results = new List<String>();
             try
             {
-                foreach (var Id in usersId)
-                {
-                    UserWorkspace result = await _context.UsersWorkspaces.FirstOrDefaultAsync(w => w.WorkspaceId == workspaceId && w.UserId == Id) ?? throw new ValidationException("The User is already not a member");
-                    _context.UsersWorkspaces.Remove(result);
-                    results.Add("Succesfully deleted !");
-                }
+                UserWorkspace result = await _context.UsersWorkspaces.FirstOrDefaultAsync(w => w.WorkspaceId == workspaceId && w.UserId == userId) ?? throw new ValidationException("The User is already not a member");
+                _context.UsersWorkspaces.Remove(result);
                 await _context.SaveChangesAsync();
-
             }
             catch (Exception)
             {
-                results.Add("Failed To delete !");
                 throw;
             }
-            return results;
         }
         public async Task<User> GetUserByEmailAsync(string email)
         {
