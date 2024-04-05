@@ -1,30 +1,15 @@
 ﻿
 using AutoMapper;
-using Azure;
 using messaging_service.Controllers;
 using messaging_service.models.domain;
 using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto.Minimal;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Response;
-using messaging_service.Repository;
 using messaging_service.Repository.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using Xunit.Abstractions;
-using Xunit.Sdk;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using static System.Net.Mime.MediaTypeNames;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace messaging_service.tests.repository.tests
 {
@@ -75,8 +60,8 @@ namespace messaging_service.tests.repository.tests
         {
             // Arrange
             string validAuthId = "validAuthId";
-            var user = new User { /* Initialize user object with valid data */ };
-            var expectedDto = new UserDetailDto { /* Initialize expected DTO with user details */ };
+            var user = new User { };
+            var expectedDto = new UserDetailDto { };
             Mock.Get(userRepository).Setup(repo => repo.GetUserAsync(validAuthId)).ReturnsAsync(user);
             Mock.Get(mapper).Setup(mapper => mapper.Map<UserDetailDto>(user)).Returns(expectedDto);
 
@@ -88,7 +73,6 @@ namespace messaging_service.tests.repository.tests
             var response = Assert.IsType<ResponseDto>(okResult.Value);
             Assert.True(response.IsSuccess);
             Assert.Equal(expectedDto, response.Result);
-            // Additional assertions if necessary
         }
 
         [Fact]
@@ -260,10 +244,5 @@ namespace messaging_service.tests.repository.tests
             Assert.Equal(expectedDto, response.Result);
             Assert.Equal("User Found!", response.Message);
         }
-
-
-
-
-
     }
 }

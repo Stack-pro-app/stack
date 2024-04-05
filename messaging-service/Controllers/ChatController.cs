@@ -1,16 +1,13 @@
 ﻿using messaging_service.models.dto.Response;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.domain;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using messaging_service.Repository;
-using messaging_service.Consumer;
 using AutoMapper;
 using messaging_service.models.dto.Detailed;
-using System.Threading.Channels;
-using RabbitMQ.Client.Events;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using messaging_service.Repository.Interfaces;
 
 namespace messaging_service.Controllers
 {
@@ -18,10 +15,10 @@ namespace messaging_service.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
-        private readonly ChatRepository _chatRepository;
+        private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
 
-        public ChatController(ChatRepository chatRepository, IMapper mapper)
+        public ChatController(IChatRepository chatRepository, IMapper mapper)
         {
             _chatRepository = chatRepository;
             _mapper = mapper;
@@ -149,6 +146,7 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
+
 
 
     }
