@@ -8,6 +8,7 @@ using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Others;
 using System.ComponentModel.DataAnnotations;
+using messaging_service.Repository.Interfaces;
 
 namespace messaging_service.Controllers
 {
@@ -15,9 +16,9 @@ namespace messaging_service.Controllers
     [ApiController]
     public class ChannelController : ControllerBase
     {
-        private readonly ChannelRepository _repository;
+        private readonly IChannelRepository _repository;
         private readonly IMapper _mapper;
-        public ChannelController(ChannelRepository repository,IMapper mapper)
+        public ChannelController(IChannelRepository repository,IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
