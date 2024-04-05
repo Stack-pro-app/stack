@@ -164,13 +164,13 @@ namespace messaging_service.Controllers
             }
         }
 
-        [HttpDelete("RemoveUser/{channelId}")]
-        public async Task<ActionResult<ResponseDto>> RemoveFromPrivateChannel([FromRoute] int channelId, [FromBody] UserMinDto user)
+        [HttpDelete("{channelId}/RemoveUser/{id}")]
+        public async Task<ActionResult<ResponseDto>> RemoveFromPrivateChannel([FromRoute] int channelId, [FromRoute]int id)
         {
             try
             {
-                bool result = await _repository.RemoveUserFromPrivateChannel(channelId, user.userId);
-                if (!result) throw new ValidationException("Can't Add User To Channel");
+                bool result = await _repository.RemoveUserFromPrivateChannel(channelId, id);
+                if (!result) throw new ValidationException("Can't Delete User from Channel");
                 ResponseDto responseDto = new()
                 {
                     IsSuccess = true,
@@ -190,7 +190,22 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
-
-
+        [HttpPost("OneToOne")]
+        public async Task<ActionResult<ResponseDto>> FindOrCreateOneToOneChannel([FromBody] OneToOneChannelRequest request)
+        {
+            var result = await _repository.GetOneToOneChannel(request);
+            if (result == null)
+            {
+                result = await _repository.CreateOneToOneChannel(request);
+            }
+            ChannelDetailDto channelDetailDto = _mapper.Map<ChannelDetailDto>(result);
+            ResponseDto responseDto = new()
+            {
+                IsSuccess = true,
+                Message = "Here's the One To One channel",
+                Result = channelDetailDto
+            };
+            return Ok(responseDto);
+        }
     }
 }

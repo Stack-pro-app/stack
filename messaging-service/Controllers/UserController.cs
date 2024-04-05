@@ -20,10 +20,12 @@ namespace messaging_service.Controllers
     {
         private readonly UserRepository _userRepository;
         private readonly IMapper _mapper;
-        public UserController(UserRepository userRepository,IMapper mapper)
+        private readonly ILogger<UserController> _logger;
+        public UserController(UserRepository userRepository,IMapper mapper,ILogger<UserController> logger)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
 
@@ -79,6 +81,21 @@ namespace messaging_service.Controllers
             {
                 throw;
             }
+        }
+
+        [HttpGet("byId/{id}")]
+        public async Task<ActionResult<ResponseDto>> GetUserById([FromRoute] int id)
+        {
+                var user = await _userRepository.GetUserAsync(id);
+                if (user == null) throw new ValidationException("No User Was Found");
+                var userResponseDto = _mapper.Map<UserDetailDto>(user);
+                ResponseDto response = new()
+                {
+                    IsSuccess = true,
+                    Result = userResponseDto,
+                    Message = "Welcome !"
+                };
+                return Ok(response);
         }
 
 
@@ -183,9 +200,9 @@ namespace messaging_service.Controllers
             try
             {
                 IEnumerable<User> users = await _userRepository.GetUsersByChannelAsync(channelId);
+                if (users == null) throw new ValidationException("Can't find any users");
                 IEnumerable<UserDetailDto> usersDto = users.Select(user => _mapper.Map<UserDetailDto>(user));
-                Console.WriteLine(usersDto);
-                if (users.IsNullOrEmpty()) throw new ValidationException("Can't find any users");
+                _logger.LogInformation("controller till here");
                 ResponseDto response = new()
                 {
                     Result = usersDto,
@@ -202,18 +219,17 @@ namespace messaging_service.Controllers
 
 
         //  Multiple Users From a workspace by workspaceId & UsersIds
-        [HttpDelete("Workspace")]
-        public async Task<ActionResult<ResponseDto>> RemoveUsersFromWorkspace([FromBody]UsersWorkSpaceDto usersDto)
+        [HttpDelete("{id}/Workspace/{workspaceId}")]
+        public async Task<ActionResult<ResponseDto>> RemoveUsersFromWorkspace([FromRoute]int id, [FromRoute] int workspaceId)
         {
             try
             {
-                IEnumerable<string> result = await _userRepository.RemoveUserFromWorkspace(usersDto.WorkspaceId, usersDto.UsersId);
-                if (!result.Any()) throw new ValidationException("Can't Add Users To Workspace");
+                await _userRepository.RemoveUserFromWorkspace(workspaceId, id);
                 ResponseDto response = new()
                 {
-                    Result = result.ToList(),
+                    Result = null,
                     IsSuccess = true,
-                    Message = "Deleted Users From Workspace",
+                    Message = "Succesfully Deleted User From Workspace",
                 };
                 return Ok(response);
             }

@@ -7,6 +7,7 @@ using messaging_service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using messaging_service.models.dto.Requests;
 
 namespace messaging_service.Repository
 {
@@ -14,11 +15,12 @@ namespace messaging_service.Repository
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-
-        public ChannelRepository(AppDbContext context,IMapper mapper)
+        private readonly ILogger<ChannelRepository> _logger;
+        public ChannelRepository(AppDbContext context,IMapper mapper, ILogger<ChannelRepository> logger)
         {
             _context = context;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<bool> CreateChannelAsync(Channel channel)
@@ -83,35 +85,33 @@ namespace messaging_service.Repository
 
         public async Task<bool> AddUserToPrivateChannel(int channelId, int userId)
         {
-            try
+            var memberVerify = await _context.Members.FirstOrDefaultAsync(x => x.UserId == userId && x.ChannelId == channelId);
+            if (memberVerify != null)
             {
-                Channel Channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId) ?? throw new ValidationException("Invalid Channel!");
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new ValidationException("Invalid User!");
-                
-                Member member = new()
-                {
-                    ChannelId = channelId,
-                    UserId = userId,
-                };
-                _context.Members.Add(member);
-                await _context.SaveChangesAsync();
-                return true;
+                _logger.LogInformation(memberVerify.ToString());
+                throw new ValidationException("Already a member");
             }
-            catch (Exception) { throw; }
+
+            var channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId && c.Is_OneToOne == false) ?? throw new ValidationException("Invalid Channel!");
+            _logger.LogInformation(channel.WorkspaceId+" "+userId);
+            var userWorkspace = await _context.UsersWorkspaces.FirstOrDefaultAsync(u => u.UserId == userId && u.WorkspaceId == channel.WorkspaceId) ?? throw new ValidationException("Invalid User!");
+            _logger.LogInformation(userWorkspace.ToString());
+
+            Member member = new()
+            {
+                ChannelId = channelId,
+                UserId = userId,
+            };
+            _context.Members.Add(member);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> RemoveUserFromPrivateChannel(int channelId, int userId)
         {
             try
             {
-                Channel Channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId) ?? throw new ValidationException("Invalid Channel!");
-                User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new ValidationException("Invalid User!");
-
-                Member member = new()
-                {
-                    ChannelId = channelId,
-                    UserId = userId,
-                };
+                Member member = await _context.Members.FirstOrDefaultAsync(m => m.ChannelId == channelId && m.UserId == userId) ?? throw new ValidationException("Invalid Operation");
                 _context.Members.Remove(member);
                 await _context.SaveChangesAsync();
                 return true;
@@ -119,5 +119,53 @@ namespace messaging_service.Repository
             catch (Exception) { throw; }
         }
 
+        public async Task<Channel> CreateOneToOneChannel(OneToOneChannelRequest request)
+        {
+            int u1 = request.User1;
+            int u2 = request.User2;
+            int workspaceId = request.WorkspaceId;
+            var user1 = await _context.Users.FindAsync(u1) ?? throw new ValidationException("Invalid User");
+            var validUser1 = await _context.UsersWorkspaces.FirstOrDefaultAsync(uw => uw.UserId == u1 && uw.WorkspaceId == workspaceId) ?? throw new ValidationException("User doesn't belong to workspace");
+            var user2 = await _context.Users.FindAsync(u2) ?? throw new ValidationException("Invalid User");
+            var validUser2 = await _context.UsersWorkspaces.FirstOrDefaultAsync(uw => uw.UserId == u2 && uw.WorkspaceId == workspaceId) ?? throw new ValidationException("User doesn't belong to workspace");
+
+            Channel channel = new()
+            {
+                Name = user1.Name + "," + user2.Name,
+                Is_private = true,
+                Is_OneToOne = true,
+                WorkspaceId = workspaceId,
+            };
+
+            _context.Channels.Add(channel);
+            await _context.SaveChangesAsync();
+
+            Member member1 = new()
+            {
+                ChannelId = channel.Id,
+                UserId = user1.Id,
+            };
+
+            Member member2 = new()
+            {
+                ChannelId = channel.Id,
+                UserId = user2.Id,
+            };
+
+            _context.Members.Add(member1);
+            _context.Members.Add(member2);
+            await _context.SaveChangesAsync();
+
+            return channel;
+        }
+
+        public async Task<Channel?> GetOneToOneChannel(OneToOneChannelRequest request)
+        {
+            int u1 = request.User1;
+            int u2 = request.User2;
+            int workspaceId = request.WorkspaceId;
+            var result = await _context.Members.Where(m => m.UserId == u1 || m.UserId == u2).Include(m => m.Channel).Select(m => m.Channel).Where(c => c.Is_OneToOne == true && c.WorkspaceId == workspaceId).Distinct().FirstOrDefaultAsync();
+            return result;
+        }
     }
 }

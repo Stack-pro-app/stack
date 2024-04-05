@@ -14,6 +14,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { WorkspaceService } from '../../../core/services/Workspace/workspace.service';
 import { Workspace } from '../../../core/Models/workspace';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-main',
@@ -29,6 +30,8 @@ import { SignalrService } from '../../../core/services/signalr/signalr.service';
   styleUrl: './main.component.css',
 })
 export class MainComponent implements OnInit, OnChanges {
+  showDeleteButton:Boolean = false;
+  searchTerm: string = '';
   id: string | null = '';
   channelRequest: any = {
     name: '',
@@ -40,8 +43,7 @@ export class MainComponent implements OnInit, OnChanges {
     id: 0,
     name: '',
     MainChannel: {},
-    publicChannels: [],
-    privateChannels: [],
+    channels: [],
   };
   currentChannelP: Channel = {
     channelString: '',
@@ -52,7 +54,6 @@ export class MainComponent implements OnInit, OnChanges {
     name: '',
   };
   users: any[] = [
-   
     {
       img: 'https://i.ibb.co/XJ5y9WM/me.jpg',
 
@@ -63,9 +64,11 @@ export class MainComponent implements OnInit, OnChanges {
       name: 'enma No Katana',
     },
   ];
+  CUsers!: any[];
   channels: Channel[] = [];
   constructor(
     private signalrService: SignalrService,
+    private userService: UserService,
     private service: ChannelService,
     private builder: FormBuilder,
     private router: Router,
@@ -111,7 +114,7 @@ export class MainComponent implements OnInit, OnChanges {
           this.currentWorkspace = response.result;
           console.log('Wos', this.currentWorkspace);
 
-          this.channels = this.currentWorkspace.privateChannels;
+          this.channels = this.currentWorkspace.channels;
 
           this.currentChannelP = {
             channelString: response.result.mainChannel.channelString,
@@ -123,6 +126,7 @@ export class MainComponent implements OnInit, OnChanges {
           };
           console.log(this.currentChannelP);
           console.log(this.channels);
+          this.onGetUsers();
         },
         error: (error) => {
           console.error('Login error', error);
@@ -136,15 +140,21 @@ export class MainComponent implements OnInit, OnChanges {
         next: (response) => {
           console.log(response);
           this.currentWorkspace = response.result;
-          this.channels = this.currentWorkspace.privateChannels;
-          for (let chanel of this.currentWorkspace.publicChannels) {
-            this.channels.push(chanel);
-          }
+          this.channels = this.currentWorkspace.channels;
+          this.currentChannelP = {
+            channelString: response.result.mainChannel.channelString,
+            created_at: response.result.mainChannel.created_at,
+            description: response.result.mainChannel.description,
+            id: response.result.mainChannel.id,
+            is_private: response.result.mainChannel.is_private,
+            name: response.result.mainChannel.name,
+          };
         },
         error: (error) => {
           console.error('Reload error', error);
         },
       });
+    this.onGetUsers();
   }
   onCreateChannel() {
     this.channelRequest.name = this.channelForm.value.channelName;
@@ -201,6 +211,7 @@ export class MainComponent implements OnInit, OnChanges {
         console.error('Updating  error', error);
       },
       complete: () => {
+
         this.reload();
       },
     });
@@ -225,11 +236,59 @@ export class MainComponent implements OnInit, OnChanges {
     });
   }
   onAddUser() {
-    console.log(this.userForm.value);
-    // TODO Add the logc for adding user to ws
+    let userId = 0;
+    this.userService.FindUserByEmail(this.userForm.value.userEmail).subscribe({
+      next: (response) => {
+        console.log(response.result.id);
+        userId = response.result.id;
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {
+        this.userService
+          .addUserToWorkSpace(userId, this.currentWorkspace.id)
+          .subscribe({
+            next: (response) => {},
+            error: (error) => {
+              console.error('get Users  error', error);
+            },
+            complete: () => {
+              this.reload();
+            },
+          });
+      },
+    });
   }
   onRemoveUser(data: any) {
     //Todo Remove User
   }
-  
+  onGetUsers() {
+    this.userService.getUersFromWorkSpace(this.currentWorkspace.id).subscribe({
+      next: (response) => {
+        this.CUsers = response;
+        console.log('Users', this.CUsers);
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {},
+    });
+  }
+  onDeleteUserFromWs(id: any) {
+    this.userService
+      .deleteUserFromWorkSpace(id, this.currentWorkspace.id)
+      .subscribe({
+        next: (response) => {
+          console.log('Confirmation', response);
+        },
+        error: (error) => {
+          console.error('get Users  error', error);
+        },
+        complete: () => {
+          this.reload();
+        },
+      });
+  }
+  filterItems() {}
 }

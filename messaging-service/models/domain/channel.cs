@@ -14,6 +14,7 @@ namespace messaging_service.models.domain
 
         public DateTime? Created_at { get; set; }
         public bool Is_private { get; set; } = true;
+        public bool? Is_OneToOne { get; set; } = false;
         public int WorkspaceId { get; set; }
         public Workspace Workspace { get; set; } = null!;
         public ICollection<Member> Members { get; set; } = new List<Member>();

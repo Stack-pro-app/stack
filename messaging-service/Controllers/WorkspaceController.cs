@@ -45,7 +45,7 @@ namespace messaging_service.Controllers
                 }
                 else
                 {
-                    throw new ValidationException("Failed to ad !");
+                    throw new ValidationException("Failed to add !");
                 }
             }
             catch (Exception)

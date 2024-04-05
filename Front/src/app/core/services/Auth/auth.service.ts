@@ -9,8 +9,8 @@ import { ChatUser } from '../../Models/chat-user';
   providedIn: 'root',
 })
 export class AuthService {
-  url: string = 'https://localhost:7004/api/auth/';
-  urlU: string = 'https://localhost:8193/api/User';
+  url: string = 'http://localhost:7004/api/auth/';
+  urlU: string = 'http://localhost:8193/api/User';
   constructor(private http: HttpClient, private store: StoreService) {}
 
   login(userData: any): Observable<any> {
