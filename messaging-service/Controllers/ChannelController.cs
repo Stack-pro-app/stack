@@ -190,7 +190,22 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
-
-
+        [HttpPost("OneToOne")]
+        public async Task<ActionResult<ResponseDto>> FindOrCreateOneToOneChannel([FromBody] OneToOneChannelRequest request)
+        {
+            var result = await _repository.GetOneToOneChannel(request);
+            if (result == null)
+            {
+                result = await _repository.CreateOneToOneChannel(request);
+            }
+            ChannelDetailDto channelDetailDto = _mapper.Map<ChannelDetailDto>(result);
+            ResponseDto responseDto = new()
+            {
+                IsSuccess = true,
+                Message = "Here's the One To One channel",
+                Result = channelDetailDto
+            };
+            return Ok(responseDto);
+        }
     }
 }

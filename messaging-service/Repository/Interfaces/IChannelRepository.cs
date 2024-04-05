@@ -1,6 +1,7 @@
 ﻿using messaging_service.models.domain;
 using messaging_service.models.dto.Minimal;
 using messaging_service.models.dto.Detailed;
+using messaging_service.models.dto.Requests;
 
 namespace messaging_service.Repository.Interfaces
 {
@@ -13,5 +14,7 @@ namespace messaging_service.Repository.Interfaces
         Task<IEnumerable<ChannelMinimalDto>> GetChannelsByWorkspaceAsync(int workspaceId);
         Task<bool> AddUserToPrivateChannel(int channelId,int userId);
         Task<bool> RemoveUserFromPrivateChannel(int channelId, int userId);
+        Task<Channel> CreateOneToOneChannel(OneToOneChannelRequest request);
+        Task<Channel?> GetOneToOneChannel(OneToOneChannelRequest request);
     }
 }
