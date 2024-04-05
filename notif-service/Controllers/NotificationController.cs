@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using notif_service.Models;
 using notif_service.Services;
 
@@ -85,11 +83,8 @@ namespace notif_service.Controllers
             ResponseDto response = new ResponseDto();
             try
             {
-                //Notification notification = _mapper.Map<Notification>(notificationDto);
-                //await _notificationService.AddNotificationAsync(notification);
-
-                var message = new Message(new string[] { "redtius@gmail.com" }, "Test email", "This is the content from our email.");
-                await _emailService.SendEmail(message);
+                Notification notif = _mapper.Map<Notification>(notificationDto);
+                await _notificationService.AddNotificationAsync(notif);
 
                 response.IsSuccess = true;
                 response.Message = "Notifications Added!";
