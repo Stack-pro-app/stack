@@ -5,9 +5,9 @@ namespace messaging_service.Repository.Interfaces
 {
     public interface IWorkspaceRepository
     {
-        public Task<bool> CreateWorkspaceAsync(string name,int userId);
-        public Task<bool> DeleteWorkspaceAsync(int workspaceId);
-        public Task<bool> UpdateWorkspaceAsync(int id,string name);
+        public Task CreateWorkspaceAsync(string name,int userId);
+        public Task DeleteWorkspaceAsync(int workspaceId);
+        public Task UpdateWorkspaceAsync(int id,string name);
         public Task<WorkspaceDetailDto> GetWorkspaceAsync(int workspaceId, int userId);
     }
 }

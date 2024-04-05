@@ -5,11 +5,11 @@ namespace messaging_service.Repository.Interfaces
 {
     public interface IChatRepository
     {
-        Task<bool> CreateChatAsync(Chat message);
-        Task<bool> DeleteChatPartAsync(int messageId);
-        Task<bool> DeleteChatPermAsync(int messageId);
-        Task<bool> DeleteChatPermAsync(Guid messageId);
-        Task<bool> UpdateChatAsync(Guid messageId, string message);
+        Task CreateChatAsync(Chat message);
+        Task DeleteChatPartAsync(int messageId);
+        Task DeleteChatPermAsync(int messageId);
+        Task DeleteChatPermAsync(Guid messageId);
+        Task UpdateChatAsync(Guid messageId, string message);
         Task<MessageDetailDto> GetMessageAsync(int messageId);
         Task<IEnumerable<MessageDetailDto>> GetChannelLastMessagesAsync(int channelId,int page);
     }

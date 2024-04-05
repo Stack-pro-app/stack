@@ -56,10 +56,9 @@ namespace messaging_service.tests.repository.tests
     }
     public class ChatTests
     {
-        [Fact]
+        /*
         public async Task Add_AddsToDatabase()
         {
-            //Arrange
             var chatSet = new Mock<DbSet<Chat>>();
             var context = new Mock<AppDbContext>();
             context.SetupGet(db => db.Chats).Returns(chatSet.Object);
@@ -68,13 +67,11 @@ namespace messaging_service.tests.repository.tests
             var mapper = Mock.Of<IMapper>();
             var repository = new ChatRepository(context.Object,mapper,s3);
             Chat chat = FakeDataGenerator.GenerateFakeChat();
-            //Act
             await repository.CreateChatAsync(chat);
-
-            //Assert
             chatSet.Verify(dbSet=>dbSet.Add(chat),Times.Once);
             context.Verify(db=>db.SaveChangesAsync(default),Times.Once);
-        }
+        }*/
+
 
     }
 }

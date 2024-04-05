@@ -7,13 +7,13 @@ namespace messaging_service.Repository.Interfaces
 {
     public interface IChannelRepository
     {
-        Task<bool> CreateChannelAsync(Channel channel);
-        Task<bool> DeleteChannelAsync(int channelId);
-        Task<bool> UpdateChannelAsync(Channel channel);
+        Task CreateChannelAsync(Channel channel);
+        Task DeleteChannelAsync(int channelId);
+        Task UpdateChannelAsync(Channel channel);
         Task<ChannelDetailDto> GetChannelAsync(int channelId);
         Task<IEnumerable<ChannelMinimalDto>> GetChannelsByWorkspaceAsync(int workspaceId);
-        Task<bool> AddUserToPrivateChannel(int channelId,int userId);
-        Task<bool> RemoveUserFromPrivateChannel(int channelId, int userId);
+        Task AddUserToPrivateChannel(int channelId,int userId);
+        Task RemoveUserFromPrivateChannel(int channelId, int userId);
         Task<Channel> CreateOneToOneChannel(OneToOneChannelRequest request);
         Task<Channel?> GetOneToOneChannel(OneToOneChannelRequest request);
     }

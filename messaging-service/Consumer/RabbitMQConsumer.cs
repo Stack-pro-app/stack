@@ -14,10 +14,10 @@ namespace messaging_service.Consumer
 {
     public class RabbitMQConsumer : DefaultBasicConsumer
     {
-        private string _queueName;
-        private ConnectionFactory _factory;
-        private IConnection _connection;
-        private IModel _channel;
+        private string? _queueName;
+        private ConnectionFactory? _factory;
+        private IConnection? _connection;
+        private IModel? _channel;
         private readonly ChatRepository _chatRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<RabbitMQConsumer> _logger;
@@ -32,11 +32,11 @@ namespace messaging_service.Consumer
             _chatRepository = chatRepository;
             _mapper = mapper;
             _logger = logger;
-            hostName = Environment.GetEnvironmentVariable("MQ_HOST");
-            userName = Environment.GetEnvironmentVariable("MQ_USER");
-            password = Environment.GetEnvironmentVariable("MQ_PASSWORD");
-            port = Environment.GetEnvironmentVariable("MQ_PORT");
-           
+            hostName = Environment.GetEnvironmentVariable("MQ_HOST") ?? "localhost";
+            userName = Environment.GetEnvironmentVariable("MQ_USER") ?? "guest";
+            password = Environment.GetEnvironmentVariable("MQ_PASSWORD") ?? "guest";
+            port = Environment.GetEnvironmentVariable("MQ_PORT") ?? "5672";
+
         }
 
         public bool SetConnection()
@@ -44,12 +44,10 @@ namespace messaging_service.Consumer
             _queueName = "message";
             _factory = new ConnectionFactory()
             {
-                //HostName = hostName,
-                //UserName = userName,
-                //Password = password,
-                //Port = int.Parse(port),
-                HostName = "localhost",
-                //Port = 5672,
+                HostName = hostName,
+                UserName = userName,
+                Password = password,
+                Port = int.Parse(port),
                 DispatchConsumersAsync = true
             };
             try
@@ -59,15 +57,16 @@ namespace messaging_service.Consumer
                 _channel.QueueDeclare(queue: _queueName, durable: true, exclusive: false, autoDelete: false, arguments: null);
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
+                Task.Delay(TimeSpan.FromSeconds(1));
                 return false;
             }
             
             
         }
 
-        public async Task StartConsuming()
+        public void StartConsuming()
         {
             var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.Received += async (model, ea) =>
@@ -93,11 +92,9 @@ namespace messaging_service.Consumer
 
                 Chat message = _mapper.Map<Chat>(messageDto);
                 _logger.LogInformation(message.ChannelId.ToString() + "|" + message.Message + "|" + message.UserId.ToString());
-                bool result = await _chatRepository.CreateChatAsync(message);
+                await _chatRepository.CreateChatAsync(message);
 
-                //_logger.LogInformation("Result:" + result);
-
-                _channel.BasicAck(ea.DeliveryTag, false);
+                _channel?.BasicAck(ea.DeliveryTag, false);
             }
             catch (Exception ex)
             {

@@ -35,7 +35,7 @@ namespace messaging_service.Controllers
                 if (messageRequestDto.Message.IsNullOrEmpty() && messageRequestDto.Attachement_Url.IsNullOrEmpty()) throw new ValidationException("Empty Message!");
                 if (messageRequestDto.MessageId == null) messageRequestDto.MessageId = Guid.NewGuid();
                 Chat message = _mapper.Map<Chat>(messageRequestDto);
-                bool result = await _chatRepository.CreateChatAsync(message);
+                await _chatRepository.CreateChatAsync(message);
                     ResponseDto response = new()
                     {
                         IsSuccess = true,
@@ -59,7 +59,7 @@ namespace messaging_service.Controllers
             try
             {
                 //bool result = await _chatRepository.DeleteChatPartAsync(messageId);
-                bool result = await _chatRepository.DeleteChatPermAsync(messageId); // If You want to delete Permenantly!
+                await _chatRepository.DeleteChatPermAsync(messageId); // If You want to delete Permenantly!
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -83,7 +83,7 @@ namespace messaging_service.Controllers
         {
             try
             {
-                bool result = await _chatRepository.UpdateChatAsync(message.MessageId, message.Message);
+                await _chatRepository.UpdateChatAsync(message.MessageId, message.Message);
                 ResponseDto response = new()
                 {
                     IsSuccess = true,

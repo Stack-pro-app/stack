@@ -20,29 +20,26 @@ namespace messaging_service.Repository
             _logger = logger;
         }
 
-        public async Task<bool> CreateUserAsync(User user)
+        public async Task CreateUserAsync(User user)
         {
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
-                return true;
         }
 
-        public async Task<bool> DeleteUserAsync(string authId)
+        public async Task DeleteUserAsync(string authId)
         {
                 var userToDelete = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == authId) ?? throw new ValidationException("User not found.");
                 _context.Users.Remove(userToDelete);
                 await _context.SaveChangesAsync();
-                return true;
         }
 
-        public async Task<bool> UpdateUserAsync(User user)
+        public async Task UpdateUserAsync(User user)
         {
                 var target = await _context.Users.FirstOrDefaultAsync(x => x.AuthId == user.AuthId);
                 if (target == null) throw new ValidationException("Invalid User");
                 target.Name = user.Name;
                 target.Email = user.Email;
                 await _context.SaveChangesAsync();
-                return true;
         }
 
         public async Task<User> GetUserAsync(string authId)
