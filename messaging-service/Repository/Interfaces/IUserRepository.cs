@@ -9,6 +9,7 @@ namespace messaging_service.Repository.Interfaces
         Task<bool> DeleteUserAsync(string authId);
         Task<bool> UpdateUserAsync(User user);
         Task<User> GetUserAsync(string authId);
+        Task<User> GetUserAsync(int id);
         Task<IEnumerable<User>> GetUsersByChannelAsync(int channelId);
         Task<IEnumerable<UserDetailDto>> GetUsersByWorkspaceAsync(int workspaceId);
         Task<IEnumerable<string>> AddUsersToWorkspace(int workspaceId, ICollection<int> usersId);
