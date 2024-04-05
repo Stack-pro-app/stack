@@ -61,7 +61,6 @@ namespace messaging_service.Repository
                     .Include(m=>m.User)
                     .Select(m=>m.User)
                     .ToListAsync();
-                _logger.LogInformation("repo working");
                 return usersByChannel;
         }
 
@@ -74,8 +73,7 @@ namespace messaging_service.Repository
 
         public async Task<IEnumerable<string>> AddUsersToWorkspace(int workspaceId, ICollection<int> usersId)
         {
-                var IsValidWorkspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == workspaceId);
-                if (IsValidWorkspace == null) throw new ValidationException("Workspace Invalid");
+                var IsValidWorkspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == workspaceId)?? throw new ValidationException("Workspace Invalid");
                 List<string> results = new List<string>();
                 foreach (var Id in usersId)
                 {

@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using messaging_service.Repository;
+using messaging_service.Repository.Interfaces;
 using AutoMapper;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Response;
@@ -17,9 +17,9 @@ namespace messaging_service.Controllers
     [ApiController]
     public class WorkspaceController : ControllerBase
     {
-        private readonly WorkspaceRepository _repository;
+        private readonly IWorkspaceRepository _repository;
         private readonly IMapper _mapper;
-        public WorkspaceController(WorkspaceRepository repository,IMapper mapper)
+        public WorkspaceController(IWorkspaceRepository repository,IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
