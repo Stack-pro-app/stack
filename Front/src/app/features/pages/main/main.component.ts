@@ -30,6 +30,7 @@ import { UserService } from '../../../core/services/user.service';
   styleUrl: './main.component.css',
 })
 export class MainComponent implements OnInit, OnChanges {
+  showDeleteButton:Boolean = false;
   searchTerm: string = '';
   id: string | null = '';
   channelRequest: any = {
@@ -42,8 +43,7 @@ export class MainComponent implements OnInit, OnChanges {
     id: 0,
     name: '',
     MainChannel: {},
-    publicChannels: [],
-    privateChannels: [],
+    channels: [],
   };
   currentChannelP: Channel = {
     channelString: '',
@@ -114,10 +114,8 @@ export class MainComponent implements OnInit, OnChanges {
           this.currentWorkspace = response.result;
           console.log('Wos', this.currentWorkspace);
 
-          this.channels = this.currentWorkspace.privateChannels;
- for (let chanel of this.currentWorkspace.publicChannels) {
-   this.channels.push(chanel);
- }
+          this.channels = this.currentWorkspace.channels;
+
           this.currentChannelP = {
             channelString: response.result.mainChannel.channelString,
             created_at: response.result.mainChannel.created_at,
@@ -142,10 +140,15 @@ export class MainComponent implements OnInit, OnChanges {
         next: (response) => {
           console.log(response);
           this.currentWorkspace = response.result;
-          this.channels = this.currentWorkspace.privateChannels;
-          for (let chanel of this.currentWorkspace.publicChannels) {
-            this.channels.push(chanel);
-          }
+          this.channels = this.currentWorkspace.channels;
+          this.currentChannelP = {
+            channelString: response.result.mainChannel.channelString,
+            created_at: response.result.mainChannel.created_at,
+            description: response.result.mainChannel.description,
+            id: response.result.mainChannel.id,
+            is_private: response.result.mainChannel.is_private,
+            name: response.result.mainChannel.name,
+          };
         },
         error: (error) => {
           console.error('Reload error', error);
@@ -208,6 +211,7 @@ export class MainComponent implements OnInit, OnChanges {
         console.error('Updating  error', error);
       },
       complete: () => {
+
         this.reload();
       },
     });
@@ -272,7 +276,19 @@ export class MainComponent implements OnInit, OnChanges {
     });
   }
   onDeleteUserFromWs(id: any) {
-    console.log('deleted user : ', id);
+    this.userService
+      .deleteUserFromWorkSpace(id, this.currentWorkspace.id)
+      .subscribe({
+        next: (response) => {
+          console.log('Confirmation', response);
+        },
+        error: (error) => {
+          console.error('get Users  error', error);
+        },
+        complete: () => {
+          this.reload();
+        },
+      });
   }
   filterItems() {}
 }

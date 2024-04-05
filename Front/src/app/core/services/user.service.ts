@@ -46,15 +46,7 @@ export class UserService {
   }
 
   deleteUserFromWorkSpace(userId:any,id:any):Observable<any>{
-    const RequestUrl = `${this.url}/Workspace`;
-
-    let data = {
-      workspaceId: id,
-      usersId: [userId],
-    };
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
+    const RequestUrl = `${this.url}/${userId}/Workspace/${id}`;
     return this.http.delete(RequestUrl);
   }
 

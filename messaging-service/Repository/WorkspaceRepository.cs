@@ -86,7 +86,7 @@ namespace messaging_service.Repository
                 //Get the minimal Private Channels
                 IEnumerable<Channel> privateChannels = channel.Where(c => c.Is_private == true).ToList();
                 IEnumerable<ChannelMinimalDto> privateMinimal = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(privateChannels);*/
-                IEnumerable<Channel> publicChannels = channel.Where(c => c.Is_private == false && c.Name != "main").ToList();
+                IEnumerable<Channel> publicChannels = channel.Where(c =>c.Name != "main").ToList();
                 IEnumerable<Channel> authorizedChannels = await _context.Members.Where(m => m.UserId == userId).Include(m => m.Channel).Select(m => m.Channel).ToListAsync();
                 IEnumerable<Channel> channels = publicChannels.Concat(authorizedChannels);
                 IEnumerable<ChannelMinimalDto> minimalChannels = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(channels);

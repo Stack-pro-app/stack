@@ -37,6 +37,8 @@ export class InputComponent implements OnInit, OnChanges {
   };
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
+      console.log("this is the new channel : " , changes['currentChannelP'].currentValue);
+      
     }
   }
 

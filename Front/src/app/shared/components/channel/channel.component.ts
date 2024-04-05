@@ -32,7 +32,6 @@ export class ChannelComponent implements OnInit, OnChanges {
 
       this.signalrService.joinChannel(this.currentChannelP.channelString);
 
-    //  this.getMessages();
     }
   }
   ngOnInit(): void {
@@ -40,12 +39,14 @@ export class ChannelComponent implements OnInit, OnChanges {
             this.signalrService.joinChannel(this.currentChannelP.channelString);
 
        this.signalrService.receiveMessage().subscribe((message) => {
+        // Before you add the message and show it make sure that you have added the user by using a user getter api
+        console.log(message);
         this.messages.push(message)         ;
        });
      });
-   // this.getMessages();
+   this.getMessages();
   }
- /* getMessages() {
+  getMessages() {
     this.service.GetMessages(this.currentChannelP.id, 1).subscribe({
       next: (response) => {
         this.messages = response.result;
@@ -57,5 +58,5 @@ export class ChannelComponent implements OnInit, OnChanges {
       complete: () => {
       },
     });
-  }*/
+  }
 }
