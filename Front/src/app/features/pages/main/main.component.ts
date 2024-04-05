@@ -115,7 +115,9 @@ export class MainComponent implements OnInit, OnChanges {
           console.log('Wos', this.currentWorkspace);
 
           this.channels = this.currentWorkspace.privateChannels;
-
+ for (let chanel of this.currentWorkspace.publicChannels) {
+   this.channels.push(chanel);
+ }
           this.currentChannelP = {
             channelString: response.result.mainChannel.channelString,
             created_at: response.result.mainChannel.created_at,
