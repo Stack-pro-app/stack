@@ -87,15 +87,15 @@ namespace notif_service.Consumer
 
                 NotificationDtoV2 notificationDto = JsonConvert.DeserializeObject<NotificationDtoV2>(messageString) ?? throw new Exception("Invalid Format");
 
-                Notification notification = _mapper.Map<Notification>(messageString);
+                Notification notification = _mapper.Map<Notification>(notificationDto);
 
                 string notificationJson = await _notificationService.AddNotificationAsync(notification);
                 
-                //await _notificationHub.Clients.Group(notificationDto.NotificationString)
-                //    .SendAsync("notificationReceived", notificationJson);
-
-
-                
+                foreach(NotificationString n in notification.NotificationStrings)
+                {
+                    await _notificationHub.Clients.Group(n.Value)
+                        .SendAsync("notificationReceived", notificationJson);
+                }
 
                 _channel?.BasicAck(ea.DeliveryTag, false);
             }
