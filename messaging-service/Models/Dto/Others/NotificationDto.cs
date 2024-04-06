@@ -3,7 +3,7 @@
     public class NotificationDto
     {
         public string Message { get; set; } = null!;
-        public string UserId { get; set; } = null!;
+        public ICollection<int> UserIds { get; set; } = null!;
         public string MailTo { get; set; } = null!;
     }
 }

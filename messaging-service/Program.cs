@@ -70,6 +70,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    ApplyMigration();
 }
 
 app.UseAuthorization();
@@ -78,7 +79,7 @@ app.UseExceptionHandler();
 app.MapControllers();
 app.UseCors(myAllowSpecificOrigins);
 
-ApplyMigration();
+
 app.Run();
 
 void ApplyMigration()

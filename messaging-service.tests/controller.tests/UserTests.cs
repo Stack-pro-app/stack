@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.ComponentModel.DataAnnotations;
 
-namespace messaging_service.tests.repository.tests
+namespace messaging_service.tests.controller.tests
 {
     public class UserTests
     {

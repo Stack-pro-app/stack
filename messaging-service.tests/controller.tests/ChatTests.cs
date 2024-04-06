@@ -14,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using messaging_service.MappingProfiles;
 using messaging_service.Repository.Interfaces;
 using messaging_service.models.dto.Detailed;
-namespace messaging_service.tests.repository.tests
+namespace messaging_service.tests.controller.tests
 {
     public class ChatControllerTests
     {
