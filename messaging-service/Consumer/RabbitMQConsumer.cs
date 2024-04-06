@@ -6,6 +6,7 @@ using messaging_service.Models.Dto.Others;
 using messaging_service.Producer;
 using messaging_service.Repository;
 using messaging_service.Repository.Interfaces;
+using messaging_service.Services;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -28,19 +29,19 @@ namespace messaging_service.Consumer
         private string userName;
         private string password;
         private string port;
-        private readonly IRabbitMQProducer _producer;
+        private readonly INotificationService _notificationService;
 
 
-        public RabbitMQConsumer(IChatRepository chatRepository, IMapper mapper, ILogger<RabbitMQConsumer> logger,IRabbitMQProducer producer)
+        public RabbitMQConsumer(IChatRepository chatRepository, IMapper mapper, ILogger<RabbitMQConsumer> logger,INotificationService notif)
         {
             _chatRepository = chatRepository;
             _mapper = mapper;
             _logger = logger;
-            _producer = producer;
             hostName = Environment.GetEnvironmentVariable("MQ_HOST") ?? "localhost";
             userName = Environment.GetEnvironmentVariable("MQ_USER") ?? "guest";
             password = Environment.GetEnvironmentVariable("MQ_PASSWORD") ?? "guest";
             port = Environment.GetEnvironmentVariable("MQ_PORT") ?? "5672";
+            _notificationService = notif;
 
         }
 
@@ -98,13 +99,7 @@ namespace messaging_service.Consumer
                 Chat message = _mapper.Map<Chat>(messageDto);
                 await _chatRepository.CreateChatAsync(message);
 
-                NotificationDto notification = new()
-                {
-                    Message = "New Message",
-                    NotificationStrings = new List<string>() { "string1", "string2", "string4" },
-
-                };
-                _producer.SendNotification(notification);
+                await _notificationService.SendMessageNotif(messageDto.ChannelId);
 
 
                 _channel?.BasicAck(ea.DeliveryTag, false);

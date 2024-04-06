@@ -9,5 +9,6 @@ namespace messaging_service.Repository.Interfaces
         public Task DeleteWorkspaceAsync(int workspaceId);
         public Task UpdateWorkspaceAsync(int id,string name);
         public Task<WorkspaceDetailDto> GetWorkspaceAsync(int workspaceId, int userId);
+        public Task<string> GetWorkspaceName(int workspaceId);
     }
 }

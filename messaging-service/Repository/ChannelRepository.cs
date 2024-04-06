@@ -138,5 +138,18 @@ namespace messaging_service.Repository
             var result = await _context.Members.Where(m => m.UserId == u1 || m.UserId == u2).Include(m => m.Channel).Select(m => m.Channel).Where(c => c.Is_OneToOne == true && c.WorkspaceId == workspaceId).Distinct().FirstOrDefaultAsync();
             return result;
         }
+
+        public async Task<List<string>> GetChannelNotificationStrings(int channelId)
+        {
+            var channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId) ?? throw new ValidationException("Invalid Channel");
+            List<string> result = new List<string>();
+            if(channel.Is_private == false)
+            {
+                result = await _context.UsersWorkspaces.Where(uw=>uw.WorkspaceId == channel.WorkspaceId).Include(uw=>uw.User).Select(u=>u.User.NotificationString).Distinct().ToListAsync();
+                return result;
+            }
+            result = await _context.Members.Where(m=>m.ChannelId==channel.Id).Include(m=>m.User).Select(m=>m.User.NotificationString).Distinct().ToListAsync();
+            return result;
+        }
     }
 }

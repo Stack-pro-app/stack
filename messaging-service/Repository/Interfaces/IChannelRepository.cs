@@ -16,5 +16,6 @@ namespace messaging_service.Repository.Interfaces
         Task RemoveUserFromPrivateChannel(int channelId, int userId);
         Task<Channel> CreateOneToOneChannel(OneToOneChannelRequest request);
         Task<Channel?> GetOneToOneChannel(OneToOneChannelRequest request);
+        Task<List<string>> GetChannelNotificationStrings(int channelId);
     }
 }

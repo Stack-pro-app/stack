@@ -76,6 +76,12 @@ namespace messaging_service.Repository
                 return detail;
         }
 
+        public async Task<string> GetWorkspaceName(int workspaceId)
+        {
+            var result = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == workspaceId) ?? throw new ValidationException("Invalid Workspace");
+            return result.Name;
+        }
+
         public async Task UpdateWorkspaceAsync(int id,string name)
         {
                 Workspace workspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == id) ?? throw new ValidationException("Can't Find User");
