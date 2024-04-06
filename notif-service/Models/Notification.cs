@@ -11,6 +11,8 @@ namespace notif_service.Models
         public string Message { get; set; } = null!;
         public ICollection<NotificationString> NotificationStrings { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public int? channelId { get; set; }
+        public int? workspaceId { get; set; }
 
     }
 

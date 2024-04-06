@@ -2,7 +2,10 @@
 using messaging_service.Data;
 using messaging_service.models.domain;
 using messaging_service.models.dto.Requests;
+using messaging_service.Models.Dto.Others;
+using messaging_service.Producer;
 using messaging_service.Repository;
+using messaging_service.Repository.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
@@ -18,20 +21,22 @@ namespace messaging_service.Consumer
         private ConnectionFactory? _factory;
         private IConnection? _connection;
         private IModel? _channel;
-        private readonly ChatRepository _chatRepository;
+        private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<RabbitMQConsumer> _logger;
         private string hostName;
         private string userName;
         private string password;
         private string port;
+        private readonly IRabbitMQProducer _producer;
 
 
-        public RabbitMQConsumer(ChatRepository chatRepository, IMapper mapper, ILogger<RabbitMQConsumer> logger)
+        public RabbitMQConsumer(IChatRepository chatRepository, IMapper mapper, ILogger<RabbitMQConsumer> logger,IRabbitMQProducer producer)
         {
             _chatRepository = chatRepository;
             _mapper = mapper;
             _logger = logger;
+            _producer = producer;
             hostName = Environment.GetEnvironmentVariable("MQ_HOST") ?? "localhost";
             userName = Environment.GetEnvironmentVariable("MQ_USER") ?? "guest";
             password = Environment.GetEnvironmentVariable("MQ_PASSWORD") ?? "guest";
@@ -91,8 +96,16 @@ namespace messaging_service.Consumer
                 if (messageDto.Message.IsNullOrEmpty() && messageDto.Attachement_Url.IsNullOrEmpty()) throw new ValidationException("Empty Message");
 
                 Chat message = _mapper.Map<Chat>(messageDto);
-                _logger.LogInformation(message.ChannelId.ToString() + "|" + message.Message + "|" + message.UserId.ToString());
                 await _chatRepository.CreateChatAsync(message);
+
+                NotificationDto notification = new()
+                {
+                    Message = "New Message",
+                    NotificationStrings = new List<string>() { "string1", "string2", "string4" },
+
+                };
+                _producer.SendNotification(notification);
+
 
                 _channel?.BasicAck(ea.DeliveryTag, false);
             }
