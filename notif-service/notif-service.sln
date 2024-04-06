@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34525.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "notif-service", "notif-service.csproj", "{7B71C6C9-812F-4226-A301-3C8B8E0F6F44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "notif-service", "notif-service.csproj", "{7B71C6C9-812F-4226-A301-3C8B8E0F6F44}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "notif-service.tests", "..\notif-service.tests\notif-service.tests.csproj", "{1AA72719-ECB9-46CC-8889-F0DB6BDEDE48}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{7B71C6C9-812F-4226-A301-3C8B8E0F6F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B71C6C9-812F-4226-A301-3C8B8E0F6F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B71C6C9-812F-4226-A301-3C8B8E0F6F44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AA72719-ECB9-46CC-8889-F0DB6BDEDE48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AA72719-ECB9-46CC-8889-F0DB6BDEDE48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AA72719-ECB9-46CC-8889-F0DB6BDEDE48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AA72719-ECB9-46CC-8889-F0DB6BDEDE48}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
