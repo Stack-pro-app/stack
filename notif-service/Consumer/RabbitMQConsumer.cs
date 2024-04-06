@@ -13,10 +13,10 @@ namespace notif_service.Consumer
 {
     public class RabbitMQConsumer : DefaultBasicConsumer
     {
-        private string _queueName;
-        private ConnectionFactory _factory;
-        private IConnection _connection;
-        private IModel _channel;
+        private string? _queueName;
+        private ConnectionFactory? _factory;
+        private IConnection? _connection;
+        private IModel? _channel;
         private readonly IMapper _mapper;
         private readonly ILogger<RabbitMQConsumer> _logger;
         private readonly INotificationService _notificationService;
@@ -33,10 +33,10 @@ namespace notif_service.Consumer
             _logger = logger;
             _notificationService = notificationService;
             _notificationHub = notificationHub;
-            hostName = Environment.GetEnvironmentVariable("MQ_HOST");
-            userName = Environment.GetEnvironmentVariable("MQ_USER");
-            password = Environment.GetEnvironmentVariable("MQ_PASSWORD");
-            port = Environment.GetEnvironmentVariable("MQ_PORT");
+            hostName = Environment.GetEnvironmentVariable("MQ_HOST") ?? "localhost";
+            userName = Environment.GetEnvironmentVariable("MQ_USER")?? "guest";
+            password = Environment.GetEnvironmentVariable("MQ_PASSWORD")?? "guest";
+            port = Environment.GetEnvironmentVariable("MQ_PORT")?? "5672";
 
         }
 
@@ -45,12 +45,10 @@ namespace notif_service.Consumer
             _queueName = "notification";
             _factory = new ConnectionFactory()
             {
-                //HostName = hostName,
-                //UserName = userName,
-                //Password = password,
-                //Port = int.Parse(port),
-                HostName = "localhost",
-                //Port = 5672,
+                HostName = hostName,
+                UserName = userName,
+                Password = password,
+                Port = int.Parse(port),
                 DispatchConsumersAsync = true
             };
             try
@@ -68,7 +66,7 @@ namespace notif_service.Consumer
 
         }
 
-        public async Task StartConsuming()
+        public void StartConsuming()
         {
             var consumer = new AsyncEventingBasicConsumer(_channel);
             consumer.Received += async (model, ea) =>
@@ -93,13 +91,13 @@ namespace notif_service.Consumer
 
                 string notificationJson = await _notificationService.AddNotificationAsync(notification);
                 
-                await _notificationHub.Clients.Group(notificationDto.UserId)
-                    .SendAsync("notificationReceived", notificationJson);
+                //await _notificationHub.Clients.Group(notificationDto.NotificationString)
+                //    .SendAsync("notificationReceived", notificationJson);
 
 
                 
 
-                _channel.BasicAck(ea.DeliveryTag, false);
+                _channel?.BasicAck(ea.DeliveryTag, false);
             }
             catch (Exception ex)
             {

@@ -5,9 +5,9 @@ namespace messaging_service.Repository.Interfaces
 {
     public interface IUserRepository
     {
-        Task<bool> CreateUserAsync(User user);
-        Task<bool> DeleteUserAsync(string authId);
-        Task<bool> UpdateUserAsync(User user);
+        Task CreateUserAsync(User user);
+        Task DeleteUserAsync(string authId);
+        Task UpdateUserAsync(User user);
         Task<User> GetUserAsync(string authId);
         Task<User> GetUserAsync(int id);
         Task<IEnumerable<User>> GetUsersByChannelAsync(int channelId);

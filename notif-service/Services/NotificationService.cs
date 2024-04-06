@@ -22,29 +22,32 @@ namespace notif_service.Services
             return notification.ToJson();
         }
 
-        public async Task<IEnumerable<Notification>> GetMoreNotificationsAsync(string userId, int page)
+        public async Task<List<Notification>> GetMoreNotificationsAsync(string notificationString, int page)
         {
             if (page < 0) throw new Exception("Invalid page");
-            var filter = Builders<Notification>.Filter.Eq(n => n.UserId, userId) & Builders<Notification>.Filter.Eq(n => n.IsSeen, true);
-            IEnumerable<Notification> notifications = await _notifications.Find(filter).SortByDescending(n=>n.CreatedAt).Skip((page-1)*10).Limit(10).ToListAsync();
+            var filter = Builders<Notification>.Filter.ElemMatch(n => n.NotificationStrings, ns => ns.Value == notificationString && ns.IsSeen == true);
+            var notifications = await _notifications.Find(filter).SortByDescending(n => n.CreatedAt).Skip((page - 1) * 10).Limit(10).ToListAsync();
             return notifications;
         }
 
-        public async Task<IEnumerable<Notification>> GetUnseenNotificationsAsync(string userId)
+        public async Task<List<Notification>> GetUnseenNotificationsAsync(string notificationString)
         {
-            var filter = Builders<Notification>.Filter.Eq(n => n.UserId, userId) & Builders<Notification>.Filter.Eq(n => n.IsSeen, false);
-            IEnumerable<Notification> notifications = await _notifications.Find(filter).SortByDescending(n=>n.CreatedAt).ToListAsync();
-            var update = Builders<Notification>.Update.Set(n => n.IsSeen, true);
+            var filter = Builders<Notification>.Filter.ElemMatch(n => n.NotificationStrings, ns => ns.Value == notificationString && ns.IsSeen == false);
 
+            var notifications = await _notifications.Find(filter)
+                                    .SortByDescending(n => n.CreatedAt)
+                                    .ToListAsync();
+
+            var update = Builders<Notification>.Update.Set("NotificationStrings.$.IsSeen", true);
             await _notifications.UpdateOneAsync(filter, update);
 
             return notifications;
         }
 
-        public async Task SetNotificationsSeenAsync(string userId)
+        public async Task SetNotificationsSeenAsync(string notificationString)
         {
-            var filter = Builders<Notification>.Filter.Eq(n => n.UserId, userId) & Builders<Notification>.Filter.Eq(n => n.IsSeen, false);
-            var update = Builders<Notification>.Update.Set(n => n.IsSeen, true);
+            var filter = Builders<Notification>.Filter.ElemMatch(n => n.NotificationStrings, ns => ns.Value == notificationString && ns.IsSeen == false);
+            var update = Builders<Notification>.Update.Set("NotificationStrings.$.IsSeen", true);
 
             await _notifications.UpdateOneAsync(filter, update);
         }

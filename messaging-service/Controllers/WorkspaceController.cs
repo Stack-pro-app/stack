@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using messaging_service.Repository;
+using messaging_service.Repository.Interfaces;
 using AutoMapper;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Response;
@@ -17,9 +17,9 @@ namespace messaging_service.Controllers
     [ApiController]
     public class WorkspaceController : ControllerBase
     {
-        private readonly WorkspaceRepository _repository;
+        private readonly IWorkspaceRepository _repository;
         private readonly IMapper _mapper;
-        public WorkspaceController(WorkspaceRepository repository,IMapper mapper)
+        public WorkspaceController(IWorkspaceRepository repository,IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -28,12 +28,8 @@ namespace messaging_service.Controllers
         [HttpPost]
         public async Task<ActionResult<ResponseDto>> CreateWorkspace([FromBody]WorkspaceRequestDto workspace)
         {
-            try
-            {
                 Console.Write(workspace);
-                bool result = await _repository.CreateWorkspaceAsync(workspace.Name,workspace.userId);
-                if (result)
-                {
+                await _repository.CreateWorkspaceAsync(workspace.Name,workspace.userId);
                     ResponseDto response = new()
                     {
                         Result = null,
@@ -42,26 +38,11 @@ namespace messaging_service.Controllers
                     };
                     return Ok(response);
 
-                }
-                else
-                {
-                    throw new ValidationException("Failed to add !");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResponseDto>> DeleteWorkspace([FromRoute]int id)
         {
-            try
-            {
-                bool result = await _repository.DeleteWorkspaceAsync(id);
-                if (result)
-                {
+                await _repository.DeleteWorkspaceAsync(id);
                     ResponseDto response = new()
                     {
                         Result = null,
@@ -70,26 +51,12 @@ namespace messaging_service.Controllers
                     };
                     return Ok(response);
 
-                }
-                else
-                {
-                    throw new ValidationException("Failed to Delete !");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
         }
         [HttpPut("{id}")]
         public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int id,[FromBody]WorkspaceName workspace)
         {
-            try
-            {
-                bool result = await _repository.UpdateWorkspaceAsync(id,workspace.Name);
-                if (result)
-                {
+
+                await _repository.UpdateWorkspaceAsync(id,workspace.Name);
                     ResponseDto response = new()
                     {
                         Result = null,
@@ -97,17 +64,6 @@ namespace messaging_service.Controllers
                         Message = "Workspace Name Succesfully Updated",
                     };
                     return Ok(response);
-
-                }
-                else
-                {
-                    throw new ValidationException("Failed to Update Name !");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
         }
         //Workspace and it's channels by Id (and the user's Id extacted from jwt Token!)
         [HttpGet("{id}/user/{userId}")]

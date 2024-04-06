@@ -1,16 +1,13 @@
 ﻿using messaging_service.models.dto.Response;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.domain;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using messaging_service.Repository;
-using messaging_service.Consumer;
 using AutoMapper;
 using messaging_service.models.dto.Detailed;
-using System.Threading.Channels;
-using RabbitMQ.Client.Events;
 using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
+using messaging_service.Repository.Interfaces;
 
 namespace messaging_service.Controllers
 {
@@ -18,10 +15,10 @@ namespace messaging_service.Controllers
     [ApiController]
     public class ChatController : ControllerBase
     {
-        private readonly ChatRepository _chatRepository;
+        private readonly IChatRepository _chatRepository;
         private readonly IMapper _mapper;
 
-        public ChatController(ChatRepository chatRepository, IMapper mapper)
+        public ChatController(IChatRepository chatRepository, IMapper mapper)
         {
             _chatRepository = chatRepository;
             _mapper = mapper;
@@ -35,7 +32,7 @@ namespace messaging_service.Controllers
                 if (messageRequestDto.Message.IsNullOrEmpty() && messageRequestDto.Attachement_Url.IsNullOrEmpty()) throw new ValidationException("Empty Message!");
                 if (messageRequestDto.MessageId == null) messageRequestDto.MessageId = Guid.NewGuid();
                 Chat message = _mapper.Map<Chat>(messageRequestDto);
-                bool result = await _chatRepository.CreateChatAsync(message);
+                await _chatRepository.CreateChatAsync(message);
                     ResponseDto response = new()
                     {
                         IsSuccess = true,
@@ -59,7 +56,7 @@ namespace messaging_service.Controllers
             try
             {
                 //bool result = await _chatRepository.DeleteChatPartAsync(messageId);
-                bool result = await _chatRepository.DeleteChatPermAsync(messageId); // If You want to delete Permenantly!
+                await _chatRepository.DeleteChatPermAsync(messageId); // If You want to delete Permenantly!
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -83,7 +80,7 @@ namespace messaging_service.Controllers
         {
             try
             {
-                bool result = await _chatRepository.UpdateChatAsync(message.MessageId, message.Message);
+                await _chatRepository.UpdateChatAsync(message.MessageId, message.Message);
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
@@ -149,6 +146,7 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
+
 
 
     }
