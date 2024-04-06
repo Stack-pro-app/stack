@@ -11,22 +11,19 @@ namespace notif_service.Controllers
     {
         private readonly IMapper _mapper;
         private readonly INotificationService _notificationService;
-        private readonly ILogger<NotificationController> _logger;
-        IEmailService _emailService;
-        public NotificationController(INotificationService notificationService,IMapper mapper,ILogger<NotificationController> logger,IEmailService emailService) {
+        public NotificationController(INotificationService notificationService,IMapper mapper) {
             _notificationService = notificationService;
             _mapper = mapper;
-            _logger = logger;
-            _emailService = emailService;
         }
-        [HttpGet("Unseen/{authId}")]
-        public async Task<ActionResult<ResponseDto>> GetUnseenNotifications([FromRoute] string authId)
+        [HttpGet("Unseen/{notificationString}")]
+        public async Task<ActionResult<ResponseDto>> GetUnseenNotifications([FromRoute] string notificationString)
         {
             ResponseDto response = new ResponseDto();
             try
             {
-                var notifications = await _notificationService.GetUnseenNotificationsAsync(authId);
-                response.Result = notifications;
+                var notifications = await _notificationService.GetUnseenNotificationsAsync(notificationString);
+                List<NotificationDto> notificationsDto = notifications.Select(n => _mapper.Map<NotificationDto>(n)).ToList();
+                response.Result = notificationsDto;
                 response.IsSuccess = true;
                 response.Message = "You Have Unseen Notifications!";
                 return Ok(response);
@@ -38,14 +35,15 @@ namespace notif_service.Controllers
             }
         }
 
-        [HttpGet("Seen/{authId}")]
-        public async Task<ActionResult<ResponseDto>> GetseenNotifications([FromRoute] string authId, [FromQuery]int page)
+        [HttpGet("Seen/{notificationString}")]
+        public async Task<ActionResult<ResponseDto>> GetseenNotifications([FromRoute] string notificationString, [FromQuery]int page)
         {
             ResponseDto response = new ResponseDto();
             try
             {
-                var notifications = await _notificationService.GetMoreNotificationsAsync(authId, page);
-                response.Result = notifications;
+                var notifications = await _notificationService.GetMoreNotificationsAsync(notificationString, page);
+                List<NotificationDto> notificationsDto = notifications.Select(n => _mapper.Map<NotificationDto>(n)).ToList();
+                response.Result = notificationsDto;
                 response.IsSuccess = true;
                 response.Message = "Old Notifications!";
                 return Ok(response);
@@ -58,13 +56,13 @@ namespace notif_service.Controllers
             }
         }
 
-        [HttpPut("SetSeen/{authId}")]
-        public async Task<ActionResult<ResponseDto>> SetSeenNotifications([FromRoute] string authId)
+        [HttpPut("SetSeen/{notificationString}")]
+        public async Task<ActionResult<ResponseDto>> SetSeenNotifications([FromRoute] string notificationString)
         {
             ResponseDto response = new ResponseDto();
             try
             {
-                await _notificationService.SetNotificationsSeenAsync(authId);
+                await _notificationService.SetNotificationsSeenAsync(notificationString);
                 response.IsSuccess = true;
                 response.Message = "Notifications Seen!";
                 return Ok(response);
@@ -97,7 +95,5 @@ namespace notif_service.Controllers
                 return BadRequest(response);
             }
         }
-
-
     }
 }

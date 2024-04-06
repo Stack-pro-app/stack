@@ -5,11 +5,12 @@ namespace notif_service.Profiles
 {
     public class NotificationProfile:Profile
     {
-        public NotificationProfile() { 
+        public NotificationProfile() {
+            CreateMap<Notification, NotificationDtoV2>();
+            CreateMap<NotificationDtoV2, Notification>()
+            .ForMember(dest => dest.NotificationStrings, opt => opt.MapFrom(src => src.NotificationStrings.Select(s => new NotificationString { Value = s, IsSeen = false })));
             CreateMap<NotificationDto, Notification>();
             CreateMap<Notification, NotificationDto>();
-            CreateMap<Notification,NotificationDtoV2>();
-            CreateMap<NotificationDtoV2, Notification>();
 
         }
     }

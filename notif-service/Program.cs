@@ -34,7 +34,7 @@ var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer>();
 while (!rabbitMQConsumer.SetConnection()) ;
-await rabbitMQConsumer.StartConsuming();
+rabbitMQConsumer.StartConsuming();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

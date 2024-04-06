@@ -7,11 +7,16 @@ namespace notif_service.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public string Id { get; set; } = null!;
         public string Message { get; set; } = null!;
-        public string UserId { get; set; } = null!;
-        public bool IsSeen { get; set; }= false;
+        public ICollection<NotificationString> NotificationStrings { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
+    }
+
+    public class NotificationString
+    {
+        public string Value { get; set; } = null!;
+        public bool IsSeen { get; set; } = false;
     }
 }
