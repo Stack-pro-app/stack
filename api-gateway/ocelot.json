@@ -204,7 +204,56 @@
           "Port": 8080
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/Notification/Unseen/{notificationString}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Notification/Unseen/{notificationString}"
+    },
+    {
+      "UpstreamPathTemplate": "/api/Notification/Seen/{notificationString}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Notification/Seen/{notificationString}"
+    },
+    {
+      "UpstreamPathTemplate": "/api/Notification/SetSeen/{notificationString}",
+      "UpstreamHttpMethod": [ "Put" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Notification/SetSeen/{notificationString}"
     }
+    {
+      "UpstreamPathTemplate": "/api/Notification",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Notification"
+    }
+
 
 
 
