@@ -12,6 +12,7 @@ import {MatInputModule} from "@angular/material/input";
 
 
 import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {ButtonModule} from "primeng/button";
 
 
 
@@ -28,6 +29,7 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
     FormsModule, MatFormFieldModule, MatInputModule,
 
     HttpClientModule,
+    ButtonModule
 
 
   ],

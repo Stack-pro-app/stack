@@ -3,7 +3,7 @@ import {Component, OnInit} from '@angular/core';
 import {NgToastService} from "ng-angular-popup";
 import {ProjectService} from "../../services/project.service";
 
-
+import '@vaadin/confirm-dialog';
 import {ConfirmationService} from "primeng/api";
 
 @Component({

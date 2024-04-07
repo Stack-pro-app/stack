@@ -15,6 +15,10 @@ import {NgToastModule} from "ng-angular-popup";
 import { DisplayProjectComponent } from './display-project/display-project.component';
 import { EditProjectComponent } from './edit-project/edit-project.component';
 import {RouterModule} from "@angular/router";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {ButtonModule} from "primeng/button";
+import {ToastModule} from "primeng/toast";
+import {ConfirmationService, MessageService} from "primeng/api";
 
 //import {ConfirmationService, MessageService} from "primeng/api";
 //import {ToastModule} from "primeng/toast";
@@ -36,14 +40,16 @@ import {RouterModule} from "@angular/router";
     MatStepperModule, ReactiveFormsModule,
     MatDatepickerModule,
     NgToastModule,
+    ConfirmDialogModule, ToastModule,
+    ButtonModule
 
    // RouterModule, ToastModule, ConfirmDialogModule
 
   ],
   providers: [
     provideNativeDateAdapter(),
-   // ConfirmationService,
-   // MessageService
+    ConfirmationService,
+    MessageService
 
   ]
 })
