@@ -45,9 +45,13 @@
 <p-confirmDialog></p-confirmDialog>
 
 
+<button mat-raised-button color="warn" (click)="confirm2($event,1,0)" >delete</button>
 
+<div class="card flex justify-content-center">
+  <p-button label="Submit"></p-button>
+</div>
 
-
+<p-button (click)="confirm2($event,1,0)" icon="pi pi-times" label="Delete" styleClass="p-button-danger"></p-button>
 
 
 
