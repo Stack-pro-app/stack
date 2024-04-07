@@ -1,0 +1,56 @@
+<div *ngIf="empty;else tmp" class="subjectBox">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+    <div *ngFor="let pro of arr; let i = index" class="col-span-1">
+      <div class="namesubject">
+        <div routerLink="/project/edit/{{pro.id}}">{{pro.projectName}}</div>
+      </div>
+      <div class="subBtn">
+        <button class="bg-red-500 text-white px-4 py-2 rounded-md mx-1" >Delete</button>
+        <button routerLink="/project/edit/{{pro.id}}" class="bg-blue-500 text-white px-4 py-2 rounded-md mx-1">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<ng-template #tmp>
+  <div class="flex flex-1 flex-col h-full items-center  pt-7 px-4 ">
+    <div class="flex flex-1 pt-7 h-full ">
+      <img src="assets/dash.jpg" class="h-[100%] pt-7">
+    </div>
+    <div class="flex flex-1 pt-4">
+      <h1 class="font-serif text-2xl">There’s not a project in sight</h1>
+    </div>
+    <div class="flex flex-1 pt-3" >
+      <h3 class="font-serif text-gray-800">Click on “Create new exam”</h3>
+    </div>
+    <div class="flex  mb-4  pt-4">
+
+      <button  type="button" class="text-white bg-black hover:bg focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-4 py-3 text-center inline-flex items-center dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2">
+        create new exam
+      </button>
+
+    </div>
+  </div>
+
+</ng-template>
+
+
+  <!--y
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+--->
+
+
+
+
+
+
+
+<ng-toast></ng-toast>
