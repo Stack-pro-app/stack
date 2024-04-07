@@ -7,6 +7,7 @@ using messaging_service.models.domain;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 
 namespace messaging_service.Repository
 {
@@ -22,6 +23,9 @@ namespace messaging_service.Repository
         {
             try
             {
+                var result = await _context.Users.FirstOrDefaultAsync(u=> u.Id == adminId);
+                if (result == null) throw new ValidationException("Invalid User");
+                if (name.IsNullOrEmpty()) throw new ValidationException("Invalid Name");
                 Workspace workspace = new();
                 workspace.Name = name;
                 workspace.AdminId = adminId;
@@ -44,9 +48,8 @@ namespace messaging_service.Repository
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine($"Error creating workspace: {ex.Message}");
                 throw;
             }
         }
@@ -55,7 +58,8 @@ namespace messaging_service.Repository
         {
             try
             {
-                var workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId)?? throw new InvalidOperationException("invalid Workspace");
+                if (workspaceId < 0) throw new ValidationException("Invalid Workspace Id");
+                var workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId)?? throw new ValidationException("Invalid Workspace");
                 _context.Workspaces.Remove(workspace);
                 await _context.SaveChangesAsync();
                 return true;
@@ -71,10 +75,10 @@ namespace messaging_service.Repository
         {
             try
             {
-                Workspace workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId)?? throw new InvalidOperationException("invalid Workspace");
-                IEnumerable<Channel> channel = await _context.Channels.Where(x => x.WorkspaceId == workspaceId).ToListAsync() ?? throw new InvalidOperationException("invalid Channels");
+                Workspace workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId)?? throw new ValidationException("invalid Workspace");
+                IEnumerable<Channel> channel = await _context.Channels.Where(x => x.WorkspaceId == workspaceId).ToListAsync() ?? throw new ValidationException("invalid Channels");
                 //Get the detailed main channel
-                Channel mainChannel = channel.FirstOrDefault(c => c.Name == "main") ?? throw new Exception("Invalid Workspace");
+                Channel mainChannel = channel.FirstOrDefault(c => c.Name == "main") ?? throw new ValidationException("Invalid Workspace");
                 ChannelDetailDto mainDetail = _mapper.Map<ChannelDetailDto>(mainChannel);
                 //Get the minimal public channels
                 IEnumerable<Channel> publicChannels = channel.Where(c=>c.Is_private == false && c.Name != "main").ToList();
@@ -105,7 +109,7 @@ namespace messaging_service.Repository
         {
             try
             {
-                Workspace workspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == id) ?? throw new InvalidOperationException("Can't Find User");
+                Workspace workspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == id) ?? throw new ValidationException("Can't Find User");
                 workspace.Name = name;
                 await _context.SaveChangesAsync();
                 return true;

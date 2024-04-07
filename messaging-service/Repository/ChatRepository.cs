@@ -7,6 +7,7 @@ using AutoMapper;
 using messaging_service.models.dto.Minimal;
 using System;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 
 namespace messaging_service.Repository
 {
@@ -33,10 +34,10 @@ namespace messaging_service.Repository
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
-                throw new Exception("Failed to create chat message.", ex);
+                throw;
             }
         }
 
@@ -44,14 +45,14 @@ namespace messaging_service.Repository
         {
             try
             {
-                var message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new InvalidOperationException("Message Inexistant");
+                var message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new ValidationException("Message Inexistant");
                 message.Is_deleted = true;
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("Failed to delete chat message partially.", ex);
+                throw;
             }
         }
 
@@ -59,14 +60,14 @@ namespace messaging_service.Repository
         {
             try
             {
-                Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId) ?? throw new InvalidOperationException("Message Inexistant");
+                Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId) ?? throw new ValidationException("Message Inexistant");
                 _context.Chats.Remove(message);
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new Exception("Failed to delete chat message permenantly.", ex);
+                throw;
             }
         }
 
@@ -82,7 +83,7 @@ namespace messaging_service.Repository
 
                 return messageDetailDtos;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -93,11 +94,11 @@ namespace messaging_service.Repository
         {
             try
             {
-                Chat message = await _context.Chats.Include(m => m.User).Include(m => m.Parent).FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new InvalidOperationException("Message Inexistant");
+                Chat message = await _context.Chats.Include(m => m.User).Include(m => m.Parent).FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new ValidationException("Message Inexistant");
                 MessageDetailDto messageDetailDto = _mapper.Map<MessageDetailDto>(message);
                 return messageDetailDto;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -107,13 +108,13 @@ namespace messaging_service.Repository
         {
             try
             {
-                var msg = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new InvalidOperationException("Message Inexistant");
+                var msg = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId && x.Is_deleted == false) ?? throw new ValidationException("Message Inexistant");
                 msg.Message = message;
                 msg.Modified_at = DateTime.Now;
                 await _context.SaveChangesAsync();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

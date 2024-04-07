@@ -7,24 +7,25 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 // Add services to the container.
 builder.Services.AddSignalR().AddJsonProtocol();
+
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder =>
+    options.AddPolicy(name:MyAllowSpecificOrigins,
+        policy =>
         {
-            builder.WithOrigins("http://localhost", "https://localhost","null")
-                   .AllowAnyMethod()
-                   .AllowAnyHeader()
-                   .AllowCredentials();
+            policy
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+                
         });
 });
+
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
-
-
-
 var app = builder.Build();
 
-app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -40,5 +41,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapHub<ChannelHub>("/channelHub");
+app.UseCors(MyAllowSpecificOrigins);
 
 app.Run();

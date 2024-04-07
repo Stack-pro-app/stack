@@ -12,5 +12,6 @@ namespace messaging_service.Repository.Interfaces
         Task<ChannelDetailDto> GetChannelAsync(int channelId);
         Task<IEnumerable<ChannelMinimalDto>> GetChannelsByWorkspaceAsync(int workspaceId);
         Task<bool> AddUserToPrivateChannel(int channelId,int userId);
+        Task<bool> RemoveUserFromPrivateChannel(int channelId, int userId);
     }
 }

@@ -39,14 +39,14 @@ namespace messaging_service.Controllers
                     };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
                     Message = "Failed To Store Your Message!"
                 };
-                return BadRequest(ex.Message);
+                return BadRequest(response);
             }
         }
         [HttpDelete("{messageId}")]
@@ -63,14 +63,14 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
                     Message = "Failed To Store Your Message!"
                 };
-                return BadRequest(ex.Message);
+                return BadRequest(response);
             }
         }
 
@@ -87,14 +87,14 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
                     Message = "Failed To update Your Message!"
                 };
-                return BadRequest(ex.Message);
+                return BadRequest(response);
             }
         }
         [HttpGet("{id}")]
@@ -111,12 +111,12 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Can't find the Message!"+ex.Message
+                    Message = "Can't find the Message!"
                 };
                 return BadRequest(response);
             }
@@ -135,12 +135,12 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ResponseDto response = new()
                 {
                     IsSuccess = false,
-                    Message = "Can't find the Messages!" + ex.Message
+                    Message = "Can't find the Messages!"
                 };
                 return BadRequest(response);
             }

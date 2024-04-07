@@ -5,12 +5,14 @@ using gateway_chat_server.Producer;
 namespace gateway_chat_server.Hubs
 {
     public class ChannelHub : Hub
+
     {
         private readonly IMessageProducer _messagePublisher;
 
         public ChannelHub(IMessageProducer messagePublisher)
         {
             _messagePublisher = messagePublisher;
+
         }
         // We Can also track if a user is online using these methods
         // Step 1: Add the client to the channel (everytime)

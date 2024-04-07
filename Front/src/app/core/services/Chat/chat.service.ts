@@ -1,15 +1,24 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ChatService {
+  url: string = 'http://localhost:5149/api/Chat';
+  constructor(private http: HttpClient) {}
 
-  constructor(private httpClient:HttpClient) { }
-
-  GetUserWorkspace(userId:number):any {
-    return this.httpClient.get("https://localhost:7005/api/User/myworkspaces/"+userId)
+  GetMessages(ChannelId: any, id: any): Observable<any> {
+    const RequestUrl = `${this.url}/channel/${ChannelId}?page=${id}`;
+    return this.http.get(RequestUrl);
+  }
+  SendMessage(data: any): Observable<any> {
+    console.log(data);
+    const CreateUrl = `${this.url}`;
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+    });
+    return this.http.post(CreateUrl, data, { headers });
   }
 }

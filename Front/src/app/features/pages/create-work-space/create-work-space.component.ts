@@ -27,7 +27,7 @@ export class CreateWorkSpaceComponent implements OnInit {
   step: number = 1;
   WorkspaceRequest: any = {
     id: 0,
-    Name: '',
+    name: '',
     MainChannel: '',
     userIds: [],
     channelIds: [],
@@ -49,7 +49,6 @@ export class CreateWorkSpaceComponent implements OnInit {
         Validators.compose([Validators.required, Validators.maxLength(50)])
       ),
       CName: this.builder.control(''),
-      coworkersEmail: [''],
     });
   }
 
@@ -73,24 +72,25 @@ export class CreateWorkSpaceComponent implements OnInit {
     } else if (this.step === 2) {
       // Process the form data, you can access it using this.form.value
       /* */
-      // Reset the form or navigate to the next component/page as needed
-      this.step = 3;
-    } else if (this.step === 3) {
-      this.form.get('coworkerEmails')?.value.split(',');
-      console.log('Emails', this.form.value.coworkerEmails);
-
-      this.WorkspaceRequest.Name = this.form.value.WName;
+      this.WorkspaceRequest.name = this.form.value.WName;
       this.WorkspaceRequest.MainChannel = this.form.value.CName;
       this.service.Create(this.WorkspaceRequest).subscribe({
         next: (response) => {
           console.log(response);
-          this.router.navigate(['/Main']);
+          this.router.navigate(['/Home']);
         },
         error: (error) => {
           console.error('Create  error', error);
         },
         complete: () => console.info('complete'),
       });
+      // Reset the form or navigate to the next component/page as needed
+      this.step = 3;
+    } else if (this.step === 3) {
+      this.form.get('coworkerEmails')?.value.split(',');
+      console.log('Emails', this.form.value.coworkerEmails);
+
+      
     }
   }
 

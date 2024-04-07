@@ -9,7 +9,9 @@
         excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a
         id nisi.
       </p>
-      <button class="btn btn-primary text-center"><a routerLink="/Create">Create Workspace</a></button>
+      <button class="btn btn-primary text-center">
+        <a routerLink="/Create">Create Workspace</a>
+      </button>
       <p class="py-4 text-sm">
         By continuing, you’re agreeing to our Main Services Agreement, User
         Terms of Service, and Slack Supplemental Terms. Additional disclosures
@@ -35,11 +37,11 @@
     <h4 class="text-2xl font-bold mb-4">Open a Workspace</h4>
     <div class="mb-4">
       <ul class="menu bg-base-500 w-auto border-2 rounded-lg p-4">
-        <li class="text-left mb-2">Workspace For {{ userEmail }}</li>
+        <li class="text-left mb-2">Workspace For {{ loggeduser.email }}</li>
         <div class="divider"></div>
 
         <li *ngFor="let workspace of workspaces">
-          <a routerLink="/Main">{{ workspace.name }}</a>
+          <a [routerLink]="['/Main',workspace.id]">{{ workspace.name }}</a>
         </li>
       </ul>
     </div>
