@@ -3,6 +3,7 @@
     <div *ngFor="let pro of arr; let i = index" class="col-span-1">
       <div class="namesubject">
         <div routerLink="/project/edit/{{pro.id}}">{{pro.projectName}}</div>
+        <div>STATUS</div>
       </div>
       <div class="subBtn">
         <button class="bg-red-500 text-white px-4 py-2 rounded-md mx-1" >Delete</button>
