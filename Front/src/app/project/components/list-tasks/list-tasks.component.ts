@@ -5,26 +5,7 @@ import { AddTaskComponent } from '../add-task/add-task.component';
 import {TaskService} from "../../../services/task.service";
 import {TaskInter1} from "../../../interfaces/task-inter1";
 import {NgToastService} from "ng-angular-popup";
-/*export interface PeriodicElement {
-  title: string;
-  user: string;
-  deadLineDate: string;
-  status: string;
-  projectName:string
-}
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {status:'Complete' , title: 'Hydrogen', user: "1.0079", deadLineDate:"10-11-2022",projectName:"prj1" },
-  {status:'In-Prossing' , title: 'Helium', user: "4.0026", deadLineDate:"10-11-2022",projectName:"prj1" },
-  {status:'Complete' , title: 'Lithium', user: "6.941", deadLineDate:"10-11-2022" ,projectName:"prj1"},
-  {status:'Complete' , title: 'Beryllium', user: "9.0122", deadLineDate:"10-11-2022",projectName:"prj1" },
-  {status:'Complete' , title: 'Boron', user: "10.811", deadLineDate:"10-11-2022",projectName:"prj1" },
-  {status:'Complete' , title: 'Carbon', user: "12.010", deadLineDate:"10-11-2022",projectName:"prj1" },
-  {status:'Complete' , title: 'Nitrogen', user: "14.006", deadLineDate:"10-11-2022",projectName:"prj1" },
-  {status:'Complete' , title: 'Oxygen', user: "15.999", deadLineDate:"10-11-2022",projectName:"prj1" },
-  {status:'Complete' , title: 'Fluorine', user: "18.998", deadLineDate:"10-11-2022",projectName:"prj1" },
-  { status:'Complete' , title: 'Neon', user: "20.179", deadLineDate:"10-11-2022",projectName:"prj1" },
-];*/
 @Component({
   selector: 'app-list-tasks',
   templateUrl: './list-tasks.component.html',
