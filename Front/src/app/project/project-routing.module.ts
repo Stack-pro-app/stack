@@ -5,6 +5,7 @@ import {DisplayProjectComponent} from "./display-project/display-project.compone
 import {EditProjectComponent} from "./edit-project/edit-project.component";
 import {ListTasksComponent} from "./components/list-tasks/list-tasks.component";
 import {AddTaskComponent} from "./components/add-task/add-task.component";
+import {UsersComponent} from "./components/users/users.component";
 
 const routes: Routes = [
   {path:"post",component:PostProComponent},
@@ -12,6 +13,7 @@ const routes: Routes = [
   {path : "edit/:id",component:EditProjectComponent},
 
   {path : "Tasks",component:ListTasksComponent},
+  {path : "users",component:UsersComponent},
 
 ];
 
