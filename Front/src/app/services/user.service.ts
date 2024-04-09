@@ -11,7 +11,10 @@ export class UserService {
   URL = "http://localhost:8080"
   constructor(private htpp : HttpClient) { }
   findAll(){
-    return this.htpp.get<UserInter>(this.URL.concat("/user"))
+    return this.htpp.get<UserInter>(this.URL.concat("/user"));
+  }
+  getWithTsk(){
+    return this.htpp.get<UserInter>(this.URL.concat("/userAndTasks"));
   }
 
 }
