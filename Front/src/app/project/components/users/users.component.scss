@@ -1,14 +1,33 @@
+button {
+  color: #FFF;
+  margin: 0 5px;
+  &.addTask {
+    background-color: #ca085a;
+    color: #FFF;
+    padding: 2px 23px;
+    font-size: 20px;
+  }
+}
+
 :host ::ng-deep {
-    table {
-        thead {
-            background-color: #bc1059!important;
-            .mat-header-cell {
-                color: #FFF;
-            }
-        }
+  table {
+    thead {
+      background-color:#d4d4d8!important;
+      .mat-header-cell {
+        color: #FFF;
+      }
     }
+  }
 }
 
 .w-20 {
-    width: 20%!important;
+  width: 20%!important;
+}
+.er{
+  margin-left: 144.6px;
+  margin-right: 82.6px;
+}
+.ee{
+  margin-left: 189.6px;
+  margin-right: 189.6px;
 }

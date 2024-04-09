@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import {UserService} from "../../../services/user.service";
 export interface PeriodicElement {
   name: string;
   email: string;
@@ -24,11 +25,21 @@ const ELEMENT_DATA: PeriodicElement[] = [
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'email' ,'tasksAssigned', 'actions'];
+  arrUsers: any;
+  displayedColumns: string[] = ['position', 'UserName', 'Email' ,'tasksAssigned', 'actions'];
   dataSource = ELEMENT_DATA;
-  constructor() { }
+  constructor(private srv:UserService) {
+
+  }
 
   ngOnInit(): void {
+    this.srv.getWithTsk().subscribe(
+      {
+        next: value =>{
+          this.arrUsers=value;
+        }
+      }
+    )
   }
 
 
