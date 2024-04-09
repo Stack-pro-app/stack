@@ -34,6 +34,7 @@ import {
 } from "@angular/material/table";
 import {MatDialog, MatDialogClose} from "@angular/material/dialog";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
+import {UsersComponent} from "./components/users/users.component";
 
 
 
@@ -46,7 +47,8 @@ import {MatMomentDateModule} from "@angular/material-moment-adapter";
     DisplayProjectComponent,
     EditProjectComponent,
     AddTaskComponent,
-    ListTasksComponent
+    ListTasksComponent,
+    UsersComponent
 
   ],
   imports: [

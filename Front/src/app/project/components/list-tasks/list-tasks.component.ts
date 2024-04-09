@@ -5,6 +5,9 @@ import { AddTaskComponent } from '../add-task/add-task.component';
 import {TaskService} from "../../../services/task.service";
 import {TaskInter1} from "../../../interfaces/task-inter1";
 import {NgToastService} from "ng-angular-popup";
+import {UserService} from "../../../services/user.service";
+import {ProjectService} from "../../../services/project.service";
+import {ConfirmationService} from "primeng/api";
 
 @Component({
   selector: 'app-list-tasks',
@@ -14,27 +17,36 @@ import {NgToastService} from "ng-angular-popup";
 export class ListTasksComponent implements OnInit {
   arrTasks:any;
 
-  displayedColumns: string[] = ['position', 'projectName', 'title', 'user', 'deadLineDate', 'status', 'actions'];
-  //dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['position','title', 'projectName',  'user', 'deadLineDate', 'status', 'actions'];
+
   tasksFilter!: FormGroup
-  users: any = [
-    {name: "Moahmed", id: 1},
-    {name: "Ali", id: 2},
-    {name: "Ahmed", id: 3},
-    {name: "Zain", id: 4},
-  ]
+  arrUsers: any;
+  arrProjects:any;
 
   status: any = [
     {name: "Complete", id: 1},
     {name: "In-Prossing", id: 2},
   ]
 
-  constructor(public dialog: MatDialog, private fb: FormBuilder,private  taskservice:TaskService,private toast: NgToastService) {
+  constructor(public dialog: MatDialog, private fb: FormBuilder,private confirmationService: ConfirmationService ,private  taskservice:TaskService,private srv:UserService,private srv2:ProjectService,private toast: NgToastService) {
   }
 
   ngOnInit(): void {
 
     this.updateList();
+
+    this.srv.findAll().subscribe(
+      {
+        next: value =>{
+          this.arrUsers=value;
+        }
+      }
+    )
+    this.srv2.findAll().subscribe({
+      next: value =>{
+        this.arrProjects=value;
+      }
+    })
 
     this.createform()
   }
@@ -74,6 +86,37 @@ export class ListTasksComponent implements OnInit {
        this.updateList();
 
     });
+  }
+
+  deleteTask($event: MouseEvent,no:number) {
+    console.log(no);
+    this.confirmationService.confirm({
+      target: $event.target as EventTarget,
+      message: 'Do you want to delete this Task?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass:'bg-red-500 text-white p-2 rounded-md',
+      rejectButtonStyleClass:"text-gray-700 p-2 rounded-md",
+      acceptIcon:"none",
+      rejectIcon:"none",
+
+      accept: () => {
+
+        this.taskservice.deleteTask(no).subscribe({
+
+          next:value =>{
+           this.updateList();
+            this.toast.info({detail:"INFO",summary:'the Task is deleted',sticky:true});
+
+          }
+        });
+
+      },
+      reject: () => {
+        this.toast.error({detail:"ERROR",summary:'Deletion Canceled',sticky:true});
+      }
+    });
+
   }
 }
 
