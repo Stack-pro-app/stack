@@ -13,6 +13,8 @@ import {MatInputModule} from "@angular/material/input";
 
 import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {ButtonModule} from "primeng/button";
+import {MatNativeDateModule, provideNativeDateAdapter} from "@angular/material/core";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 
 
@@ -29,14 +31,16 @@ import {ButtonModule} from "primeng/button";
     FormsModule, MatFormFieldModule, MatInputModule,
 
     HttpClientModule,
-    ButtonModule
+    ButtonModule,
+
 
 
   ],
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
-    HttpClient
+    HttpClient,
+
 
   ],
   bootstrap: [AppComponent]
