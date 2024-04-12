@@ -1,8 +1,10 @@
 package com.ProjectMana.ProjectManagementSpring.Controllers;
 
+import com.ProjectMana.ProjectManagementSpring.DTO.GanttDTO;
 import com.ProjectMana.ProjectManagementSpring.DTO.taskDTO;
 import com.ProjectMana.ProjectManagementSpring.DTO.taskDTO1;
 import com.ProjectMana.ProjectManagementSpring.enteties.Task;
+import com.ProjectMana.ProjectManagementSpring.enteties.project;
 import com.ProjectMana.ProjectManagementSpring.repo.TaskRepo;
 import com.ProjectMana.ProjectManagementSpring.services.taskService;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +43,13 @@ public class TaskController {
     public taskDTO1 getByNo(@PathVariable Integer no){
         return this.taskService.getByNo(no);
     }
+  @GetMapping("/task/Gantt")
+  public List<project> getGantData(){
+      return this.taskService.pp();
+  }
+
+
+
 
 
 }

@@ -4,10 +4,7 @@ import com.ProjectMana.ProjectManagementSpring.DTO.userDTO;
 import com.ProjectMana.ProjectManagementSpring.enteties.UserT;
 import com.ProjectMana.ProjectManagementSpring.repo.UserRepo;
 import com.ProjectMana.ProjectManagementSpring.services.userService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,8 +19,8 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public UserT create(@RequestBody UserT userT){
-       return this.userRespo.save(userT);
+    public userDTO create(@RequestBody userDTO userDTO){
+       return this.userService.post(userDTO);
     }
 
     @GetMapping ("/user")
@@ -37,4 +34,9 @@ public class UserController {
         return  this.userRespo.findAll();
 
     }
+  @GetMapping("/user/IdByName/{name}")
+  public Integer getIdByName(@PathVariable String name){
+    return this.userService.getIdByName(name);
+
+  }
 }

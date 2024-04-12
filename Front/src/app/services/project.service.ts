@@ -26,4 +26,8 @@ export class ProjectService {
   deleteByid(id:string){
     return this.htpp.delete(this.URL.concat("/project/").concat(id));
   }
+  IdByName(name:any){
+
+    return this.htpp.get(this.URL.concat("/project/").concat("IdByName/").concat(name));
+  }
 }

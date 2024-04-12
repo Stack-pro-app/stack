@@ -18,14 +18,19 @@ public class Task {
     private Integer no ;
     private String title ;
     private String description ;
+
     @Column(name = "endDate")
     private String end ;
+
+  @Column(name = "startDate")
+  private String start ;
     private Integer status ;
 
     @ManyToOne
     @JoinColumn(
             name = "project_id"
     )
+
     @JsonBackReference
     private project project  ;
 

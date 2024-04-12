@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import { AddTaskComponent } from '../add-task/add-task.component';
 import {TaskService} from "../../../services/task.service";
 import {TaskInter1} from "../../../interfaces/task-inter1";
@@ -8,6 +8,8 @@ import {NgToastService} from "ng-angular-popup";
 import {UserService} from "../../../services/user.service";
 import {ProjectService} from "../../../services/project.service";
 import {ConfirmationService} from "primeng/api";
+import {UpdateTaskComponent} from "../update-task/update-task.component";
+import {execute} from "@angular-devkit/build-angular/src/builders/karma";
 
 @Component({
   selector: 'app-list-tasks',
@@ -74,8 +76,8 @@ export class ListTasksComponent implements OnInit {
   addTask() {
     const dialogRef = this.dialog.open(AddTaskComponent, {
       //width: '771px',
-      width: '721px',
-      height:'619px',
+      width: '696px',
+      height: '552px',
 
       panelClass: 'custom-dialog'
     });
@@ -116,6 +118,42 @@ export class ListTasksComponent implements OnInit {
         this.toast.error({detail:"ERROR",summary:'Deletion Canceled',sticky:true});
       }
     });
+
+  }
+
+  updateTask1() {
+    const dialogRef = this.dialog.open(AddTaskComponent, {
+      //width: '771px',
+      width: '691px',
+      height:'582px',
+
+      panelClass: 'custom-dialog'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+
+
+      this.updateList();
+
+    });
+
+  }
+  updateTask(taskId: number) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width = '694px';
+    dialogConfig.height = '582px';
+    dialogConfig.panelClass = 'custom-dialog';
+    dialogConfig.data = { taskId: taskId }; // Pass task id to the dialog
+
+    const dialogRef = this.dialog.open(UpdateTaskComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.updateList();
+    });
+  }
+
+
+  ert() {
 
   }
 }

@@ -11,10 +11,11 @@ public class taskDTO1 {
     public String description ;
     public String projectName;
     public String userName;
+  public String start ;
     public String end ;
     public Integer status ;
 
-    public taskDTO1(Integer no, String title, String description, String projectName, String userName, String end, Integer status) {
+    public taskDTO1(Integer no, String title, String description, String projectName, String userName, String end, Integer status,String start) {
         this.no = no;
         this.title = title;
         this.description = description;
@@ -22,5 +23,6 @@ public class taskDTO1 {
         this.userName = userName;
         this.end = end;
         this.status = status;
+        this.start=start;
     }
 }

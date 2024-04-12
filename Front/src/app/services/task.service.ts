@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {ProjectInter} from "../interfaces/project-inter";
 import {TaskInter} from "../interfaces/task-inter";
 import {TaskInter1} from "../interfaces/task-inter1";
+import {GantInter} from "../interfaces/Gant";
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +21,12 @@ export class TaskService {
   }
   deleteTask(no:any){
     return this.htpp.delete(this.URL.concat("/task/").concat(no));
+  }
+  getByNo(no: any){
+    return this.htpp.get<TaskInter1>(this.URL.concat("/task/").concat(no));
+
+  }
+  getGant(){
+    return this.htpp.get<GantInter[]>(this.URL.concat("/task/Gantt"));
   }
 }

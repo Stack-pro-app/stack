@@ -31,4 +31,16 @@ public class projectService {
 
 
     }
+    public projectDTO post(projectDTO prj ){
+      project p = new project(prj.getId(),prj.getProjectName(),prj.getProjectDescrp(),prj.getStart(),prj.getEnd(),prj.getBudget(),prj.getClientName(),null);
+      prj.setId(this.projectRepo.save(p).getId()) ;
+      return prj ;
+    }
+    public Integer getIdByName(String name){
+      project p = this.projectRepo.findByprojectName(name);
+      if(p!=null){
+        return p.getId();
+      }
+      return null ;
+    }
 }
