@@ -4,6 +4,7 @@ export interface TaskInter {
   description :string;
    projectId:number;
    userId:number;
+  start :string;
    end :string;
 
 }

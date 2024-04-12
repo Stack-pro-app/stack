@@ -23,9 +23,9 @@ private projectService projectService ;
         this.projectService = projectService;
     }
 
-    @PostMapping(value = "/project", consumes = {"application/xml","application/json"})
-    public project create(@RequestBody project prj ){
-        return this.prjRepo.save(prj);
+    @PostMapping(value = "/project")
+    public projectDTO create(@RequestBody projectDTO prj ){
+        return this.projectService.post(prj);
 
     }
     @GetMapping("/project/{id}")
@@ -55,6 +55,11 @@ private projectService projectService ;
 
         this.prjRepo.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/project/IdByName/{name}")
+  public Integer getIdByName(@PathVariable String name){
+      return this.projectService.getIdByName(name);
+
     }
 
 

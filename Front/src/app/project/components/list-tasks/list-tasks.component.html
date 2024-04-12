@@ -1,4 +1,6 @@
-<div  class="mt-12 ee  ">
+
+<button (click)="ert()"> CLLLLLLLLLLLLLLLLLLLLLlllIICK</button>
+<div class="mt-12 ee  ">
 
   <div class="flex justify-end">
     <button class="addTask bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="addTask()" mat-raised-button>Add Task</button>
@@ -100,8 +102,9 @@
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef class="w-20"></th>
         <td mat-cell *matCellDef="let element">
-          <button class="btn btn-warning bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" mat-raised-button>Update</button>
+          <button   (click)="updateTask(element.no)" class="btn btn-warning bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" mat-raised-button>Update</button>
           <button (click)="deleteTask($event,element.no)" mat-raised-button color="warn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+
 
         </td>
       </ng-container>

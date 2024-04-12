@@ -23,6 +23,7 @@ export class AddTaskComponent implements OnInit {
     this.f1 = fb.group({
       title: ['', Validators.required],
       descr: ['', Validators.required],
+      start : ['',Validators.required],
       end : ['',Validators.required],
       userName : ['',Validators.required],
       projectName:['',Validators.required],
@@ -43,6 +44,7 @@ export class AddTaskComponent implements OnInit {
         this.arrProjects=value;
       }
     })
+
   }
 
   protected readonly range = range;
@@ -50,13 +52,16 @@ export class AddTaskComponent implements OnInit {
   createTask( ) {
 
      if(!this.f1.invalid){
+
        this.task={
          title : this.f1.get("title")?.value,
          description : this.f1.get("descr")?.value,
          projectId : this.f1.get("projectName")?.value,
          userId: this.f1.get("userName")?.value,
+         start:this.f1.get("start")?.value,
          end:this.f1.get("end")?.value
        }
+       console.log(this.task);
        this.taskservice.createTask(this.task).subscribe(
          {
            next:value => this.toast.success({detail:"SUCCESS",summary:'Task added with success'}),
@@ -71,4 +76,5 @@ export class AddTaskComponent implements OnInit {
 
 
   }
+
 }

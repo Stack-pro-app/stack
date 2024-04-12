@@ -35,6 +35,9 @@ import {
 import {MatDialog, MatDialogClose} from "@angular/material/dialog";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
 import {UsersComponent} from "./components/users/users.component";
+import {UpdateTaskComponent} from "./components/update-task/update-task.component";
+import {GanttModule} from "@syncfusion/ej2-angular-gantt";
+import { GanttComponent } from './components/gantt/gantt.component';
 
 
 
@@ -48,7 +51,9 @@ import {UsersComponent} from "./components/users/users.component";
     EditProjectComponent,
     AddTaskComponent,
     ListTasksComponent,
-    UsersComponent
+    UsersComponent,
+    UpdateTaskComponent,
+    GanttComponent
 
   ],
   imports: [
@@ -62,7 +67,9 @@ import {UsersComponent} from "./components/users/users.component";
     ButtonModule,
     MatIconModule,
     MatSelectModule, MatTable, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatRowDef, MatHeaderCell, MatColumnDef, MatCell, MatHeaderRow, MatRow, MatDialogClose,
-    MatMomentDateModule
+    MatMomentDateModule,
+    GanttModule
+
 
 
 

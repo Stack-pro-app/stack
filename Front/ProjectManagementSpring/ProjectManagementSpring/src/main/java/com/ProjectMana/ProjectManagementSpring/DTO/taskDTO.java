@@ -12,23 +12,26 @@ public class taskDTO {
     public String description ;
     public Integer projectId;
     public Integer userId;
+  public String start ;
     public String end ;
 
-    public taskDTO(Integer no, String title, String description, Integer projectId, Integer userId, String end) {
+    public taskDTO(Integer no, String title, String description, Integer projectId, Integer userId, String end ,String start) {
         this.no = no;
         this.title = title;
         this.description = description;
         this.projectId = projectId;
         this.userId = userId;
         this.end = end;
+        this.start=start;
     }
 
-    public taskDTO(String title, String description, Integer projectId, Integer userId, String end) {
+    public taskDTO(String title, String description, Integer projectId, Integer userId, String end,String start) {
         this.title = title;
         this.description = description;
         this.projectId = projectId;
         this.userId = userId;
         this.end = end;
+        this.start=start;
     }
 
 }

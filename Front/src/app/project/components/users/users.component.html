@@ -41,9 +41,9 @@
     <ng-container matColumnDef="tasksAssigned">
       <th mat-header-cell *matHeaderCellDef>tasksAssigned</th>
       <td mat-cell *matCellDef="let element">
-        [
+
         <span *ngFor="let task of element.tasks">{{ task.title }},</span>
-        ]
+
       </td>
     </ng-container>
 

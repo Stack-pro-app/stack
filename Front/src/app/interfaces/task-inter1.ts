@@ -6,7 +6,8 @@ export interface TaskInter1 {
   "projectName"?: string,
   "userName"?: string,
   "end": string,
-  "status": number
+  "status": number,
+  start : string
 
 
 }
