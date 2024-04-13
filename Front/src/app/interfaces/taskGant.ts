@@ -5,5 +5,6 @@ export interface taskGant {
   end: string;
   start: string;
   status: number;
+  Predecessor?:string
 
 }

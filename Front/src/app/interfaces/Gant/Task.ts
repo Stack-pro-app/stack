@@ -6,4 +6,5 @@ export interface Task {
   StartDate: Date;
   EndDate: Date;
   subtasks?: Subtask[];
+
 }

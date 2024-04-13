@@ -4,4 +4,5 @@ interface Subtask {
   StartDate: Date;
   Duration: number;
   Progress: number;
+  Predecessor?:string
 }
