@@ -36,7 +36,7 @@ import {MatDialog, MatDialogClose} from "@angular/material/dialog";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
 import {UsersComponent} from "./components/users/users.component";
 import {UpdateTaskComponent} from "./components/update-task/update-task.component";
-import {GanttModule} from "@syncfusion/ej2-angular-gantt";
+import {CriticalPathService, EditService, GanttModule, ToolbarService} from "@syncfusion/ej2-angular-gantt";
 import { GanttComponent } from './components/gantt/gantt.component';
 
 
@@ -81,6 +81,7 @@ import { GanttComponent } from './components/gantt/gantt.component';
     provideNativeDateAdapter(),
     ConfirmationService,
     MessageService,
+    CriticalPathService, ToolbarService, EditService
 
 
 

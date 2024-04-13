@@ -1,2 +1,15 @@
-<ejs-gantt id="ganttDefault" height="430px" [dataSource]="data$ | async" taskMode="Manual" [taskFields]="taskSettings"></ejs-gantt>
+
+
+
+  <div class="m-24">
+
+    <ejs-gantt id="ganttDefault" height="430px"
+               [dataSource]="data$ | async" taskMode="Manual" [enableCriticalPath]='true'  [editSettings]="editSettings" [toolbar]="toolbar"
+               [taskFields]="taskSettings" [labelSettings]="labelSettings">
+
+    </ejs-gantt>
+
+  </div>
+
+
 

@@ -3,16 +3,23 @@ import {GantInter} from "../../../interfaces/Gant";
 import {TaskService} from "../../../services/task.service";
 import {Task} from "../../../interfaces/Gant/Task";
 import {map, Observable} from "rxjs";
+import {EditSettingsModel, ToolbarItem} from "@syncfusion/ej2-angular-gantt";
 @Component({
   selector: 'app-gantt',
   templateUrl: './gantt.component.html',
   styleUrl: './gantt.component.css'
 })
 export class GanttComponent implements OnInit{
+
   public tmp?: GantInter[];
-  public tmp2?:GantInter;
   public data$!: Observable<Task[]>;
   public taskSettings?: object;
+  critical : boolean =false ;
+  public toolbar?: ToolbarItem[];
+
+  public editSettings?: EditSettingsModel;
+  public labelSettings?: object;
+
 
   constructor(private  taskservice:TaskService) {
   }
@@ -37,7 +44,8 @@ export class GanttComponent implements OnInit{
               TaskName: h.title,
               StartDate: new Date(h.start),
               Progress: h.status,
-              Duration: this.duration(h.start,h.end)
+              Duration: this.duration(h.start,h.end),
+
             });
           }
           data.push(x);
@@ -46,6 +54,10 @@ export class GanttComponent implements OnInit{
         return data;
       })
     );
+    this.labelSettings = {
+      leftLabel: 'TaskName',
+      taskLabel: 'Progress'
+    };
 
 
     this.taskSettings = {
@@ -55,9 +67,17 @@ export class GanttComponent implements OnInit{
       endDate: 'EndDate',
       duration: 'Duration',
       progress: 'Progress',
-
       child: 'subtasks'
     };
+
+
+    this.editSettings = {
+      allowAdding: true,
+      allowTaskbarEditing: true,
+
+    };
+    this.toolbar = ['Add','ExpandAll', 'CollapseAll','CriticalPath','Search', 'ZoomIn', 'ZoomOut'];
+
   }
   public duration(start :string, end:string ){
     const startDate = new Date(start); // Example start date
@@ -77,4 +97,7 @@ export class GanttComponent implements OnInit{
   }
 
 
+  enableCriti() {
+    this.critical=true;
+  }
 }
