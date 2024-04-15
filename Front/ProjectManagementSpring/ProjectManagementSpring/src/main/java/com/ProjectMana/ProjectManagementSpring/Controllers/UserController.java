@@ -39,4 +39,14 @@ public class UserController {
     return this.userService.getIdByName(name);
 
   }
+  @GetMapping ("/userTasks")
+  public List<UserT> getAllUserTasks(){
+    return  this.userRespo.findAll();
+
+  }
+  @GetMapping ("/userTasks/{id}")
+  public UserT getAllUserTasksId(@PathVariable int id ){
+    return  this.userRespo.findById(id).get();
+
+  }
 }

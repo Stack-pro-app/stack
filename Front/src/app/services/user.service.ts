@@ -20,5 +20,8 @@ export class UserService {
 
     return this.htpp.get(this.URL.concat("/user/").concat("IdByName/").concat(name));
   }
+  getTasks(id:any){
+    return this.htpp.get<UserInter>(this.URL.concat("/userTasks/").concat(id));
+  }
 
 }

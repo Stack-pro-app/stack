@@ -87,6 +87,14 @@ public class taskService {
   public List<project> pp(){
    return this.projectRepo.findAll();
   }
+  public Task updateProgress(Integer no ,int progress ){
+
+    Task t =  this.taskRepo.findById(no).get();
+    t.setStatus(progress);
+    return this.taskRepo.save(t);
+
+
+  }
 
 
 }

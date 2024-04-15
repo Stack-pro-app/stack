@@ -1,24 +1,31 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {GantInter} from "../../../interfaces/Gant";
 import {TaskService} from "../../../services/task.service";
 import {Task} from "../../../interfaces/Gant/Task";
 import {map, Observable} from "rxjs";
-import {EditSettingsModel, ToolbarItem} from "@syncfusion/ej2-angular-gantt";
+import {EditSettingsModel, PdfExport, ToolbarItem} from "@syncfusion/ej2-angular-gantt";
+import { GanttComponent } from '@syncfusion/ej2-angular-gantt';
+import { PdfColor} from '@syncfusion/ej2-pdf-export';
 @Component({
   selector: 'app-gantt',
   templateUrl: './gantt.component.html',
   styleUrl: './gantt.component.css'
 })
-export class GanttComponent implements OnInit{
+export class Gantt1Component implements OnInit{
 
   public tmp?: GantInter[];
   public data$!: Observable<Task[]>;
   public taskSettings?: object;
   critical : boolean =false ;
   public toolbar?: ToolbarItem[];
+  public pdfExportInstance?: PdfExport;
+
 
   public editSettings?: EditSettingsModel;
   public labelSettings?: object;
+
+  @ViewChild('ganttObject')
+  public ganttObject: GanttComponent|undefined;
 
 
   constructor(private  taskservice:TaskService) {
@@ -76,7 +83,11 @@ export class GanttComponent implements OnInit{
       allowTaskbarEditing: true,
 
     };
-    this.toolbar = ['Add','ExpandAll', 'CollapseAll','CriticalPath','Search', 'ZoomIn', 'ZoomOut'];
+
+    this.toolbar = ['Add','ExpandAll', 'CollapseAll','CriticalPath','Search', 'ZoomIn', 'ZoomOut', "ExcelExport", "CsvExport"];
+
+
+
 
   }
   public duration(start :string, end:string ){
@@ -96,8 +107,37 @@ export class GanttComponent implements OnInit{
     return daysDifference +1 ;
   }
 
+  public toolbarClick(args: any): void {
+   if(args.item.text === "Excel export"){
+      (this.ganttObject as GanttComponent).excelExport({
+        fileName: "ProjectData.xlsx",
+        theme: {
+          header: { fontColor:"#C67878"},
+          record: { fontColor:"#C67878"}
+        },
+        header:{
+          headerRows: 1,
+          rows: [{
+            cells:[{
+              colSpan: 4,
+              value: "Project Time Tracking Report",
+              style: { fontSize:20, hAlign:"Center"}
+            }]
+          }]
+        },
+        footer:{
+          footerRows: 1,
+          rows: [{
+            cells:[{
+              colSpan: 4,
 
-  enableCriti() {
-    this.critical=true;
+              style: { fontSize:18, hAlign:"Center"}
+            }]
+          }]
+        }
+      });
+    } else if(args.item.text === "CSV export"){
+      (this.ganttObject as GanttComponent).csvExport();
+    }
   }
 }
