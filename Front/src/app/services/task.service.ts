@@ -29,4 +29,8 @@ export class TaskService {
   getGant(){
     return this.htpp.get<GantInter[]>(this.URL.concat("/task/Gantt"));
   }
+
+  updateProgrss(no:any,progress:any){
+    return this.htpp.get(this.URL.concat("/task/").concat(no).concat("/").concat(progress));
+  }
 }

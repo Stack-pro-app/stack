@@ -47,6 +47,11 @@ public class TaskController {
   public List<project> getGantData(){
       return this.taskService.pp();
   }
+  @GetMapping("/task/{no}/{progress}")
+  public Task updateProgress(@PathVariable int no , @PathVariable int progress){
+    return this.taskService.updateProgress(no,progress);
+
+  }
 
 
 

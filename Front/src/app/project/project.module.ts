@@ -36,8 +36,20 @@ import {MatDialog, MatDialogClose} from "@angular/material/dialog";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
 import {UsersComponent} from "./components/users/users.component";
 import {UpdateTaskComponent} from "./components/update-task/update-task.component";
-import {CriticalPathService, EditService, GanttModule, ToolbarService} from "@syncfusion/ej2-angular-gantt";
-import { GanttComponent } from './components/gantt/gantt.component';
+import {
+  CriticalPathService,
+  EditService, ExcelExportService,
+  GanttModule,
+  PdfExportService, SelectionService,
+  ToolbarService
+} from "@syncfusion/ej2-angular-gantt";
+import {Gantt1Component} from "./components/gantt/gantt1.component";
+import { ListTaskComponent } from './userTask/list-task/list-task.component';
+import { DetailTaskComponent } from './userTask/detail-task/detail-task.component';
+
+
+
+
 
 
 
@@ -53,7 +65,11 @@ import { GanttComponent } from './components/gantt/gantt.component';
     ListTasksComponent,
     UsersComponent,
     UpdateTaskComponent,
-    GanttComponent
+    Gantt1Component,
+    ListTaskComponent,
+    DetailTaskComponent,
+
+
 
   ],
   imports: [
@@ -68,7 +84,8 @@ import { GanttComponent } from './components/gantt/gantt.component';
     MatIconModule,
     MatSelectModule, MatTable, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatRowDef, MatHeaderCell, MatColumnDef, MatCell, MatHeaderRow, MatRow, MatDialogClose,
     MatMomentDateModule,
-    GanttModule
+    GanttModule,
+
 
 
 
@@ -81,7 +98,7 @@ import { GanttComponent } from './components/gantt/gantt.component';
     provideNativeDateAdapter(),
     ConfirmationService,
     MessageService,
-    CriticalPathService, ToolbarService, EditService
+    CriticalPathService, ToolbarService, EditService,SelectionService, ExcelExportService
 
 
 

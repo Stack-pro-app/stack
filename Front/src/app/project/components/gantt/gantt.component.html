@@ -1,15 +1,17 @@
 
 
 
-  <div class="m-24">
 
-    <ejs-gantt id="ganttDefault" height="430px"
-               [dataSource]="data$ | async" taskMode="Manual" [enableCriticalPath]='true'  [editSettings]="editSettings" [toolbar]="toolbar"
-               [taskFields]="taskSettings" [labelSettings]="labelSettings">
+<div class="m-24">
+  <ejs-gantt  height="490px" #ganttObject [allowExcelExport]="true"
+              [dataSource]="data$ | async" taskMode="Manual" [enableCriticalPath]='true'  [editSettings]="editSettings" [toolbar]="toolbar"
+              [taskFields]="taskSettings" [labelSettings]="labelSettings" [allowPdfExport]="true"  (toolbarClick)="toolbarClick($event)">
 
-    </ejs-gantt>
+  </ejs-gantt>
+</div>
 
-  </div>
+
+
 
 
 

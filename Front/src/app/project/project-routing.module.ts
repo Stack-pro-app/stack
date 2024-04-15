@@ -6,10 +6,15 @@ import {EditProjectComponent} from "./edit-project/edit-project.component";
 import {ListTasksComponent} from "./components/list-tasks/list-tasks.component";
 import {AddTaskComponent} from "./components/add-task/add-task.component";
 import {UsersComponent} from "./components/users/users.component";
-import {GanttComponent} from "./components/gantt/gantt.component";
+import {Gantt1Component} from "./components/gantt/gantt1.component";
+import {ListTaskComponent} from "./userTask/list-task/list-task.component";
+
+
+
 
 const routes: Routes = [
-  {path:"gg",component:GanttComponent},
+  {path:"userTasks/:id",component:ListTaskComponent},
+  {path:"gg",component:Gantt1Component},
   {path:"post",component:PostProComponent},
   {path : "",component:DisplayProjectComponent},
   {path : "edit/:id",component:EditProjectComponent},

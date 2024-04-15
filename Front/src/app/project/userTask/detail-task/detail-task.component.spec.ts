@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GanttComponent } from './gantt1.component';
+import { DetailTaskComponent } from './detail-task.component';
 
-describe('GanttComponent', () => {
-  let component: GanttComponent;
-  let fixture: ComponentFixture<GanttComponent>;
+describe('DetailTaskComponent', () => {
+  let component: DetailTaskComponent;
+  let fixture: ComponentFixture<DetailTaskComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GanttComponent]
+      declarations: [DetailTaskComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(GanttComponent);
+    
+    fixture = TestBed.createComponent(DetailTaskComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
