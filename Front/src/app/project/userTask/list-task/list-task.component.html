@@ -6,13 +6,17 @@
       <p>Progress:{{ item.status }}%</p>
       <div class="card-actions justify-center">
         <button class="btn btn-neutral text-xs px-2 py-1" (click)="detail(item.no)">Details</button>
-        <button class="btn btn-success px-2 py-1 " (click)="done(item.no)" [disabled]="item.status === 100">
-          {{ item.status === 100 ? 'Done' : 'Complete' }}
+        <button class="btn btn-success px-2 py-1"
+                (click)="done(item.no)"
+                [disabled]="item.status === 100 || isBeforeToday(item.start)">
+          {{ isBeforeToday(item.start) ? 'To Do' : (item.status === 100 ? 'Done' : 'Complete') }}
         </button>
       </div>
     </div>
   </div>
 </div>
+
+
 
 <ng-toast></ng-toast>
 

@@ -93,4 +93,17 @@ tasks?: TaskInter1[];
     });
 
   }
+
+  isBeforeToday(dateStr: string): boolean {
+    const today = new Date();
+    const date = new Date(dateStr);
+
+
+    today.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+   /* console.log("date"+date);
+    console.log("today"+today);
+    console.log(date >= today);*/
+    return date > today;
+  }
 }

@@ -22,6 +22,8 @@ public class TaskController {
   private taskService taskService;
   private ActivityRepo ActivityRepo ;
 
+
+
   public TaskController(com.ProjectMana.ProjectManagementSpring.repo.TaskRepo taskRepo, com.ProjectMana.ProjectManagementSpring.services.taskService taskService, ActivityRepo activityRepo) {
     TaskRepo = taskRepo;
     this.taskService = taskService;
@@ -41,6 +43,11 @@ public class TaskController {
 
     @DeleteMapping("/task/{id}")
     public void delete(@PathVariable Integer id ){
+      Task task = this.TaskRepo.findById(id)
+        .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+
+      this.ActivityRepo.deleteByTask(task);
+
         this.TaskRepo.deleteById(id);
 
     }
