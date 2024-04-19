@@ -121,23 +121,7 @@ export class ListTasksComponent implements OnInit {
 
   }
 
-  updateTask1() {
-    const dialogRef = this.dialog.open(AddTaskComponent, {
-      //width: '771px',
-      width: '691px',
-      height:'582px',
 
-      panelClass: 'custom-dialog'
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-
-
-      this.updateList();
-
-    });
-
-  }
   updateTask(taskId: number) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '694px';

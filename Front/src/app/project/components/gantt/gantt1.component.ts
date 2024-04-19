@@ -6,6 +6,9 @@ import {map, Observable} from "rxjs";
 import {EditSettingsModel, PdfExport, ToolbarItem} from "@syncfusion/ej2-angular-gantt";
 import { GanttComponent } from '@syncfusion/ej2-angular-gantt';
 import { PdfColor} from '@syncfusion/ej2-pdf-export';
+import {MatDialog} from "@angular/material/dialog";
+import {AddTaskComponent} from "../add-task/add-task.component";
+import {StatisticsComponent} from "../statistics/statistics.component";
 @Component({
   selector: 'app-gantt',
   templateUrl: './gantt.component.html',
@@ -28,7 +31,7 @@ export class Gantt1Component implements OnInit{
   public ganttObject: GanttComponent|undefined;
 
 
-  constructor(private  taskservice:TaskService) {
+  constructor(private  taskservice:TaskService,public dialog: MatDialog) {
   }
 
   public ngOnInit(): void {
@@ -84,7 +87,7 @@ export class Gantt1Component implements OnInit{
 
     };
 
-    this.toolbar = ['Add','ExpandAll', 'CollapseAll','CriticalPath','Search', 'ZoomIn', 'ZoomOut', "ExcelExport", "CsvExport"];
+    this.toolbar = ['Add','ExpandAll', 'CollapseAll','CriticalPath','Search', 'ZoomIn', 'ZoomOut', "ExcelExport", "CsvExport",];
 
 
 
@@ -140,4 +143,6 @@ export class Gantt1Component implements OnInit{
       (this.ganttObject as GanttComponent).csvExport();
     }
   }
+
+
 }

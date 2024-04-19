@@ -41,7 +41,7 @@ public class Task {
     @JsonBackReference
     private UserT user ;
 
-
-
-
+  public Task(Integer no) {
+    this.no = no;
+  }
 }
