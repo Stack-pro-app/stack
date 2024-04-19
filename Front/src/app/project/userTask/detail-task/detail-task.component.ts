@@ -12,7 +12,7 @@ import {NgToastService} from "ng-angular-popup";
 })
 export class DetailTaskComponent implements OnInit{
   id ?: number ;
-  task : TaskInter1={} ;
+  task : TaskInter1={start:''} ;
   done: boolean=false;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,private  taskservice:TaskService,private toast: NgToastService) {
@@ -30,7 +30,7 @@ export class DetailTaskComponent implements OnInit{
         this.task.end=value.end;
         this.task.projectName=value.projectName;
         this.task.status=value.status;
-        this.done=value.status==100
+        this.done=(value.status==100 || this.isBeforeToday(value.start))
 
       },
       error:value => console.log("ERROR")
@@ -46,6 +46,18 @@ export class DetailTaskComponent implements OnInit{
         this.toast.success({detail: "SUCCESS", summary: 'Progress Updated !!!!'});
       }
     });
+  }
+  isBeforeToday(dateStr: string): boolean {
+    const today = new Date();
+    const date = new Date(dateStr);
+
+
+    today.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+    /* console.log("date"+date);
+     console.log("today"+today);
+     console.log(date >= today);*/
+    return date > today;
   }
 
 }
