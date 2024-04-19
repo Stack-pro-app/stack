@@ -4,6 +4,7 @@ import {UserService} from "../../../services/user.service";
 import {MatDialog} from "@angular/material/dialog";
 import {AddTaskComponent} from "../add-task/add-task.component";
 import {ActivityComponent} from "../../userTask/activity/activity.component";
+import {NgToastService} from "ng-angular-popup";
 export interface PeriodicElement {
   name: string;
   email: string;
@@ -21,7 +22,7 @@ export class UsersComponent implements OnInit {
   displayedColumns: string[] = ['position', 'UserName', 'Email' ,'tasksAssigned', 'actions'];
   taskId : any;
   //f1: FormGroup;
-  constructor(private srv:UserService,public dialog: MatDialog) {
+  constructor(private srv:UserService,public dialog: MatDialog,private toast: NgToastService) {
     /*this.f1 = fb.group({
       TaskId: ['', Validators.required],
     });*/
@@ -33,6 +34,8 @@ export class UsersComponent implements OnInit {
       {
         next: value =>{
           this.arrUsers=value;
+          this.toast.info({detail:"INFO",summary:'Select a Task to see the activity of the user '});
+
         }
       }
     )
