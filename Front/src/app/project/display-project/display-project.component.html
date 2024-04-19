@@ -3,14 +3,14 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
       <div *ngFor="let pro of arr; let i = index" class="col-span-1">
         <div   class="namesubject">
-          <div  routerLink="/project/edit/{{pro.id}}">{{pro.projectName}}</div>
+          <div   routerLink="/project/edit/{{pro.id}}">{{pro.projectName}}</div>
           <p >STATUS : in progress </p>
         </div>
 
 
 
         <button class="bg-red-500 text-white px-4 py-2 rounded-md mx-1" (click)="confirm2($event,pro.id,i)" >Delete</button>
-        <button routerLink="/project/edit/{{pro.id}}" class="bg-blue-500 text-white px-4 py-2 rounded-md mx-1">Edit</button>
+        <button  routerLink="/project/edit/{{pro.id}}" class="bg-blue-500 text-white px-4 py-2 rounded-md mx-1">Edit</button>
       </div>
     </div>
   </div>

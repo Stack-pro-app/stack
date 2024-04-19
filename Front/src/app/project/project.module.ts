@@ -46,11 +46,16 @@ import {
 import {Gantt1Component} from "./components/gantt/gantt1.component";
 import { ListTaskComponent } from './userTask/list-task/list-task.component';
 import { DetailTaskComponent } from './userTask/detail-task/detail-task.component';
+import { StatisticsComponent } from './components/statistics/statistics.component';
+import {CircularChart3DAllModule} from "@syncfusion/ej2-angular-charts";
+import { ChartModule} from '@syncfusion/ej2-angular-charts';
+
+import { CategoryService, BarSeriesService, ColumnSeriesService, LineSeriesService,LegendService, DataLabelService, MultiLevelLabelService} from '@syncfusion/ej2-angular-charts';
+import { ActivityComponent } from './userTask/activity/activity.component';
 
 
 
-
-
+import { DateTimeService, DateTimeCategoryService, StripLineService} from '@syncfusion/ej2-angular-charts';
 
 
 
@@ -68,6 +73,9 @@ import { DetailTaskComponent } from './userTask/detail-task/detail-task.componen
     Gantt1Component,
     ListTaskComponent,
     DetailTaskComponent,
+    StatisticsComponent,
+    ActivityComponent,
+
 
 
 
@@ -85,6 +93,7 @@ import { DetailTaskComponent } from './userTask/detail-task/detail-task.componen
     MatSelectModule, MatTable, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatRowDef, MatHeaderCell, MatColumnDef, MatCell, MatHeaderRow, MatRow, MatDialogClose,
     MatMomentDateModule,
     GanttModule,
+    CircularChart3DAllModule,ChartModule,
 
 
 
@@ -98,7 +107,10 @@ import { DetailTaskComponent } from './userTask/detail-task/detail-task.componen
     provideNativeDateAdapter(),
     ConfirmationService,
     MessageService,
-    CriticalPathService, ToolbarService, EditService,SelectionService, ExcelExportService
+    CriticalPathService, ToolbarService, EditService,SelectionService, ExcelExportService,CircularChart3DAllModule,
+    CategoryService, BarSeriesService, ColumnSeriesService, LineSeriesService,LegendService, DataLabelService, MultiLevelLabelService, SelectionService,
+    CategoryService, ColumnSeriesService, LineSeriesService
+
 
 
 

@@ -8,11 +8,15 @@ import {AddTaskComponent} from "./components/add-task/add-task.component";
 import {UsersComponent} from "./components/users/users.component";
 import {Gantt1Component} from "./components/gantt/gantt1.component";
 import {ListTaskComponent} from "./userTask/list-task/list-task.component";
+import {StatisticsComponent} from "./components/statistics/statistics.component";
+import {ActivityComponent} from "./userTask/activity/activity.component";
 
 
 
 
 const routes: Routes = [
+  {path:"activity",component:ActivityComponent},
+  {path:"xx",component:StatisticsComponent},
   {path:"userTasks/:id",component:ListTaskComponent},
   {path:"gg",component:Gantt1Component},
   {path:"post",component:PostProComponent},

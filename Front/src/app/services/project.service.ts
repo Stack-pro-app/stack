@@ -30,4 +30,7 @@ export class ProjectService {
 
     return this.htpp.get(this.URL.concat("/project/").concat("IdByName/").concat(name));
   }
+  projectTasks(){
+    return this.htpp.get(this.URL.concat("/project/projectTasks"));
+  }
 }
