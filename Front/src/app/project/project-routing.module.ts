@@ -10,11 +10,14 @@ import {Gantt1Component} from "./components/gantt/gantt1.component";
 import {ListTaskComponent} from "./userTask/list-task/list-task.component";
 import {StatisticsComponent} from "./components/statistics/statistics.component";
 import {ActivityComponent} from "./userTask/activity/activity.component";
+import {Schedule0Component} from "./components/schedule0/schedule0.component";
+
 
 
 
 
 const routes: Routes = [
+  {path:"sh",component:Schedule0Component},
   {path:"activity",component:ActivityComponent},
   {path:"xx",component:StatisticsComponent},
   {path:"userTasks/:id",component:ListTaskComponent},

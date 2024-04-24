@@ -57,6 +57,15 @@ import { ActivityComponent } from './userTask/activity/activity.component';
 
 import { DateTimeService, DateTimeCategoryService, StripLineService} from '@syncfusion/ej2-angular-charts';
 
+import {
+  AgendaService, DayService, MonthAgendaService,
+  MonthService,
+  ScheduleModule, TimelineMonthService, TimelineViewsService,
+  WeekService,
+  WorkWeekService
+} from "@syncfusion/ej2-angular-schedule";
+import { Schedule0Component } from './components/schedule0/schedule0.component';
+
 
 
 
@@ -75,6 +84,8 @@ import { DateTimeService, DateTimeCategoryService, StripLineService} from '@sync
     DetailTaskComponent,
     StatisticsComponent,
     ActivityComponent,
+    Schedule0Component,
+
 
 
 
@@ -94,6 +105,7 @@ import { DateTimeService, DateTimeCategoryService, StripLineService} from '@sync
     MatMomentDateModule,
     GanttModule,
     CircularChart3DAllModule,ChartModule,
+    ScheduleModule
 
 
 
@@ -109,7 +121,8 @@ import { DateTimeService, DateTimeCategoryService, StripLineService} from '@sync
     MessageService,
     CriticalPathService, ToolbarService, EditService,SelectionService, ExcelExportService,CircularChart3DAllModule,
     CategoryService, BarSeriesService, ColumnSeriesService, LineSeriesService,LegendService, DataLabelService, MultiLevelLabelService, SelectionService,
-    CategoryService, ColumnSeriesService, LineSeriesService
+    CategoryService, ColumnSeriesService, LineSeriesService,
+    DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService
 
 
 
