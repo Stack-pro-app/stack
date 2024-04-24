@@ -14,24 +14,26 @@ public class taskDTO {
     public Integer userId;
   public String start ;
     public String end ;
+    public Integer status;
 
-    public taskDTO(Integer no, String title, String description, Integer projectId, Integer userId, String end ,String start) {
-        this.no = no;
-        this.title = title;
-        this.description = description;
-        this.projectId = projectId;
-        this.userId = userId;
-        this.end = end;
-        this.start=start;
-    }
+  public taskDTO(Integer no, String title, String description, Integer projectId, Integer userId, String start, String end, Integer status) {
+    this.no = no;
+    this.title = title;
+    this.description = description;
+    this.projectId = projectId;
+    this.userId = userId;
+    this.start = start;
+    this.end = end;
+    this.status = status;
+  }
 
-    public taskDTO(String title, String description, Integer projectId, Integer userId, String end,String start) {
-        this.title = title;
-        this.description = description;
-        this.projectId = projectId;
-        this.userId = userId;
-        this.end = end;
-        this.start=start;
-    }
-
+  public taskDTO(String title, String description, Integer projectId, Integer userId, String start, String end, Integer status) {
+    this.title = title;
+    this.description = description;
+    this.projectId = projectId;
+    this.userId = userId;
+    this.start = start;
+    this.end = end;
+    this.status = status;
+  }
 }

@@ -6,5 +6,6 @@ export interface TaskInter {
    userId:number;
   start :string;
    end :string;
+   status?:number
 
 }

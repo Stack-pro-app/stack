@@ -32,7 +32,7 @@ public class taskService {
   }
 
   public taskDTO create(taskDTO t ){
-        Task ts = new Task(t.getNo(),t.title,t.getDescription(),t.getEnd(),t.start,0,new project(t.projectId),new UserT(t.userId));
+        Task ts = new Task(t.getNo(),t.title,t.getDescription(),t.getEnd(),t.start,t.getStatus(),new project(t.projectId),new UserT(t.userId));
         Task ts1 = this.taskRepo.save(ts);
         t.no=ts1.getNo();
         return t ;

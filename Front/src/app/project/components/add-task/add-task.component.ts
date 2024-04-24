@@ -59,7 +59,8 @@ export class AddTaskComponent implements OnInit {
          projectId : this.f1.get("projectName")?.value,
          userId: this.f1.get("userName")?.value,
          start:this.f1.get("start")?.value,
-         end:this.f1.get("end")?.value
+         end:this.f1.get("end")?.value,
+         status:0
        }
        console.log(this.task);
        this.taskservice.createTask(this.task).subscribe(

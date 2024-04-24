@@ -80,6 +80,7 @@ export class UpdateTaskComponent implements OnInit {
           userId: idUser,
           start: this.f1.get("start")?.value,
           end: this.f1.get("end")?.value,
+          status:this.task?.status
 
         };
 
