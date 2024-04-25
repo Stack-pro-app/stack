@@ -55,11 +55,12 @@ import { ActivityComponent } from './userTask/activity/activity.component';
 
 
 
+
 import { DateTimeService, DateTimeCategoryService, StripLineService} from '@syncfusion/ej2-angular-charts';
 
 import {
-  AgendaService, DayService, MonthAgendaService,
-  MonthService,
+  AgendaService, DayService, ICalendarExportService, ICalendarImportService, MonthAgendaService,
+  MonthService, PrintService, RecurrenceEditorModule,
   ScheduleModule, TimelineMonthService, TimelineViewsService,
   WeekService,
   WorkWeekService
@@ -118,7 +119,8 @@ import {ProgressBarModule} from "primeng/progressbar";
     GanttModule,
     CircularChart3DAllModule,ChartModule,
     ScheduleModule,
-    ProgressBarModule
+    ProgressBarModule,
+    RecurrenceEditorModule,
 
 
 
@@ -135,8 +137,9 @@ import {ProgressBarModule} from "primeng/progressbar";
     CriticalPathService, ToolbarService, EditService,SelectionService, ExcelExportService,CircularChart3DAllModule,
     CategoryService, BarSeriesService, ColumnSeriesService, LineSeriesService,LegendService, DataLabelService, MultiLevelLabelService, SelectionService,
     CategoryService, ColumnSeriesService, LineSeriesService,
-    DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService
-
+    DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService,
+    ICalendarExportService,
+    ICalendarImportService, PrintService
 
 
 

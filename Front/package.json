@@ -24,6 +24,7 @@
     "@microsoft/signalr": "^8.0.0",
     "@syncfusion/ej2-angular-charts": "^25.1.39",
     "@syncfusion/ej2-angular-gantt": "^25.1.39",
+    "@syncfusion/ej2-angular-navigations": "^25.1.41",
     "@syncfusion/ej2-angular-schedule": "^25.1.41",
     "@syncfusion/ej2-material-theme": "~25.1.39",
     "aos": "^2.3.4",
