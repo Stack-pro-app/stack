@@ -24,14 +24,7 @@ export class Schedule0Component {
     crossDomain:true
   });
 
-  public data: object[] = [{
-    Id: 1,
-    Subject: 'imad',
-    StartTime: new Date(2024, 3, 25, 10, 0),
-    EndTime: new Date(2024, 3, 25, 12, 30),
-    isAllDay: false
-  }
-  ];
+
   public eventSettings: EventSettingsModel = {
     dataSource: this.dataManager
   }
