@@ -11,12 +11,14 @@ import {ListTaskComponent} from "./userTask/list-task/list-task.component";
 import {StatisticsComponent} from "./components/statistics/statistics.component";
 import {ActivityComponent} from "./userTask/activity/activity.component";
 import {Schedule0Component} from "./components/schedule0/schedule0.component";
+import {DashboardComponent} from "./components/dashboard/dashboard.component";
 
 
 
 
 
 const routes: Routes = [
+  {path:"dash",component:DashboardComponent},
   {path:"sh",component:Schedule0Component},
   {path:"activity",component:ActivityComponent},
   {path:"xx",component:StatisticsComponent},

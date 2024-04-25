@@ -1,0 +1,27 @@
+:host ::ng-deep {
+  table {
+    thead {
+      background-color: #cee9f5 !important;
+      .mat-header-cell {
+        color: #FFF;
+      }
+    }
+  }
+}
+
+
+.missed-task {
+  color: #d20505; /* Or any other color you want for tasks that are past their deadline */
+}
+
+.done-task {
+  color: #03a903; /* Or any other color you want for completed tasks */
+}
+
+.in-progress-task {
+  color: #d58c04; /* Or any other color you want for tasks that are in progress */
+}
+
+
+
+

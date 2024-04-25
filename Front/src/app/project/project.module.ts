@@ -65,6 +65,13 @@ import {
   WorkWeekService
 } from "@syncfusion/ej2-angular-schedule";
 import { Schedule0Component } from './components/schedule0/schedule0.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ProjectInfoComponent } from './components/dashboard/project-info/project-info.component';
+import { ProjectProgressComponent } from './components/dashboard/project-progress/project-progress.component';
+import { TasksInfoComponent } from './components/dashboard/tasks-info/tasks-info.component';
+import {ProgressBarModule} from "primeng/progressbar";
+
+
 
 
 
@@ -85,6 +92,11 @@ import { Schedule0Component } from './components/schedule0/schedule0.component';
     StatisticsComponent,
     ActivityComponent,
     Schedule0Component,
+    DashboardComponent,
+    ProjectInfoComponent,
+    ProjectProgressComponent,
+    TasksInfoComponent,
+
 
 
 
@@ -105,7 +117,8 @@ import { Schedule0Component } from './components/schedule0/schedule0.component';
     MatMomentDateModule,
     GanttModule,
     CircularChart3DAllModule,ChartModule,
-    ScheduleModule
+    ScheduleModule,
+    ProgressBarModule
 
 
 

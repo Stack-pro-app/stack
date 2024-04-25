@@ -106,4 +106,16 @@ tasks?: TaskInter1[];
     console.log(date >= today);*/
     return date > today;
   }
+  isAfterDead(endDateStr: string): boolean {
+    const today = new Date();
+    const endDate = new Date(endDateStr);
+
+
+
+    today.setHours(0, 0, 0, 0);
+   endDate.setHours(0, 0, 0, 0);
+
+    return endDate < today;
+  }
+
 }

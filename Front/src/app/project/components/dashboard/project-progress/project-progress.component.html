@@ -1,0 +1,18 @@
+<div class="top-countries">
+  <div class="countries">
+    <div class="countries-header">Projects Progress <i class="bi bi-question-circle" ></i></div>
+  </div>
+  <div class="countries countries-list">
+    <div *ngFor="let element of ARR" class="country-item">
+      <div><b>{{element.name}}</b></div>
+      <div>To DO : 13</div>
+      <div>In progress: 5</div>
+      <div>Done: 3
+        <p-progressBar [value]="50"></p-progressBar>
+      </div>
+
+
+    </div>
+
+  </div>
+</div>
