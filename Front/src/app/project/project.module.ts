@@ -71,6 +71,7 @@ import { ProjectInfoComponent } from './components/dashboard/project-info/projec
 import { ProjectProgressComponent } from './components/dashboard/project-progress/project-progress.component';
 import { TasksInfoComponent } from './components/dashboard/tasks-info/tasks-info.component';
 import {ProgressBarModule} from "primeng/progressbar";
+import {CarouselModule} from "primeng/carousel";
 
 
 
@@ -121,6 +122,7 @@ import {ProgressBarModule} from "primeng/progressbar";
     ScheduleModule,
     ProgressBarModule,
     RecurrenceEditorModule,
+    CarouselModule
 
 
 

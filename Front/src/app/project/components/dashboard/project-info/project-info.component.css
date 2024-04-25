@@ -1,11 +1,11 @@
 .info-grid {
-  display: grid;
+  /*display: grid;
   grid-auto-columns: 1fr;
   grid-template-areas:
         'one'
         'two'
         'three'
-        'four';
+        'four';*/
   width: 100%;
   margin-inline: auto;
   box-shadow: 2px 2px 2px 2px hsl(0, 0%, 70%);
@@ -38,7 +38,7 @@
 }
 
 .info-session-count {
-  font-size: 2.5em;
+  font-size: 2em;
   font-weight: 200;
 }
 
@@ -95,7 +95,7 @@
   }
 
   .info:nth-child(1) {
-    border-bottom: 1px lightgray solid;
+    border-bottom: 3px lightgray solid;
     border-right: 1px lightgray solid;
   }
 
@@ -125,4 +125,7 @@
   .info:nth-child(3) {
     border-right: 1px lightgray solid;
   }
+}
+.p-carousel-items-content{
+  height: 169px;
 }
