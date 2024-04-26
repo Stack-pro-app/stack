@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ProjectRoutingModule } from './project-routing.module';
 import { PostProComponent } from './post-pro/post-pro.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {MatStepperModule} from "@angular/material/stepper";
 import {MatButtonModule} from "@angular/material/button";
@@ -21,7 +21,7 @@ import {ToastModule} from "primeng/toast";
 import {ConfirmationService, MessageService} from "primeng/api";
 import {AddTaskComponent} from "./components/add-task/add-task.component";
 import {ListTasksComponent} from "./components/list-tasks/list-tasks.component";
-import {MatIconModule} from "@angular/material/icon";
+import {MatIconModule, MatIconRegistry} from "@angular/material/icon";
 import {MatSelectModule} from "@angular/material/select";
 import {
   MatCell,
@@ -56,7 +56,6 @@ import { ActivityComponent } from './userTask/activity/activity.component';
 
 
 
-import { DateTimeService, DateTimeCategoryService, StripLineService} from '@syncfusion/ej2-angular-charts';
 
 import {
   AgendaService, DayService, ICalendarExportService, ICalendarImportService, MonthAgendaService,
@@ -72,6 +71,11 @@ import { ProjectProgressComponent } from './components/dashboard/project-progres
 import { TasksInfoComponent } from './components/dashboard/tasks-info/tasks-info.component';
 import {ProgressBarModule} from "primeng/progressbar";
 import {CarouselModule} from "primeng/carousel";
+import { ListUsersComponent } from './components/dashboard/list-users/list-users.component';
+import {FloatLabelModule} from "primeng/floatlabel";
+import { UserProgressComponent } from './components/dashboard/user-progress/user-progress.component';
+import { ChartsComponent } from './components/dashboard/charts/charts.component';
+import { Charts0Component } from './components/dashboard/charts0/charts0.component';
 
 
 
@@ -98,6 +102,10 @@ import {CarouselModule} from "primeng/carousel";
     ProjectInfoComponent,
     ProjectProgressComponent,
     TasksInfoComponent,
+    ListUsersComponent,
+    UserProgressComponent,
+    ChartsComponent,
+    Charts0Component,
 
 
 
@@ -122,17 +130,12 @@ import {CarouselModule} from "primeng/carousel";
     ScheduleModule,
     ProgressBarModule,
     RecurrenceEditorModule,
-    CarouselModule
-
-
-
-
-
-
-    // RouterModule, ToastModule, ConfirmDialogModule
+    CarouselModule,
+    FloatLabelModule
 
   ],
   providers: [
+
     provideNativeDateAdapter(),
     ConfirmationService,
     MessageService,
@@ -141,7 +144,7 @@ import {CarouselModule} from "primeng/carousel";
     CategoryService, ColumnSeriesService, LineSeriesService,
     DayService, WeekService, WorkWeekService, MonthService, AgendaService, MonthAgendaService, TimelineViewsService, TimelineMonthService,
     ICalendarExportService,
-    ICalendarImportService, PrintService
+    ICalendarImportService, PrintService,
 
 
 

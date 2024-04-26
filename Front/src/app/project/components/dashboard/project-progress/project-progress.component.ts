@@ -36,10 +36,10 @@ export class ProjectProgressComponent  implements OnInit{
               prj.inProgress++;
             }
           }
-          let totalTasks =prj.toDo+prj.inProgress+prj.done+prj.missed;
+          let totalTasks =prj.inProgress+prj.done+prj.missed;
 
           if(totalTasks!=0){
-            prj.progress = prj.progress/(prj.toDo+prj.inProgress+prj.done+prj.missed);
+            prj.progress = prj.progress/totalTasks;
             prj.progress = Number(prj.progress.toFixed(2));
           }
 

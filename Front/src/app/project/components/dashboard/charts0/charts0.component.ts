@@ -1,17 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {ProjectService} from "../../../services/project.service";
-import {TaskService} from "../../../services/task.service";
+import {Statis} from "../../../../interfaces/Gant/Statis";
 import {map, Observable} from "rxjs";
-import {Task} from "../../../interfaces/Gant/Task";
-import {Statis} from "../../../interfaces/Gant/Statis";
-
+import {TaskService} from "../../../../services/task.service";
 
 @Component({
-  selector: 'app-statistics',
-  templateUrl: './statistics.component.html',
-  styleUrl: './statistics.component.css'
+  selector: 'app-charts0',
+  templateUrl: './charts0.component.html',
+  styleUrl: './charts0.component.css'
 })
-export class StatisticsComponent implements OnInit{
+export class Charts0Component implements OnInit{
   public primaryXAxis?: Object;
   public primaryYAxis?: Object;
 
@@ -41,7 +38,8 @@ export class StatisticsComponent implements OnInit{
         const dt : Statis[] =[];
         for (const g of value) {
           const tmp: Statis = {
-           x:g.projectName
+            x:g.projectName,
+            y:0
           };
           let st :number=0;
           let i = 0  ;
@@ -53,7 +51,10 @@ export class StatisticsComponent implements OnInit{
             }
 
           }
-          tmp.y=st/i;
+          if(i!=0){
+            tmp.y=st/i;
+          }
+
           dt.push(tmp);
           this.chartData?.push({})
         }
@@ -93,5 +94,4 @@ export class StatisticsComponent implements OnInit{
      console.log(date >= today);*/
     return date > today;
   }
-
 }
