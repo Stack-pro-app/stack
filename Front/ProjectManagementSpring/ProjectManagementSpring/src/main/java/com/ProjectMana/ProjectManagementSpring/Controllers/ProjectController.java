@@ -61,5 +61,15 @@ private projectService projectService ;
       return this.projectService.getIdByName(name);
 
     }
+  @GetMapping("/project/getPro/{name}")
+  public ResponseEntity<projectDTO> getByName(@PathVariable String name) {
+    project p = this.prjRepo.findByprojectName(name);
+    if (p != null) {
+      projectDTO projectDTO = this.projectService.getById(p.getId());
+      return ResponseEntity.ok(projectDTO);
+    } else {
+      return ResponseEntity.notFound().build();
+    }
+  }
 
 }

@@ -33,4 +33,7 @@ export class ProjectService {
   projectTasks(){
     return this.htpp.get(this.URL.concat("/project/projectTasks"));
   }
+  findProName(name : string){
+    return this.htpp.get<ProjectInter>(this.URL.concat("/project/").concat("getPro/").concat(name));
+  }
 }
