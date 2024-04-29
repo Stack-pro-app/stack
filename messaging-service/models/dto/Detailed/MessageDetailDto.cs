@@ -5,6 +5,7 @@ namespace messaging_service.models.dto.Detailed
     public class MessageDetailDto
     {
         public int Id { get; set; }
+        public Guid MessageId { get; set; }
         public int UserId { get; set; }
         public UserMinimalDto User { get; set; }
         public int ChannelId { get; set; }
@@ -13,5 +14,8 @@ namespace messaging_service.models.dto.Detailed
         public DateTime Created_at { get; set; }
         public int ParentId { get; set; }
         public MessageMinimalDto? Parent { get; set; }
+        public string? Attachement_Url { get; set; }
+        public string? Attachement_Name { get; set; }
+        public string? Attachement_Key { get; set; }
     }
 }

@@ -2,13 +2,19 @@ import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { ChannelComponent } from '../../../shared/components/channel/channel.component';
 import { Channel } from '../../../core/Models/channel';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ChannelService } from '../../../core/services/Channel/channel.service';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { WorkspaceService } from '../../../core/services/Workspace/workspace.service';
 import { Workspace } from '../../../core/Models/workspace';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
+import { UserService } from '../../../core/services/user.service';
 
 @Component({
   selector: 'app-main',
@@ -23,7 +29,9 @@ import { SignalrService } from '../../../core/services/signalr/signalr.service';
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
-export class MainComponent implements OnInit , OnChanges {
+export class MainComponent implements OnInit, OnChanges {
+  showDeleteButton:Boolean = false;
+  searchTerm: string = '';
   id: string | null = '';
   channelRequest: any = {
     name: '',
@@ -35,8 +43,7 @@ export class MainComponent implements OnInit , OnChanges {
     id: 0,
     name: '',
     MainChannel: {},
-    publicChannels: [],
-    privateChannels: [],
+    channels: [],
   };
   currentChannelP: Channel = {
     channelString: '',
@@ -46,9 +53,22 @@ export class MainComponent implements OnInit , OnChanges {
     is_private: false,
     name: '',
   };
-  channels:Channel[] = [];
+  users: any[] = [
+    {
+      img: 'https://i.ibb.co/XJ5y9WM/me.jpg',
+
+      name: 'Reda Mountassir',
+    },
+    {
+      img: null,
+      name: 'enma No Katana',
+    },
+  ];
+  CUsers!: any[];
+  channels: Channel[] = [];
   constructor(
-    private signalrService : SignalrService,
+    private signalrService: SignalrService,
+    private userService: UserService,
     private service: ChannelService,
     private builder: FormBuilder,
     private router: Router,
@@ -57,24 +77,20 @@ export class MainComponent implements OnInit , OnChanges {
   ) {}
   public channelForm!: FormGroup;
   public workspaceForm!: FormGroup;
-receivedMessage :any;
-ngOnChanges(changes: SimpleChanges): void {
-     if (
-       changes['currentChannelP'] &&
-       changes['currentChannelP'].currentValue
-     ) {
-const messageDto = {
-  userId: localStorage.getItem('userId'),
-  channelId: 14,
-  ChannelString: '1D96A361-E812-460E-A21D-429B0C62F935',
-  message: 'this.messageForm.value.message',
-};
-this.signalrService.sendMessage(messageDto);
-     }
-}
+  public userForm!: FormGroup;
+  receivedMessage: any;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
+      const messageDto = {
+        userId: localStorage.getItem('userId'),
+        channelId: 14,
+        ChannelString: '1D96A361-E812-460E-A21D-429B0C62F935',
+        message: 'this.messageForm.value.message',
+      };
+      this.signalrService.sendMessage(messageDto);
+    }
+  }
   ngOnInit() {
-     
-
     this.id = this.route.snapshot.paramMap.get('id');
     this.channelForm = this.builder.group({
       channelName: this.builder.control(''),
@@ -84,15 +100,21 @@ this.signalrService.sendMessage(messageDto);
     this.workspaceForm = this.builder.group({
       workspaceName: this.builder.control(''),
     });
+    this.userForm = this.builder.group({
+      userEmail: this.builder.control(
+        '',
+        Validators.compose([Validators.required, Validators.email])
+      ),
+    });
 
     this.workspaceService
       .getWorkspace(this.id, localStorage.getItem('userId'))
       .subscribe({
         next: (response) => {
           this.currentWorkspace = response.result;
-          console.log("Wos" ,this.currentWorkspace);
-          
-          this.channels = this.currentWorkspace.privateChannels;
+          console.log('Wos', this.currentWorkspace);
+
+          this.channels = this.currentWorkspace.channels;
 
           this.currentChannelP = {
             channelString: response.result.mainChannel.channelString,
@@ -104,9 +126,7 @@ this.signalrService.sendMessage(messageDto);
           };
           console.log(this.currentChannelP);
           console.log(this.channels);
-          
-
-          
+          this.onGetUsers();
         },
         error: (error) => {
           console.error('Login error', error);
@@ -120,16 +140,21 @@ this.signalrService.sendMessage(messageDto);
         next: (response) => {
           console.log(response);
           this.currentWorkspace = response.result;
-          this.channels = this.currentWorkspace.privateChannels;
-          for (let chanel of this.currentWorkspace.publicChannels) {
-            this.channels.push(chanel);
-          }
-
+          this.channels = this.currentWorkspace.channels;
+          this.currentChannelP = {
+            channelString: response.result.mainChannel.channelString,
+            created_at: response.result.mainChannel.created_at,
+            description: response.result.mainChannel.description,
+            id: response.result.mainChannel.id,
+            is_private: response.result.mainChannel.is_private,
+            name: response.result.mainChannel.name,
+          };
         },
         error: (error) => {
           console.error('Reload error', error);
         },
       });
+    this.onGetUsers();
   }
   onCreateChannel() {
     this.channelRequest.name = this.channelForm.value.channelName;
@@ -175,7 +200,7 @@ this.signalrService.sendMessage(messageDto);
   }
   onChangeChannel(channel: Channel) {
     this.currentChannelP = channel;
-    console.log("HEEEEEEEEEEEREE",this.currentChannelP);
+    console.log('HEEEEEEEEEEEREE', this.currentChannelP);
   }
   onDeleteChannel() {
     this.service.Delete(this.currentChannelP.id).subscribe({
@@ -186,16 +211,17 @@ this.signalrService.sendMessage(messageDto);
         console.error('Updating  error', error);
       },
       complete: () => {
+
         this.reload();
       },
-    });;
+    });
   }
   onUpdateChannel() {
     const data = {
-      id:this.currentChannelP.id,
+      id: this.currentChannelP.id,
       name: this.channelForm.value.channelName,
-      description:this.currentChannelP.description,
-      is_private:this.channelForm.value.channelPrivate
+      description: this.currentChannelP.description,
+      is_private: this.channelForm.value.channelPrivate,
     };
     this.service.Update(data).subscribe({
       next: (response) => {
@@ -209,4 +235,60 @@ this.signalrService.sendMessage(messageDto);
       },
     });
   }
+  onAddUser() {
+    let userId = 0;
+    this.userService.FindUserByEmail(this.userForm.value.userEmail).subscribe({
+      next: (response) => {
+        console.log(response.result.id);
+        userId = response.result.id;
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {
+        this.userService
+          .addUserToWorkSpace(userId, this.currentWorkspace.id)
+          .subscribe({
+            next: (response) => {},
+            error: (error) => {
+              console.error('get Users  error', error);
+            },
+            complete: () => {
+              this.reload();
+            },
+          });
+      },
+    });
+  }
+  onRemoveUser(data: any) {
+    //Todo Remove User
+  }
+  onGetUsers() {
+    this.userService.getUersFromWorkSpace(this.currentWorkspace.id).subscribe({
+      next: (response) => {
+        this.CUsers = response;
+        console.log('Users', this.CUsers);
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {},
+    });
+  }
+  onDeleteUserFromWs(id: any) {
+    this.userService
+      .deleteUserFromWorkSpace(id, this.currentWorkspace.id)
+      .subscribe({
+        next: (response) => {
+          console.log('Confirmation', response);
+        },
+        error: (error) => {
+          console.error('get Users  error', error);
+        },
+        complete: () => {
+          this.reload();
+        },
+      });
+  }
+  filterItems() {}
 }

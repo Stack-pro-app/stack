@@ -1,6 +1,7 @@
 ﻿using messaging_service.models.domain;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
+using System.Xml;
 
 
 namespace messaging_service.Data
@@ -33,6 +34,10 @@ namespace messaging_service.Data
             .Property(c => c.ChannelString)
             .HasDefaultValueSql("NEWID()");
 
+            modelBuilder.Entity<User>()
+            .Property(u => u.NotificationString)
+            .HasDefaultValueSql("NEWID()");
+
             modelBuilder.Entity<Workspace>()
             .HasIndex(w => new { w.Name, w.AdminId })
             .IsUnique();
@@ -56,6 +61,10 @@ namespace messaging_service.Data
 
             modelBuilder.Entity<Channel>()
             .HasIndex(c => c.ChannelString)
+            .IsUnique();
+
+            modelBuilder.Entity<User>()
+            .HasIndex(u => u.NotificationString)
             .IsUnique();
 
             modelBuilder

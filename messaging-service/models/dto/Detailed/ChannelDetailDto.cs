@@ -10,5 +10,6 @@ namespace messaging_service.models.dto.Detailed
         public string? Description { get; set; }
         public DateTime? Created_at { get; set; }
         public bool Is_private { get; set; }
+        public int WorkspaceId { get; set; }
     }
 }

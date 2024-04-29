@@ -1,14 +1,17 @@
-<div class="h-40 mt-auto w-3/4 fixed bottom-0 ">
+<div
+  class="h-40 mt-auto w-3/4 fixed bottom-0 border rounded-3xl border-opacity-100 border-base-300 ml-20 mb-6"
+>
   <!-- Textarea -->
-  <div class="relative m-5 focus:border-black">
+  <div class="relative m-5">
     <form [formGroup]="messageForm" (ngSubmit)="onSend()">
       <label for="hs-textarea-ex-2" hidden="hidden"></label>
       <textarea
         id="hs-textarea-ex-2"
-        class="p-4 pb-12 block w-full bg-base-100 border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-800 black:border-gray-700 dark:text-gray-400 dark:focus:ring-gray-600"
+        class="p-4 pb-16 block w-full bg-base-100 text-sm"
         type="text"
         formControlName="message"
         placeholder="Ask me anything..."
+        required
       ></textarea>
       <div
         class="absolute bottom-px inset-x-px p-2 rounded-b-md bg-base-100 dark:bg-slate-800"
