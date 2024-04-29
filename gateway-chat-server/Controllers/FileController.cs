@@ -3,11 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using gateway_chat_server.Hubs;
 using gateway_chat_server.Models;
-using System;
-using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
-using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using gateway_chat_server.Producer;
 using Newtonsoft.Json;
 

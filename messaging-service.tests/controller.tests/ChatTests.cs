@@ -1,12 +1,6 @@
-﻿using Amazon.S3;
-using AutoMapper;
-using messaging_service.Data;
+﻿using AutoMapper;
 using messaging_service.models.domain;
-using messaging_service.Repository;
-using System.Threading.Tasks;
 using Moq;
-using Bogus;
-using Microsoft.EntityFrameworkCore;
 using messaging_service.Controllers;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Response;
