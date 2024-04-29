@@ -1,0 +1,25 @@
+<div class="flex flex-wrap justify-center ml-30">
+  <div class="card w-64 bg-base-100 shadow-xl aa mb-4 mr-4" *ngFor="let item of tasks; let index = index">
+    <div class="card-body">
+      <h2 class="card-title">{{ item.title }}</h2>
+      <p>Dead-Line: {{ item.end }}</p>
+      <p>Progress:{{ item.status }}%</p>
+      <div class="card-actions justify-center">
+        <button class="btn btn-neutral text-xs px-2 py-1" (click)="detail(item.no)">Details</button>
+        <button class="btn btn-success px-2 py-1"
+                (click)="done(item.no)"
+                [disabled]="item.status === 100 || isBeforeToday(item.start) || isAfterDead(item.end)">
+          {{ isBeforeToday(item.start) ? 'To Do' : (isAfterDead(item.end) ? 'Missed' : (item.status === 100 ? 'Done' : 'Complete')) }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<ng-toast></ng-toast>
+
+
+

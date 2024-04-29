@@ -1,0 +1,132 @@
+
+
+<div class="mt-12 ee  ">
+
+  <div class="flex justify-end">
+    <button class="addTask bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="addTask()" mat-raised-button>Add Task</button>
+  </div>
+
+  <form class="mt-12">
+    <div class="grid grid-cols-5  gap-1">
+      <div class="">
+        <mat-form-field  >
+          <mat-label>Search</mat-label>
+          <input matInput  placeholder="title search">
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field   >
+          <mat-label >By Project</mat-label>
+          <mat-select class="w-full">
+            <mat-option  *ngFor="let project of arrProjects" [value]="project?.id">
+              {{project?. projectName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field   >
+          <mat-label>By User</mat-label>
+          <mat-select class="w-full">
+            <mat-option *ngFor="let user of arrUsers" [value]="user?.id">
+              {{user?.userName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field >
+          <mat-label>Status</mat-label>
+          <mat-select class="w-full">
+            <mat-option *ngFor="let item of status" [value]="item?.id">
+              {{item?.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div >
+        <mat-form-field  >
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [rangePicker]="picker" class="w-full">
+            <input matStartDate placeholder="Start date" class="w-full">
+            <input matEndDate placeholder="End date" class="w-full">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+</div>
+  <div   class="er listBox ">
+    <table  mat-table [dataSource]="arrTasks" class="mat-elevation-z8 w-full">
+
+
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef>No.</th>
+        <td mat-cell  *matCellDef="let element;let index = index"> {{index + 1}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef>Title</th>
+        <td mat-cell *matCellDef="let element">{{element.title}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="projectName">
+        <th mat-header-cell *matHeaderCellDef>Project Name</th>
+        <td mat-cell *matCellDef="let element">{{element.projectName}}</td>
+      </ng-container>
+
+
+
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef>User</th>
+        <td mat-cell *matCellDef="let element">{{element.userName}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="deadLineDate">
+        <th mat-header-cell *matHeaderCellDef>DeadLine Date</th>
+        <td mat-cell *matCellDef="let element">{{element.end}}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.status === 100 ? 'Completed' : 'In Progress' }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="w-20"></th>
+        <td mat-cell *matCellDef="let element">
+          <button   (click)="updateTask(element.no)" class="btn btn-warning bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" mat-raised-button>Update</button>
+          <button (click)="deleteTask($event,element.no)" mat-raised-button color="warn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Delete</button>
+
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+
+
+
+
+
+
+
+
+
+<ng-toast></ng-toast>
+

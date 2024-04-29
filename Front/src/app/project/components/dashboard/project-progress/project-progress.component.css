@@ -1,0 +1,27 @@
+.top-countries {
+  width: 100%;
+  margin-inline: auto;
+  box-shadow: 2px 2px 2px 2px hsl(0, 0%, 70%);
+  background-color: white;
+  padding: 1rem;
+  height: 550px;
+}
+
+.countries-header {
+  font-size: 1.05em;
+  color: gray;
+}
+
+.countries-list {
+  height: 95%;
+  max-height: 95%;
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+
+.country-item {
+  margin-top: 1em;
+}
+.ee{
+  margin-top: -24px;
+}

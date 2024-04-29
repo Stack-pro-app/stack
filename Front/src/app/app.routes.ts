@@ -20,4 +20,8 @@ export const routes: Routes = [
   { path: 'Create', title: 'Create', component: CreateWorkSpaceComponent },
   { path: 'Call/:ChannelString', title: 'Call', component: VideoCallComponent },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
+  {
+    path: 'project',
+    loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
+  },
 ];

@@ -1,0 +1,18 @@
+
+
+
+
+<div class="m-24">
+  <ejs-gantt  height="490px" #ganttObject [allowExcelExport]="true"
+              [dataSource]="data$ | async" taskMode="Manual" [enableCriticalPath]='true'  [editSettings]="editSettings" [toolbar]="toolbar"
+              [taskFields]="taskSettings" [labelSettings]="labelSettings" [allowPdfExport]="true"  (toolbarClick)="toolbarClick($event)">
+
+  </ejs-gantt>
+  <button routerLink="/project/xx" class=" btn btn-primary" >SHOW STATISTICS</button>
+</div>
+
+
+
+
+
+

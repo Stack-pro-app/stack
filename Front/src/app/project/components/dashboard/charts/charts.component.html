@@ -1,0 +1,7 @@
+<div>
+  <ejs-chart id="chart-container" [primaryXAxis]='primaryXAxis'[primaryYAxis]='primaryYAxis' [title]='title'>
+    <e-series-collection>
+      <e-series [dataSource]="data$ | async" type='Column' xName='x' yName='y' name='Progress'></e-series>
+    </e-series-collection>
+  </ejs-chart>
+</div>

@@ -1,0 +1,52 @@
+<table mat-table [dataSource]="arrTasks">
+  <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef>No.</th>
+    <td mat-cell *matCellDef="let element; let index = index">{{ index + 1 }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>Title</th>
+    <td mat-cell *matCellDef="let element">{{ element.title }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="projectName">
+    <th mat-header-cell *matHeaderCellDef>Project Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.projectName }}</td>
+  </ng-container>
+
+  <!-- User Column -->
+  <ng-container matColumnDef="user">
+   <!--lkm--> <th mat-header-cell *matHeaderCellDef>User</th>
+    <td mat-cell *matCellDef="let element">{{ element.userName }}</td>
+  </ng-container>
+
+  <!-- DeadLine Date Column -->
+  <ng-container matColumnDef="deadLineDate">
+    <th mat-header-cell *matHeaderCellDef>DeadLine Date</th>
+    <td mat-cell *matCellDef="let element">{{ element.end }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let element" [ngClass]="{
+        'done-task': element.status === 100,
+        'to-do-task': isBeforeToday(element.start),
+        'missed-task': isAfterDead(element.end),
+        'in-progress-task': !isBeforeToday(element.start) && !isAfterDead(element.end) && element.status !== 100
+      }">
+      {{
+      element.status === 100 ? 'Done':
+      isBeforeToday(element.start) ? 'To Do' :
+        isAfterDead(element.end) ? 'Not Completed': 'In Progress'
+
+      }}
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+
+
+

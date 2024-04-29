@@ -1,0 +1,18 @@
+
+
+<div class="mx-24">
+  <ejs-chart id="chart-container" [primaryXAxis]='primaryXAxis'[primaryYAxis]='primaryYAxis' [title]='title'>
+    <e-series-collection>
+      <e-series [dataSource]="data$ | async" type='Column' xName='x' yName='y' name='Progress'></e-series>
+    </e-series-collection>
+  </ejs-chart>
+</div>
+
+<ejs-circularchart3d style='display:block;' align='center' tilt='-45'  [legendSettings]="legendSettings">
+  <e-circularchart3d-series-collection>
+    <e-circularchart3d-series [dataSource]="data$ | async" xName='x' yName='y' [dataLabel]='dataLabel'>
+    </e-circularchart3d-series></e-circularchart3d-series-collection>
+</ejs-circularchart3d>
+
+
+

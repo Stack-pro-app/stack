@@ -1,0 +1,17 @@
+<ejs-chart id="chart-container" [primaryXAxis]='primaryXAxis'[primaryYAxis]='primaryYAxis' [title]='title'>
+  <e-axes>
+    <e-axis rowIndex=1 name='yAxis1' opposedPosition='true' title='Progress' [majorGridLines]='majorGridLines'
+            labelFormat='{value}%'
+            [minimum]='0' [maximum]='100' [interval]='10' [lineStyle]='lineStyle'>
+    </e-axis>
+  </e-axes>
+  <e-rows>
+    <e-row height=40%></e-row>
+    <e-row height=60%></e-row>
+  </e-rows>
+  <e-series-collection>
+    <e-series [dataSource]='chartData' type='Column' xName='x' yName='y' name='Progress'></e-series>
+    <e-series [dataSource]='chartData' type='Line' xName='x' yName='y1' name='Progress' yAxisName='yAxis1' [marker]='marker'></e-series>
+  </e-series-collection>
+</ejs-chart>
+
