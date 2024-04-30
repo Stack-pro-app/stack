@@ -79,7 +79,7 @@ services:
     container_name: notif-service
     image:
     ports:
-      - "8090:8080"
+      - "8092:8080"
     networks:
       - backend
       - notification
