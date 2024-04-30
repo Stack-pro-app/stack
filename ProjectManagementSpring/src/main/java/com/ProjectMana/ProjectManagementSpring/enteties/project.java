@@ -1,12 +1,14 @@
 package com.ProjectMana.ProjectManagementSpring.enteties;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 
@@ -30,6 +32,12 @@ public class project {
 
   private String clientName ;
 
+  @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+  @JsonManagedReference
 
+    public List<Task> tasks ;
 
+    public project(Integer id) {
+        this.id = id;
+    }
 }
