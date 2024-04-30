@@ -10,23 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3179422e-f3d5-46e7-b9e6-1000df6c0de0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_common_http.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_core.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_forms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_platform-browser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/@angular_router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/jwt-decode.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/jwt-decode.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/rxjs.js" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/.angular/cache/17.2.2/vite/deps/rxjs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/app.routes.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/app.routes.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/core/services/Auth/auth.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/core/services/Auth/auth.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/core/services/Channel/channel.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/core/services/Channel/channel.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/core/services/Chat/chat.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/core/services/Chat/chat.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/core/services/Workspace/workspace.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/core/services/Workspace/workspace.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/core/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/core/services/user.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Front/src/app/features/pages/main/main.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/../Front/src/app/features/pages/main/main.component.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.auth-service/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.auth-service/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.dll" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.exe" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/bin/Debug/net8.0/auth-service.exe" afterDir="false" />
@@ -40,10 +23,6 @@
       <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/ref/auth-service.dll" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/ref/auth-service.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/refint/auth-service.dll" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/Debug/net8.0/refint/auth-service.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/auth-service/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/rider.project.model.nuget.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/auth-service/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/auth-service/obj/rider.project.restore.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../messaging-service/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../messaging-service/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../messaging-service/Properties/launchSettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../messaging-service/Properties/launchSettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../messaging-service/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/../messaging-service/appsettings.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +54,7 @@
     ".NET Launch Settings Profile.auth-service: https.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "Video-Call-Impl",
+    "git-widget-placeholder": "messaging-v2",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -154,6 +133,7 @@
       <workItem from="1709997226688" duration="743000" />
       <workItem from="1710002023367" duration="402000" />
       <workItem from="1710013780176" duration="753000" />
+      <workItem from="1712921726430" duration="826000" />
     </task>
     <servers />
   </component>

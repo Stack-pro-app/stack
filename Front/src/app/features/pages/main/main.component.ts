@@ -163,6 +163,8 @@ export class MainComponent implements OnInit, OnChanges {
     this.channelRequest.description = this.channelForm.value.channelDescription;
     this.service.CreateChannel(this.channelRequest).subscribe({
       next: (response) => {
+        console.log(response);
+        
         this.reload();
       },
       error: (error) => {
@@ -199,9 +201,20 @@ export class MainComponent implements OnInit, OnChanges {
     });
   }
   onChangeChannel(channel: Channel) {
-    this.currentChannelP = channel;
+    this.service.getChannel(channel.id).subscribe({
+      next: (response) => {
+        this.currentChannelP = response.result;
+        console.log(response);
+        
+      },
+      error: (error) => {
+        console.error('Getting Messages  error', error);
+      },
+      complete: () => {},
+    });
+     
     console.log('HEEEEEEEEEEEREE', this.currentChannelP);
-  }
+  }//BACK
   onDeleteChannel() {
     this.service.Delete(this.currentChannelP.id).subscribe({
       next: (response) => {
@@ -266,7 +279,7 @@ export class MainComponent implements OnInit, OnChanges {
   onGetUsers() {
     this.userService.getUersFromWorkSpace(this.currentWorkspace.id).subscribe({
       next: (response) => {
-        this.CUsers = response;
+        this.CUsers = response.result;
         console.log('Users', this.CUsers);
       },
       error: (error) => {

@@ -23,40 +23,41 @@ export class ChannelComponent implements OnInit, OnChanges {
   @Input({ required: true }) currentChannelP!: Channel;
   messages: any[] = [];
   //add the messaging service here
-  constructor(private service: ChatService,
-    private signalrService : SignalrService) {}
+  constructor(
+    private service: ChatService,
+    private signalrService: SignalrService,
+    private channelService: ChannelService
+  ) {}
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
-     console.log("Changed WorkSpace Chanel" ,changes['currentChannelP']);
-          console.log(' ChanelStr', this.currentChannelP.channelString);
+      this.messages = [];
+      this.getMessages();
 
       this.signalrService.joinChannel(this.currentChannelP.channelString);
-
     }
   }
   ngOnInit(): void {
-     this.signalrService.startConnection().subscribe(() => {
-            this.signalrService.joinChannel(this.currentChannelP.channelString);
+    this.signalrService.startConnection().subscribe(() => {
+      this.signalrService.joinChannel(this.currentChannelP.channelString);
 
-       this.signalrService.receiveMessage().subscribe((message) => {
+      this.signalrService.receiveMessage().subscribe((message) => {
         // Before you add the message and show it make sure that you have added the user by using a user getter api
         console.log(message);
-        this.messages.push(message)         ;
-       });
-     });
-   this.getMessages();
+        this.messages.push(message);
+      });
+    });
+    this.getMessages();
   }
   getMessages() {
     this.service.GetMessages(this.currentChannelP.id, 1).subscribe({
       next: (response) => {
         this.messages = response.result;
-        console.log("The messages",this.messages);
+        console.log('The messages', this.messages);
       },
       error: (error) => {
         console.error('Getting Messages  error', error);
       },
-      complete: () => {
-      },
+      complete: () => {},
     });
   }
 }

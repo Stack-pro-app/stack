@@ -19,7 +19,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD") ?? "";
 
     //string connectionString = $"Server={dbHost},1433;Database={dbName};User Id=SA;Password={dbPassword};Trusted_Connection=false;TrustServerCertificate=True";
-    string connectionString = "Server=localhost;Database=dev;Trusted_Connection=True;TrustServerCertificate=True";
+    string connectionString = "Server=DESKTOP-HE8J79E;Database=MessagingV;Trusted_Connection=True;TrustServerCertificate=True";
     option.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure();

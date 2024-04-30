@@ -25,4 +25,8 @@ export class ChannelService {
     });
     return this.http.put(RequestUrl, data, { headers });
   }
+  getChannel(data:any):Observable<any>{
+     const RequestUrl = `${this.url}/${data}`;
+     return this.http.get(RequestUrl);
+  }
 }

@@ -60,7 +60,7 @@ namespace messaging_service.Repository
                 IEnumerable<Channel> channel = await _context.Channels.Where(x => x.WorkspaceId == workspaceId).ToListAsync() ?? throw new ValidationException("invalid Channels");
                 Channel mainChannel = channel.FirstOrDefault(c => c.Name == "main") ?? throw new ValidationException("Invalid Workspace");
                 ChannelDetailDto mainDetail = _mapper.Map<ChannelDetailDto>(mainChannel);
-                IEnumerable<Channel> publicChannels = channel.Where(c =>c.Name != "main" && c.Is_private == false).ToList();
+                IEnumerable<Channel> publicChannels = channel.Where(c =>c.Name != "main").ToList();
                 IEnumerable<Channel> authorizedChannels = await _context.Members.Where(m => m.UserId == userId).Include(m => m.Channel).Select(m => m.Channel).Where(c=>c.Is_OneToOne == false).ToListAsync();
                 IEnumerable<Channel> channels = publicChannels.Concat(authorizedChannels);
                 IEnumerable<ChannelMinimalDto> minimalChannels = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(channels);
