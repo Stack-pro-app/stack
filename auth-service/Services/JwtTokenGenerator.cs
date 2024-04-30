@@ -20,7 +20,8 @@ public class JwtTokenGenerator : IJwtTokenGenerator
     public string GenerateToken(ApplicationUser applicationUser,IEnumerable<string> roles)
     {
         var tokenHolder = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_jwtOptions.Secret);
+        var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+        var key = Encoding.ASCII.GetBytes(jwtKey??"SECRET");
         var claimList = new List<Claim>()
         {
             new Claim(JwtRegisteredClaimNames.Email, applicationUser.Email),

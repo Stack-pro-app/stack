@@ -102,7 +102,6 @@ public class AuthService : IAuthService
                 _roleManager.CreateAsync(new IdentityRole(rolename)).GetAwaiter().GetResult();
 
             }
-
             await _userManager.AddToRoleAsync(user, rolename);
             return true;
         }

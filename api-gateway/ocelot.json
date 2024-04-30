@@ -10,7 +10,14 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Channel"
+      "DownstreamPathTemplate": "/api/Channel",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      },
+      "AddHeadersToRequest": {
+        "AuthId": "Claims[sub] > value > |"
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Channel/{id}",
@@ -22,7 +29,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Channel/{id}"
+      "DownstreamPathTemplate": "/api/Channel/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Channel/AddUser/{id}",
@@ -34,7 +45,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Channel/AddUser/{channelId}"
+      "DownstreamPathTemplate": "/api/Channel/AddUser/{channelId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Chat",
@@ -46,7 +61,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Chat"
+      "DownstreamPathTemplate": "/api/Chat",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Chat/{id}",
@@ -58,7 +77,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Chat/{id}"
+      "DownstreamPathTemplate": "/api/Chat/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Chat/channel/{id}",
@@ -70,7 +93,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Chat/channel/{channelId}"
+      "DownstreamPathTemplate": "/api/Chat/channel/{channelId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "DownstreamScheme": "http",
@@ -82,7 +109,11 @@
       ],
       "DownstreamPathTemplate": "/api/User",
       "UpstreamPathTemplate": "/api/User",
-      "UpstreamHttpMethod": [ "Post", "Put" ]
+      "UpstreamHttpMethod": [ "Post", "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
 
     },
     {
@@ -95,7 +126,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/User/{authId}"
+      "DownstreamPathTemplate": "/api/User/{authId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/User/Workspace",
@@ -107,7 +142,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/User/Workspace"
+      "DownstreamPathTemplate": "/api/User/Workspace",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/User/channel/{channelId}",
@@ -119,7 +158,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/User/channel/{channelId}"
+      "DownstreamPathTemplate": "/api/User/channel/{channelId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/User/Workspace/{workspaceId}",
@@ -131,7 +174,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/User/Workspace/{workspaceId}"
+      "DownstreamPathTemplate": "/api/User/Workspace/{workspaceId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/User/email/{email}",
@@ -143,7 +190,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/User/email/{email}"
+      "DownstreamPathTemplate": "/api/User/email/{email}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/User/myworkspaces/{authId}",
@@ -155,7 +206,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/User/myworkspaces/{authId}"
+      "DownstreamPathTemplate": "/api/User/myworkspaces/{authId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Workspace",
@@ -167,7 +222,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Workspace"
+      "DownstreamPathTemplate": "/api/Workspace",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Workspace/{id}",
@@ -179,7 +238,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Workspace/{id}"
+      "DownstreamPathTemplate": "/api/Workspace/{id}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Workspace/{id}/user/{userId}",
@@ -191,7 +254,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Workspace/{id}/user/{userId}"
+      "DownstreamPathTemplate": "/api/Workspace/{id}/user/{userId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
@@ -215,7 +282,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Notification/Unseen/{notificationString}"
+      "DownstreamPathTemplate": "/api/Notification/Unseen/{notificationString}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Notification/Seen/{notificationString}",
@@ -227,7 +298,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Notification/Seen/{notificationString}"
+      "DownstreamPathTemplate": "/api/Notification/Seen/{notificationString}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/Notification/SetSeen/{notificationString}",
@@ -239,8 +314,12 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Notification/SetSeen/{notificationString}"
-    }
+      "DownstreamPathTemplate": "/api/Notification/SetSeen/{notificationString}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
+    },
     {
       "UpstreamPathTemplate": "/api/Notification",
       "UpstreamHttpMethod": [ "Post" ],
@@ -251,16 +330,22 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Notification"
+      "DownstreamPathTemplate": "/api/Notification",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     }
-
-
-
-
-
-
-
   ],
+  "FileCacheOptions": {
+    "TtlSeconds": 10
+  },
+  "RateLimitOptions": {
+    "EnableRateLimiting": true,
+    "Period": "10s",
+    "PeriodTimespan": 10,
+    "Limit": 20
+  },
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:8084/"
   }
