@@ -25,7 +25,7 @@ jobs:
       - name: Test and Build
         run: |
           cd ProjectManagementSpring
-          mvn install -DskipTests
+          mvn clean install -DskipTests
 
       - name: Build Docker image
         uses: docker/build-push-action@v5
@@ -45,7 +45,7 @@ jobs:
       - name: push image
         uses: docker/build-push-action@v5
         with:
-          context: ./notif-service
+          context: ./ProjectManagementSpring
           dockerfile: Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-project-management-service:latest
