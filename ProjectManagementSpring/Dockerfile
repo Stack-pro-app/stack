@@ -7,6 +7,6 @@ RUN mvn clean install -DskipTests
 # Runtime stage
 FROM openjdk:17-alpine
 WORKDIR /app
-COPY --from=build /app/target/ProjectManagementSpring-0.0.1-SNAPSHOT.jar .
+COPY --from=build /app/target/ProjectManagementSpring-SNAPSHOT.jarr .
 EXPOSE 8080
-CMD ["java", "-jar", "ProjectManagementSpring-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "ProjectManagementSpring-SNAPSHOT.jar"]
