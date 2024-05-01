@@ -33,7 +33,7 @@ jobs:
           context: ./ProjectManagementSpring
           dockerfile: Dockerfile
           push: false
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-project-Management-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-project-management-service:latest
 
 
       - name: login to docker hub
@@ -48,4 +48,4 @@ jobs:
           context: ./notif-service
           dockerfile: Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-project-Management-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/slack-project-management-service:latest
