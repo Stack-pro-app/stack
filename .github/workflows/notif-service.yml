@@ -27,7 +27,7 @@ jobs:
       - name: Restore dependencies
         run: |
           cd notif-service
-          dotnet restore
+          dotnet restore notif-service.sln
 
       - name: Build project
         run: |
