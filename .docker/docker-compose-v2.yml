@@ -107,7 +107,7 @@ services:
       - notification
   projectManagement:
     container_name: projectManagement
-    image: oussamazaoui872/slack-project-Management-service:latest
+    image: oussamazaoui872/slack-project-management-service:latest
     ports:
       - "8088:8080":
     depends_on:
