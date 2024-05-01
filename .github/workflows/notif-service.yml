@@ -32,7 +32,7 @@ jobs:
       - name: Build project
         run: |
           cd notif-service
-          dotnet build
+          dotnet build notif-service.sln
 
       - name: Test project
         run: |
