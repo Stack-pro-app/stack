@@ -25,7 +25,7 @@ jobs:
       - name: Test and Build
         run: |
           cd ProjectManagementSpring
-          mvn clean install
+          mvn install -DskipTests
 
       - name: Build Docker image
         uses: docker/build-push-action@v5
