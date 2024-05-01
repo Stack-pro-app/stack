@@ -37,7 +37,7 @@ jobs:
       - name: Test project
         run: |
          cd notif-service
-         dotnet test
+         dotnet test notif-service.sln
 
       - name: Build Docker image
         uses: docker/build-push-action@v5
