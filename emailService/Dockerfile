@@ -6,6 +6,6 @@ RUN mvn clean install -DskipTests
 # Runtime stage
 FROM openjdk:17-alpine
 WORKDIR /app
-COPY --from=build /app/target/emailService.jar .
+COPY --from=build /app/target/emailService-SNAPSHOT.jar .
 EXPOSE 8080
 CMD ["java", "-jar", "emailService-SNAPSHOT.jar"]
