@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.stack</groupId>
 	<artifactId>emailService</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>SNAPSHOT</version>
 	<name>emailService</name>
 	<description>emailService</description>
 	<properties>
