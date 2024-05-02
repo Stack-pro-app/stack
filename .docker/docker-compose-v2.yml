@@ -16,13 +16,7 @@ services:
       - RABBITMQ_DEFAULT_PASS=password  
     networks:
       - backend
-  eureka:
-    container_name: eureka
-    image: oussamazaoui872/slack-eureka-server:latest
-    ports:
-      - "8761:8761"
-    networks:
-      - backend
+  
   gateway-chat:
     container_name: gateway-chat
     image: oussamazaoui872/slack-gateway-chat-server:latest
@@ -152,6 +146,14 @@ services:
       - ACCEPT_EULA=Y
     networks:
       - auth-service
+      
+  email-service:
+    container_name: email-service
+    image: oussamazaoui872/slack-email-service:latest
+    ports:
+      - "8087:8080"
+     networks:
+      - backend  
 
 networks:
   backend:
