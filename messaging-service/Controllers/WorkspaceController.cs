@@ -1,7 +1,4 @@
-﻿
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using messaging_service.Repository.Interfaces;
 using AutoMapper;
 using messaging_service.models.dto.Requests;
@@ -9,7 +6,7 @@ using messaging_service.models.dto.Response;
 using messaging_service.models.dto.Others;
 using messaging_service.models.domain;
 using messaging_service.models.dto.Detailed;
-using System.ComponentModel.DataAnnotations;
+using messaging_service.Filters;
 
 namespace messaging_service.Controllers
 {
@@ -28,8 +25,8 @@ namespace messaging_service.Controllers
         [HttpPost]
         public async Task<ActionResult<ResponseDto>> CreateWorkspace([FromBody]WorkspaceRequestDto workspace)
         {
-                Console.Write(workspace);
-                await _repository.CreateWorkspaceAsync(workspace.Name,workspace.userId);
+                Workspace ws = _mapper.Map<Workspace>(workspace);
+                await _repository.CreateWorkspaceAsync(ws);
                     ResponseDto response = new()
                     {
                         Result = null,
@@ -37,12 +34,12 @@ namespace messaging_service.Controllers
                         Message = "Workspace Succesfully Created",
                     };
                     return Ok(response);
-
         }
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ResponseDto>> DeleteWorkspace([FromRoute]int id)
+        //Admin Middleware Here
+        [HttpDelete("{workspaceId}")]
+        public async Task<ActionResult<ResponseDto>> DeleteWorkspace([FromRoute]int workspaceId)
         {
-                await _repository.DeleteWorkspaceAsync(id);
+                await _repository.DeleteWorkspaceAsync(workspaceId);
                     ResponseDto response = new()
                     {
                         Result = null,
@@ -52,11 +49,11 @@ namespace messaging_service.Controllers
                     return Ok(response);
 
         }
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int id,[FromBody]WorkspaceName workspace)
+        [HttpPut("{workspaceId}")]
+        public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int workspaceId,[FromBody]WorkspaceName workspace)
         {
 
-                await _repository.UpdateWorkspaceAsync(id,workspace.Name);
+                await _repository.UpdateWorkspaceAsync(workspaceId, workspace.Name);
                     ResponseDto response = new()
                     {
                         Result = null,
@@ -65,13 +62,13 @@ namespace messaging_service.Controllers
                     };
                     return Ok(response);
         }
-        //Workspace and it's channels by Id (and the user's Id extacted from jwt Token!)
-        [HttpGet("{id}/user/{userId}")]
-        public async Task<ActionResult<ResponseDto>> GetWorkspace([FromRoute]int id, [FromRoute]int userId)
+
+        [HttpGet("{workspaceId}")]
+        public async Task<ActionResult<ResponseDto>> GetWorkspace([FromRoute]int workspaceId, [FromQuery]int userId)
         {
             try
             {
-                WorkspaceDetailDto workspace = await _repository.GetWorkspaceAsync(id,userId);
+                WorkspaceDetailDto workspace = await _repository.GetWorkspaceAsync(workspaceId,userId);
                 ResponseDto response = new()
                 {
                     Result = workspace,

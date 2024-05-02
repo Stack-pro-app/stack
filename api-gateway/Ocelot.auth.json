@@ -34,11 +34,7 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/auth/AssignRole",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKeys": [ "Bearer" ],
-        "AllowedScopes": []
-      }
+      "DownstreamPathTemplate": "/api/auth/AssignRole"
     }
   ]
 }

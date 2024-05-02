@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace messaging_service.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstCreate : Migration
+    public partial class first_create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,7 +25,8 @@ namespace messaging_service.Migrations
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     Last_login = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    AuthId = table.Column<int>(type: "int", nullable: false)
+                    AuthId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NotificationString = table.Column<string>(type: "nvarchar(450)", nullable: false, defaultValueSql: "NEWID()")
                 },
                 constraints: table =>
                 {
@@ -40,11 +41,19 @@ namespace messaging_service.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
+                    Created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
+                    AdminId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Workspaces", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Workspaces_Users_AdminId",
+                        column: x => x.AdminId,
+                        principalSchema: "chat",
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,10 +63,12 @@ namespace messaging_service.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ChannelString = table.Column<string>(type: "nvarchar(450)", nullable: false, defaultValueSql: "NEWID()"),
                     Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
                     Is_private = table.Column<bool>(type: "bit", nullable: false),
+                    Is_OneToOne = table.Column<bool>(type: "bit", nullable: true),
                     WorkspaceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -92,7 +103,7 @@ namespace messaging_service.Migrations
                         principalSchema: "chat",
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_UsersWorkspaces_Workspaces_WorkspaceId",
                         column: x => x.WorkspaceId,
@@ -109,14 +120,17 @@ namespace messaging_service.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    MessageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     ChannelId = table.Column<int>(type: "int", nullable: false),
-                    Message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Is_deleted = table.Column<bool>(type: "bit", nullable: false),
                     Modified_at = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
                     ParentId = table.Column<int>(type: "int", nullable: true),
-                    TaggedIds = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Attachement_Url = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attachement_Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Attachement_Key = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -140,7 +154,7 @@ namespace messaging_service.Migrations
                         principalSchema: "chat",
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -170,14 +184,22 @@ namespace messaging_service.Migrations
                         principalSchema: "chat",
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Channels_WorkspaceId",
+                name: "IX_Channels_ChannelString",
                 schema: "chat",
                 table: "Channels",
-                column: "WorkspaceId");
+                column: "ChannelString",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Channels_WorkspaceId_Name",
+                schema: "chat",
+                table: "Channels",
+                columns: new[] { "WorkspaceId", "Name" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Chats_ChannelId",
@@ -224,16 +246,30 @@ namespace messaging_service.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UsersWorkspaces_UserId",
+                name: "IX_Users_NotificationString",
+                schema: "chat",
+                table: "Users",
+                column: "NotificationString",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersWorkspaces_UserId_WorkspaceId",
                 schema: "chat",
                 table: "UsersWorkspaces",
-                column: "UserId");
+                columns: new[] { "UserId", "WorkspaceId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_UsersWorkspaces_WorkspaceId",
                 schema: "chat",
                 table: "UsersWorkspaces",
                 column: "WorkspaceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Workspaces_AdminId",
+                schema: "chat",
+                table: "Workspaces",
+                column: "AdminId");
         }
 
         /// <inheritdoc />
@@ -256,11 +292,11 @@ namespace messaging_service.Migrations
                 schema: "chat");
 
             migrationBuilder.DropTable(
-                name: "Users",
+                name: "Workspaces",
                 schema: "chat");
 
             migrationBuilder.DropTable(
-                name: "Workspaces",
+                name: "Users",
                 schema: "chat");
         }
     }

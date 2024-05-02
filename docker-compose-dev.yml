@@ -1,12 +1,4 @@
-version: '3.8'
 services:
-  # front:
-  #   build:
-  #     context: /front
-  #     dockerfile: Dockerfile
-  #   container_name: front
-  #   ports:
-  #     - "80:80"
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
@@ -32,8 +24,10 @@ services:
     environment:
       - MQ_HOST=rabbitmq
       - MQ_USER=user
-      - MQ_PASSWORD=password 
+      - MQ_PASSWORD=password
       - MQ_PORT=5672
+      - AWS_ACCESS_KEY_ID=AKIAYI4HD5JJE7IVFNXH
+      - AWS_SECRET_ACCESS_KEY=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
   messaging-service:
     container_name: messaging-service
     build:
@@ -55,6 +49,8 @@ services:
       - MQ_USER=user
       - MQ_PASSWORD=password
       - MQ_PORT=5672
+      - AWS_ACCESS_KEY_ID=AKIAYI4HD5JJE7IVFNXH
+      - AWS_SECRET_ACCESS_KEY=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
   api-gateway:
     container_name: api-gateway
     build:
@@ -64,6 +60,8 @@ services:
       - "8084:8080"
     networks:
       - backend
+    environment:
+      - JWT_KEY=ThisIsAVerySecretKeyForJWTGeneration
   database-1:
     container_name: database-1
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -107,8 +105,8 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password@12345#
     networks:
       - notification
-  auth_service:
-    container_name: auth_service
+  auth-service:
+    container_name: auth-service
     build:
       context: /auth-service
       dockerfile: Dockerfile
@@ -119,11 +117,13 @@ services:
       - auth
     depends_on:
       - database-3
+    restart: on-failure
     environment:
-      - DB_HOST=database-1
+      - DB_HOST=database-3
       - DB_NAME=stack-auth
-      - DB_PORT=1434
+      - DB_PORT=1433
       - DB_SA_PASSWORD=password@12345#
+      - JWT_KEY=ThisIsAVerySecretKeyForJWTGeneration
   database-3:
     container_name: database-3
     image: mcr.microsoft.com/mssql/server:2022-latest

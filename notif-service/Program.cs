@@ -7,12 +7,10 @@ using notif_service.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR();
 
-// Add services to the container.
-/*
 NotificationDatabaseSettings NotificationDatabase = new()
 {
     ConnectionString = $"mongodb://{Environment.GetEnvironmentVariable("DB_USER")}:{Environment.GetEnvironmentVariable("DB_PASSWORD")}@{Environment.GetEnvironmentVariable("DB_HOST")}:{Environment.GetEnvironmentVariable("DB_PORT")}",
-    DatabaseName = "notifications-service",
+    DatabaseName = "notifications-db",
     NotificationsCollectionName = "Notifications"
 };
 builder.Services.Configure<NotificationDatabaseSettings>(options =>
@@ -20,7 +18,7 @@ builder.Services.Configure<NotificationDatabaseSettings>(options =>
     options.ConnectionString = NotificationDatabase.ConnectionString;
     options.DatabaseName = NotificationDatabase.DatabaseName;
     options.NotificationsCollectionName = NotificationDatabase.NotificationsCollectionName;
-});*/
+});
 builder.Services.Configure<NotificationDatabaseSettings>(builder.Configuration.GetSection("NotificationDatabase"));
 builder.Services.AddAutoMapper(typeof(NotificationProfile));
 builder.Services.AddScoped<INotificationService,NotificationService>();
@@ -35,12 +33,10 @@ using var scope = app.Services.CreateScope();
 var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer>();
 while (!rabbitMQConsumer.SetConnection()) ;
 rabbitMQConsumer.StartConsuming();
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 app.UseHttpsRedirection();
 

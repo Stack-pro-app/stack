@@ -24,7 +24,13 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    var dbHost = Environment.GetEnvironmentVariable("DB_HOST")?? "localhost";
+    var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "dev";
+    var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "1433";
+    var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD") ?? "";
+
+    string connectionString = $"Server={dbHost},{dbPort};Database={dbName};User Id=SA;Password={dbPassword};Trusted_Connection=false;TrustServerCertificate=True";
+    option.UseSqlServer(connectionString);
 } );
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 
@@ -39,6 +45,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+using var scope = app.Services.CreateScope();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -47,7 +54,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+await dbContext.Database.MigrateAsync();
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

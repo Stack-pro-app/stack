@@ -46,7 +46,7 @@ namespace messaging_service.Services
 
             };
             //Send notification
-            _producer.SendNotification(notification);
+            _producer.SendToQueue(notification,"notification");
         }
     }
 }

@@ -182,12 +182,21 @@ namespace messaging_service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NotificationString")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)")
+                        .HasDefaultValueSql("NEWID()");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthId")
                         .IsUnique();
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("NotificationString")
                         .IsUnique();
 
                     b.ToTable("Users", "chat");
@@ -245,8 +254,7 @@ namespace messaging_service.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name", "AdminId")
-                        .IsUnique();
+                    b.HasIndex("AdminId");
 
                     b.ToTable("Workspaces", "chat");
                 });
@@ -277,7 +285,7 @@ namespace messaging_service.Migrations
                     b.HasOne("messaging_service.models.domain.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Channel");
@@ -298,7 +306,7 @@ namespace messaging_service.Migrations
                     b.HasOne("messaging_service.models.domain.User", "User")
                         .WithMany("Memberships")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Channel");
@@ -311,7 +319,7 @@ namespace messaging_service.Migrations
                     b.HasOne("messaging_service.models.domain.User", "User")
                         .WithMany("UserWorkspaces")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("messaging_service.models.domain.Workspace", "Workspace")
@@ -323,6 +331,17 @@ namespace messaging_service.Migrations
                     b.Navigation("User");
 
                     b.Navigation("Workspace");
+                });
+
+            modelBuilder.Entity("messaging_service.models.domain.Workspace", b =>
+                {
+                    b.HasOne("messaging_service.models.domain.User", "Admin")
+                        .WithMany()
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
                 });
 
             modelBuilder.Entity("messaging_service.models.domain.Channel", b =>
