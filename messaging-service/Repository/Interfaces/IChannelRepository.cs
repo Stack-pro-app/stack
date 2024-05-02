@@ -17,5 +17,6 @@ namespace messaging_service.Repository.Interfaces
         Task<Channel> CreateOneToOneChannel(OneToOneChannelRequest request);
         Task<Channel?> GetOneToOneChannel(OneToOneChannelRequest request);
         Task<List<string>> GetChannelNotificationStrings(int channelId);
+        public Task<bool> VerifyAccess(string authId, int Channel_Id);
     }
 }

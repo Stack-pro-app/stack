@@ -1,25 +1,28 @@
+using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
 using messaging_service.Consumer;
 using messaging_service.Data;
 using messaging_service.Exceptions;
+using messaging_service.Filters;
 using messaging_service.MappingProfiles;
 using messaging_service.Producer;
 using messaging_service.Repository;
 using messaging_service.Repository.Interfaces;
+using messaging_service.Services;
 using Microsoft.EntityFrameworkCore;
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
+var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "messaging-db";
+var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD") ?? "";
+
+string connectionString = $"Server={dbHost},1433;Database={dbName};User Id=SA;Password={dbPassword};Trusted_Connection=false;TrustServerCertificate=True";
+
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
-
-    var dbHost = Environment.GetEnvironmentVariable("DB_HOST")?? "localhost";
-    var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "dev";
-    var dbPassword = Environment.GetEnvironmentVariable("DB_SA_PASSWORD") ?? "";
-
-    //string connectionString = $"Server={dbHost},1433;Database={dbName};User Id=SA;Password={dbPassword};Trusted_Connection=false;TrustServerCertificate=True";
-    string connectionString = "Server=localhost;Database=dev;Trusted_Connection=True;TrustServerCertificate=True";
+    //string connectionString = "Server=localhost;Database=messaging-db;Trusted_Connection=True;TrustServerCertificate=True";
     option.UseSqlServer(connectionString, sqlServerOptionsAction: sqlOptions =>
     {
         sqlOptions.EnableRetryOnFailure();
@@ -37,7 +40,12 @@ builder.Services.AddCors(options =>
                       });
 });
 
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+AWSOptions awsOptions = new();
+
+awsOptions.Credentials = new Amazon.Runtime.BasicAWSCredentials(Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID"), Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY"));
+awsOptions.Region = Amazon.RegionEndpoint.USEast1;
+
+builder.Services.AddDefaultAWSOptions(awsOptions);
 builder.Services.AddAWSService<IAmazonS3>();
 builder.Services.AddScoped<IRabbitMQProducer,RabbitMQProducer>();
 builder.Services.AddControllers();
@@ -45,6 +53,8 @@ builder.Services.AddScoped<RabbitMQConsumer>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHealthChecks();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>()
     .AddProblemDetails()
     .AddExceptionHandler<GlobalExceptionHandler>();
@@ -57,6 +67,12 @@ builder.Services.AddScoped<IChatRepository,ChatRepository>()
 builder.Services.AddScoped<IChannelRepository,ChannelRepository>()
     .AddProblemDetails()
     .AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddScoped<WorkspaceAccessFilter>()
+    .AddProblemDetails()
+    .AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddScoped<AdminAccess>()
+    .AddProblemDetails()
+    .AddExceptionHandler<GlobalExceptionHandler>();
 
 
 builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile));
@@ -67,14 +83,15 @@ var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer
 while (!rabbitMQConsumer.SetConnection()) ;
 rabbitMQConsumer.StartConsuming();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    ApplyMigration();
-}
 
+app.UseHealthChecks("/health");
+app.UseSwagger();
+app.UseSwaggerUI();
+var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+await dbContext.Database.MigrateAsync();
+
+builder.Services.AddHealthChecks();
+    
 app.UseAuthorization();
 app.UseStatusCodePages();
 app.UseExceptionHandler();
@@ -83,7 +100,7 @@ app.UseCors(myAllowSpecificOrigins);
 
 
 app.Run();
-
+/*
 void ApplyMigration()
 {
     using (var scope = app.Services.CreateScope())
@@ -95,4 +112,4 @@ void ApplyMigration()
             _db.Database.Migrate();
         }
     }
-}
+}*/

@@ -2,6 +2,6 @@
 {
     public interface IRabbitMQProducer
     {
-       void SendNotification<T> (T notification);
+       void SendToQueue<T> (T message,string queue);
     }
 }

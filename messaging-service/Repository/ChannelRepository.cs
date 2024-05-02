@@ -151,5 +151,14 @@ namespace messaging_service.Repository
             result = await _context.Members.Where(m=>m.ChannelId==channel.Id).Include(m=>m.User).Select(m=>m.User.NotificationString).Distinct().ToListAsync();
             return result;
         }
+
+        public async Task<bool> VerifyAccess(string authId, int Channel_Id)
+        {
+            var result = await _context.Channels.FirstOrDefaultAsync(c => c.Id == Channel_Id) ?? throw new ValidationException("Invalid Channel");
+            if (result.Is_private == false) return true;
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId);
+            if (user == null) return false;
+            return await _context.Members.AnyAsync(m=> m.UserId == user.Id && m.ChannelId == Channel_Id);
+        }
     }
 }

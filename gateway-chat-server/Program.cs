@@ -1,3 +1,4 @@
+using Amazon.Extensions.NETCore.Setup;
 using Amazon.S3;
 using gateway_chat_server.Hubs;
 using gateway_chat_server.Producer;
@@ -6,7 +7,12 @@ var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+AWSOptions awsOptions = new();
+
+awsOptions.Credentials = new Amazon.Runtime.BasicAWSCredentials(Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID"), Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY"));
+awsOptions.Region = Amazon.RegionEndpoint.USEast1;
+
+builder.Services.AddDefaultAWSOptions(awsOptions);
 builder.Services.AddAWSService<IAmazonS3>();
 // Add services to the container.
 builder.Services.AddSignalR().AddJsonProtocol();

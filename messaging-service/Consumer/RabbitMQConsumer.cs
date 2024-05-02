@@ -38,9 +38,11 @@ namespace messaging_service.Consumer
             _mapper = mapper;
             _logger = logger;
             hostName = Environment.GetEnvironmentVariable("MQ_HOST") ?? "localhost";
+            //hostName = "localhost";
             userName = Environment.GetEnvironmentVariable("MQ_USER") ?? "guest";
             password = Environment.GetEnvironmentVariable("MQ_PASSWORD") ?? "guest";
             port = Environment.GetEnvironmentVariable("MQ_PORT") ?? "5672";
+            //port = "5672";
             _notificationService = notif;
 
         }
@@ -68,10 +70,7 @@ namespace messaging_service.Consumer
                 Task.Delay(TimeSpan.FromSeconds(1));
                 return false;
             }
-            
-            
         }
-
         public void StartConsuming()
         {
             var consumer = new AsyncEventingBasicConsumer(_channel);

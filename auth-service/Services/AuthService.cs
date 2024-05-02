@@ -2,6 +2,7 @@
 using auth_service.Models;
 using auth_service.Models.Dto;
 using auth_service.Services.IService;
+using Azure;
 using Microsoft.AspNetCore.Identity;
 
 namespace auth_service.Services;
@@ -83,6 +84,7 @@ public class AuthService : IAuthService
             Name = user.Name,
             PhoneNumber = user.PhoneNumber
         };
+
         LoginResponseDto loginResponseDto = new LoginResponseDto()
         {
             User = userDto,
