@@ -1,5 +1,6 @@
 using auth_service.Data;
 using auth_service.Models;
+using auth_service.Producer;
 using auth_service.Services;
 using auth_service.Services.IService;
 using Microsoft.AspNetCore.Identity;
@@ -27,7 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 } );
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
-
+builder.Services.AddScoped<IRabbitMQProducer, RabbitMQProducer>();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddControllers();

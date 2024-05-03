@@ -261,3 +261,4 @@ C:\Users\hp\Documents\GitHub\stack\auth-service\auth-service\obj\Debug\net8.0\re
 C:\Users\hp\Documents\GitHub\stack\auth-service\auth-service\obj\Debug\net8.0\auth-service.pdb
 C:\Users\hp\Documents\GitHub\stack\auth-service\auth-service\obj\Debug\net8.0\auth-service.genruntimeconfig.cache
 C:\Users\hp\Documents\GitHub\stack\auth-service\auth-service\obj\Debug\net8.0\ref\auth-service.dll
+C:\Users\hp\Documents\GitHub\stack\auth-service\auth-service\bin\Debug\net8.0\RabbitMQ.Client.dll
