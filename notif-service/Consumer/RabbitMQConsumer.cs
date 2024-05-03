@@ -8,6 +8,8 @@ using notif_service.Services;
 using notif_service.Models;
 using Newtonsoft.Json;
 using notif_service.Hubs;
+using notif_service.Services.Email;
+using System.Xml;
 
 namespace notif_service.Consumer
 {
@@ -20,6 +22,7 @@ namespace notif_service.Consumer
         private readonly IMapper _mapper;
         private readonly ILogger<RabbitMQConsumer> _logger;
         private readonly INotificationService _notificationService;
+        private readonly IEmailservice _emailService;
         private readonly IHubContext<NotificationHub> _notificationHub;
         private string hostName;
         private string userName;
@@ -27,11 +30,13 @@ namespace notif_service.Consumer
         private string port;
 
 
-        public RabbitMQConsumer( IMapper mapper, ILogger<RabbitMQConsumer> logger,INotificationService notificationService,IHubContext<NotificationHub> notificationHub)
+        public RabbitMQConsumer( IMapper mapper, ILogger<RabbitMQConsumer> logger,INotificationService notificationService,
+            IHubContext<NotificationHub> notificationHub, IEmailservice emailservice)
         {
             _mapper = mapper;
             _logger = logger;
             _notificationService = notificationService;
+            _emailService = emailservice;
             _notificationHub = notificationHub;
             hostName = Environment.GetEnvironmentVariable("MQ_HOST") ?? "localhost";
             userName = Environment.GetEnvironmentVariable("MQ_USER")?? "guest";
@@ -87,6 +92,7 @@ namespace notif_service.Consumer
 
                 NotificationDtoV2 notificationDto = JsonConvert.DeserializeObject<NotificationDtoV2>(messageString) ?? throw new Exception("Invalid Format");
 
+                
                 Notification notification = _mapper.Map<Notification>(notificationDto);
 
                 string notificationJson = await _notificationService.AddNotificationAsync(notification);
@@ -94,7 +100,17 @@ namespace notif_service.Consumer
                 foreach(NotificationString n in notification.NotificationStrings)
                 {
                     await _notificationHub.Clients.Group(n.Value)
-                        .SendAsync("notificationReceived", notificationJson);
+                        .SendAsync("notificationReceived", "New Notifications");
+                }
+
+                if (notificationDto.MailTo != null)
+                {
+                    EmailDto email = _mapper.Map<EmailDto>(notificationDto);
+                    email.Links = email.Links?.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value + "?isEmail=True"
+                    );
+                    _emailService.SendEmailInvitation(email);
                 }
 
                 _channel?.BasicAck(ea.DeliveryTag, false);

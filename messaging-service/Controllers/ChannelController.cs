@@ -1,13 +1,10 @@
 ﻿using messaging_service.models.dto.Response;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using messaging_service.models.domain;
-using messaging_service.Repository;
 using AutoMapper;
 using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Others;
-using System.ComponentModel.DataAnnotations;
 using messaging_service.Repository.Interfaces;
 
 namespace messaging_service.Controllers

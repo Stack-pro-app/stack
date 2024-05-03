@@ -51,6 +51,8 @@ services:
       - MQ_PORT=5672
       - AWS_ACCESS_KEY_ID=AKIAYI4HD5JJE7IVFNXH
       - AWS_SECRET_ACCESS_KEY=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
+      - DOMAIN=localhost
+      - PORT=8090
   api-gateway:
     container_name: api-gateway
     build:

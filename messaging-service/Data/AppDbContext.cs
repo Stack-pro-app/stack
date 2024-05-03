@@ -1,4 +1,5 @@
 ﻿using messaging_service.models.domain;
+using messaging_service.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
 using System.Xml;
@@ -16,6 +17,7 @@ namespace messaging_service.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
         public DbSet<UserWorkspace> UsersWorkspaces { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
