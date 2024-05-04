@@ -21,15 +21,18 @@ public class projectDTO {
     private Integer  budget;
 
     private String clientName ;
+    private Integer workId ;
+    private String workName ;
 
-    public projectDTO(Integer id, String projectName, String projectDescrp, String start, String end, Integer budget, String clientName) {
-        this.id = id;
-        this.projectName = projectName;
-        this.projectDescrp = projectDescrp;
-        this.start = start;
-        this.end = end;
-        this.budget = budget;
-        this.clientName = clientName;
-    }
-
+  public projectDTO(Integer id, String projectName, String projectDescrp, String start, String end, Integer budget, String clientName, Integer workId, String workName) {
+    this.id = id;
+    this.projectName = projectName;
+    this.projectDescrp = projectDescrp;
+    this.start = start;
+    this.end = end;
+    this.budget = budget;
+    this.clientName = clientName;
+    this.workId = workId;
+    this.workName = workName;
+  }
 }

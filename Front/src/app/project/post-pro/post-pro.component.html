@@ -32,6 +32,17 @@
                 <mat-date-range-picker #picker></mat-date-range-picker>
               </mat-form-field>
             </div>
+            <div>
+              <mat-form-field>
+                <mat-label>WorkSpaces</mat-label>
+                <mat-select formControlName = 'workId'>
+
+                  <mat-option *ngFor="let work of works"  [value]="work.id" >
+                    {{ work.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
 
             <div class="btt1">
               <button (click)="checkName()">NEXT</button>

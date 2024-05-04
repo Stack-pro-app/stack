@@ -1,9 +1,6 @@
 package com.ProjectMana.ProjectManagementSpring.services;
 
-import com.ProjectMana.ProjectManagementSpring.DTO.GanttDTO;
-import com.ProjectMana.ProjectManagementSpring.DTO.TaskGant;
-import com.ProjectMana.ProjectManagementSpring.DTO.taskDTO;
-import com.ProjectMana.ProjectManagementSpring.DTO.taskDTO1;
+import com.ProjectMana.ProjectManagementSpring.DTO.*;
 import com.ProjectMana.ProjectManagementSpring.enteties.Task;
 import com.ProjectMana.ProjectManagementSpring.enteties.UserT;
 import com.ProjectMana.ProjectManagementSpring.enteties.project;
@@ -25,13 +22,16 @@ import java.time.temporal.TemporalUnit;
 public class taskService {
     private TaskRepo taskRepo ;
     private projectRepo  projectRepo ;
+    private projectService projectService ;
 
-  public taskService(TaskRepo taskRepo, com.ProjectMana.ProjectManagementSpring.repo.projectRepo projectRepo) {
+  public taskService(TaskRepo taskRepo, com.ProjectMana.ProjectManagementSpring.repo.projectRepo projectRepo, com.ProjectMana.ProjectManagementSpring.services.projectService projectService) {
     this.taskRepo = taskRepo;
     this.projectRepo = projectRepo;
+    this.projectService = projectService;
   }
 
   public taskDTO create(taskDTO t ){
+
         Task ts = new Task(t.getNo(),t.title,t.getDescription(),t.getEnd(),t.start,t.getStatus(),new project(t.projectId),new UserT(t.userId));
         Task ts1 = this.taskRepo.save(ts);
         t.no=ts1.getNo();
@@ -97,4 +97,17 @@ public class taskService {
   }
 
 
+  public List<taskDTO1> getAll0(Integer id) {
+    List<taskDTO1> l = new ArrayList<>();
+    List<project> projects  =  this.projectService.getAdminProject0(id) ;
+    List<Task> l1 = this.taskRepo.findAllByProjectIn(projects);
+    if(!l1.isEmpty()){
+      for(Task t : l1){
+        l.add(new taskDTO1(t.getNo(),t.getTitle(),t.getDescription(),t.getProject().getProjectName(),t.getUser().userName,t.getEnd(),t.getStatus(),t.getStart()));
+      }
+
+    }
+    return l ;
+
+  }
 }

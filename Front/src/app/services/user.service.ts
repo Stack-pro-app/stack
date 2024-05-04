@@ -11,8 +11,8 @@ export class UserService {
 
   URL = "http://localhost:8080"
   constructor(private htpp : HttpClient) { }
-  findAll(){
-    return this.htpp.get<UserInter>(this.URL.concat("/user"));
+  findAll(id:any){
+    return this.htpp.get<UserInter>(this.URL.concat("/user/").concat(id));
   }
   getWithTsk(){
     return this.htpp.get<UserInter[]>(this.URL.concat("/userAndTasks"));
@@ -26,6 +26,9 @@ export class UserService {
   }
 getActivity(userId : any, taskId : any){
     return this.htpp.get<ActivityInter[]>(this.URL.concat("/Activity/").concat(userId).concat("/").concat(taskId));
+}
+sameWork(pro_id:any,user_id:any){
+    return this.htpp.get(this.URL.concat("/user/sameWork/").concat(pro_id).concat("/").concat(user_id));
 }
 
 }

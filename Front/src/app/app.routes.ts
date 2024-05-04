@@ -16,7 +16,7 @@ export const routes: Routes = [
     {path:'Profile',title:'profile',component:ProfileComponent},
     {path:'Create',title:'Create',component:CreateWorkSpaceComponent},
   {
-    path: 'project',
+    path: 'project/:id',
     loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
   },
     {path:'**',pathMatch:'full',component:PageNotFoundComponent}

@@ -10,6 +10,7 @@ import {ProjectService} from "../../../services/project.service";
 import {ConfirmationService} from "primeng/api";
 import {UpdateTaskComponent} from "../update-task/update-task.component";
 import {execute} from "@angular-devkit/build-angular/src/builders/karma";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-list-tasks',
@@ -17,6 +18,8 @@ import {execute} from "@angular-devkit/build-angular/src/builders/karma";
   styleUrls: ['./list-tasks.component.scss']
 })
 export class ListTasksComponent implements OnInit {
+  act1:ActivatedRoute  ;
+  idAdmin :any;
   arrTasks:any;
 
   displayedColumns: string[] = ['position','title', 'projectName',  'user', 'deadLineDate', 'status', 'actions'];
@@ -30,27 +33,34 @@ export class ListTasksComponent implements OnInit {
     {name: "In-Prossing", id: 2},
   ]
 
-  constructor(public dialog: MatDialog, private fb: FormBuilder,private confirmationService: ConfirmationService ,private  taskservice:TaskService,private srv:UserService,private srv2:ProjectService,private toast: NgToastService) {
+  constructor(private act0:ActivatedRoute,public dialog: MatDialog, private fb: FormBuilder,private confirmationService: ConfirmationService ,private  taskservice:TaskService,private srv:UserService,private srv2:ProjectService,private toast: NgToastService) {
+    this.act1=act0;
   }
 
   ngOnInit(): void {
 
-    this.updateList();
 
-    this.srv.findAll().subscribe(
-      {
-        next: value =>{
-          this.arrUsers=value;
-        }
-      }
-    )
-    this.srv2.findAll().subscribe({
-      next: value =>{
-        this.arrProjects=value;
-      }
-    })
+    console.log(this.act1.paramMap.subscribe({
+      next :(value)=>{this.idAdmin=value?.get('id');
+        this.updateList();
+        this.srv.findAll(this.idAdmin).subscribe(
+          {
+            next: value =>{
+              this.arrUsers=value;
+            }
+          }
+        );
+        this.srv2.findAll().subscribe({
+          next: value =>{
+            this.arrProjects=value;
+          }
+        });
 
-    this.createform()
+        this.createform()
+
+      }}));
+
+
   }
 
 
@@ -68,26 +78,32 @@ export class ListTasksComponent implements OnInit {
   }
 
   updateList(){
-    this.taskservice.getAllTasks().subscribe({
+
+    this.taskservice.getAllTasks00(this.idAdmin).subscribe({
       next:value => this.arrTasks=value ,
       error :value=> this.toast.error({detail:"ERROR",summary:'ERROR while displaying tasks'+value,sticky:true})
     })
   }
   addTask() {
-    const dialogRef = this.dialog.open(AddTaskComponent, {
-      //width: '771px',
-      width: '696px',
-      height: '552px',
+    console.log(this.act1.paramMap.subscribe({
+        next :(value)=>{console.log(value);this.idAdmin=value?.get('id');
 
-      panelClass: 'custom-dialog'
-    });
+          const dialogConfig = new MatDialogConfig();
+          dialogConfig.width = '696px';
+          dialogConfig.height = '552px';
+          dialogConfig.panelClass = 'custom-dialog';
+          dialogConfig.data = { idAdmin: this.idAdmin }; // Pass idAdmin to the dialog
 
-    dialogRef.afterClosed().subscribe(result => {
+          const dialogRef = this.dialog.open(AddTaskComponent, dialogConfig);
 
+          dialogRef.afterClosed().subscribe(result => {
+            this.updateList();
+          });
 
-       this.updateList();
+          },
+      }
+    ));
 
-    });
   }
 
   deleteTask($event: MouseEvent,no:number) {
@@ -127,7 +143,7 @@ export class ListTasksComponent implements OnInit {
     dialogConfig.width = '694px';
     dialogConfig.height = '582px';
     dialogConfig.panelClass = 'custom-dialog';
-    dialogConfig.data = { taskId: taskId }; // Pass task id to the dialog
+    dialogConfig.data = { taskId: taskId,idAdmin:this.idAdmin }; // Pass task id to the dialog
 
     const dialogRef = this.dialog.open(UpdateTaskComponent, dialogConfig);
 

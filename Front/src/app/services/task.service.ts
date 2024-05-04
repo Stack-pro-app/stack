@@ -19,6 +19,9 @@ export class TaskService {
   getAllTasks(){
     return this.htpp.get<TaskInter1>(this.URL.concat("/task"));
   }
+  getAllTasks00(id:any){
+    return this.htpp.get<TaskInter1>(this.URL.concat("/taskAdmin/").concat(id));
+  }
   deleteTask(no:any){
     return this.htpp.delete(this.URL.concat("/task/").concat(no));
   }
