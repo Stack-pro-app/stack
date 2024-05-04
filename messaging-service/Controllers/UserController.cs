@@ -111,7 +111,6 @@ namespace messaging_service.Controllers
 
         // Add multiple Users To a WorkSpace
         [HttpPost("Workspace")]
-        [ServiceFilter(typeof(AdminAccess))]
         public async Task<ActionResult<ResponseDto>> AddUsersToWorkspace([FromBody]UsersWorkSpaceDto usersDto)
         {
                 IEnumerable<string> result = await _userRepository.AddUsersToWorkspace(usersDto.WorkspaceId, usersDto.UsersId);
@@ -127,7 +126,6 @@ namespace messaging_service.Controllers
 
         // Get Users In a Workspace by workspaceId
         [HttpGet("Workspace/{workspaceId}")]
-        [ServiceFilter(typeof(WorkspaceAccessFilter))]
         public async Task<ActionResult<ResponseDto>> GetUsersByWorkspaceId([FromRoute]int workspaceId)
         {
                 IEnumerable<UserDetailDto> users = await _userRepository.GetUsersByWorkspaceAsync(workspaceId);
@@ -158,7 +156,6 @@ namespace messaging_service.Controllers
 
         //  Multiple Users From a workspace by workspaceId & UsersIds
         [HttpDelete("{id}/Workspace/{workspaceId}")]
-        [ServiceFilter(typeof(AdminAccess))]
         public async Task<ActionResult<ResponseDto>> RemoveUsersFromWorkspace([FromRoute]int id, [FromRoute] int workspaceId)
         {
                 await _userRepository.RemoveUserFromWorkspace(workspaceId, id);

@@ -17,7 +17,7 @@ namespace messaging_service.Repository
 
         public async Task<Invitation> FindInvitationByToken (string token)
         {
-            Invitation res = await _context.Invitations.FirstOrDefaultAsync(i => i.Id == token) ?? throw new ValidationException("Invitation not found");
+            Invitation res = await _context.Invitations.FirstOrDefaultAsync(i => i.Token == token) ?? throw new ValidationException("Invitation not found");
             return res;
         }
             
@@ -31,7 +31,8 @@ namespace messaging_service.Repository
                 UserId = res.UserId
             };
             _context.UsersWorkspaces.Add(uw);
-            res.IsAccepted = true;
+            _context.Remove(res);
+            await _context.SaveChangesAsync();
         }
 
         public async Task CreateInvitation(Invitation inv)
@@ -60,7 +61,7 @@ namespace messaging_service.Repository
 
         public async Task<IEnumerable<Invitation>> GetInvitations(int userId)
         {
-            IEnumerable<Invitation> res = await _context.Invitations.Where(i => i.UserId == userId && i.IsAccepted == false).ToListAsync();
+            IEnumerable<Invitation> res = await _context.Invitations.Where(i => i.UserId == userId).ToListAsync();
             return res;
         }
 

@@ -59,15 +59,15 @@ namespace messaging_service.Services
             {
                 MailTo = user.Email,
                 Title = "Invitation To " + workspace.Name,
-                Message = "Dear " + user.Name + ", You have been invited to join our workspace" + workspace.Name,
+                Message = "Dear " + user.Name + ", You have been invited to join our workspace: " + workspace.Name,
                 NotificationStrings = new List<string>(),
                 workspaceId = workspace.Id,
                 Links = new Dictionary<string, string>()
             };
             notif.Links.Add("Accept", "http://" + Environment.GetEnvironmentVariable("DOMAIN") + ":" + Environment.GetEnvironmentVariable("PORT")
-            + "/api/invitation/accept/" + invitation.Id);
+            + "/api/invitation/accept/" + invitation.Token);
             notif.Links.Add("Decline", "http://" + Environment.GetEnvironmentVariable("DOMAIN") + ":" + Environment.GetEnvironmentVariable("PORT")
-                + "/api/invitation/decline/" + invitation.Id);
+                + "/api/invitation/decline/" + invitation.Token);
             notif.NotificationStrings.Add(user.NotificationString);
             _notificationService.SendNotification(notif);
         }

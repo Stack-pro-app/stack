@@ -8,6 +8,9 @@ using messaging_service.Models.Dto.Detailed;
 
 namespace messaging_service.Controllers
 {
+    /// <summary>
+    /// This is Invitations Controller
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class InvitationController:ControllerBase

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using messaging_service.Models.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace messaging_service.models.domain
 {
@@ -10,10 +11,11 @@ namespace messaging_service.models.domain
         public string Email { get; set; } = null!;
         public DateTime Created_at { get; set; }
         public DateTime? Last_login { get; set; }
-        public ICollection<UserWorkspace>? UserWorkspaces { get; set; } = new List<UserWorkspace>();
-        //public ICollection<Workspace>? WorkspacesAdmin { get; set; } = null!;
-        public ICollection<Member>? Memberships { get; set; } = new List<Member>();
-        public ICollection<Chat>? Messages { get; set; } = new List<Chat>();
+        public ICollection<UserWorkspace> UserWorkspaces { get; } = new List<UserWorkspace>();
+        public ICollection<Invitation> Invitations { get; } = new List<Invitation>();
+        public ICollection<Member> Memberships { get; } = new List<Member>();
+        public ICollection<Chat> Messages { get; } = new List<Chat>();
+        public ICollection<Workspace> WorkspacesAdmin { get; } = new List<Workspace>();
         public string AuthId { get; set; } = null!;
         public string NotificationString { get; set; } = null!;
         

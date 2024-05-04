@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace messaging_service.models.domain
 {
@@ -17,7 +18,7 @@ namespace messaging_service.models.domain
         public DateTime Created_at { get; set; }
         public int? ParentId { get; set; }
         public Chat? Parent { get; set; }
-        public ICollection<Chat>? Children { get; set; }
+        public ICollection<Chat>? Children { get; }
         public string? Attachement_Url { get; set; }
         public string? Attachement_Name { get; set; }
         public string? Attachement_Key { get; set; }

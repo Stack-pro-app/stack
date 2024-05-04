@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace messaging_service.Migrations
 {
     /// <inheritdoc />
-    public partial class first_create : Migration
+    public partial class full_migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -84,33 +84,59 @@ namespace messaging_service.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UsersWorkspaces",
+                name: "Invitations",
                 schema: "chat",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: false, defaultValueSql: "NEWID()"),
+                    WorkspaceId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    IsAccepted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Invitations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Invitations_Users_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "chat",
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Invitations_Workspaces_WorkspaceId",
+                        column: x => x.WorkspaceId,
+                        principalSchema: "chat",
+                        principalTable: "Workspaces",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UsersWorkspaces",
+                schema: "chat",
+                columns: table => new
+                {
                     UserId = table.Column<int>(type: "int", nullable: false),
                     WorkspaceId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsersWorkspaces", x => x.Id);
+                    table.PrimaryKey("PK_UsersWorkspaces", x => new { x.UserId, x.WorkspaceId });
                     table.ForeignKey(
                         name: "FK_UsersWorkspaces_Users_UserId",
                         column: x => x.UserId,
                         principalSchema: "chat",
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_UsersWorkspaces_Workspaces_WorkspaceId",
                         column: x => x.WorkspaceId,
                         principalSchema: "chat",
                         principalTable: "Workspaces",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -153,8 +179,7 @@ namespace messaging_service.Migrations
                         column: x => x.UserId,
                         principalSchema: "chat",
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -162,15 +187,14 @@ namespace messaging_service.Migrations
                 schema: "chat",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     ChannelId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Created_at = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Members", x => x.Id);
+                    table.PrimaryKey("PK_Members", x => new { x.UserId, x.ChannelId });
                     table.ForeignKey(
                         name: "FK_Members_Channels_ChannelId",
                         column: x => x.ChannelId,
@@ -183,8 +207,7 @@ namespace messaging_service.Migrations
                         column: x => x.UserId,
                         principalSchema: "chat",
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -220,16 +243,22 @@ namespace messaging_service.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Invitations_UserId",
+                schema: "chat",
+                table: "Invitations",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Invitations_WorkspaceId",
+                schema: "chat",
+                table: "Invitations",
+                column: "WorkspaceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Members_ChannelId",
                 schema: "chat",
                 table: "Members",
                 column: "ChannelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Members_UserId",
-                schema: "chat",
-                table: "Members",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_AuthId",
@@ -277,6 +306,10 @@ namespace messaging_service.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Chats",
+                schema: "chat");
+
+            migrationBuilder.DropTable(
+                name: "Invitations",
                 schema: "chat");
 
             migrationBuilder.DropTable(
