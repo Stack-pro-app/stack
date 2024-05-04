@@ -110,4 +110,11 @@ public class taskService {
     return l ;
 
   }
+  public List<Task> getAllTasksAdmin1(Integer id) {
+
+    List<project> projects  =  this.projectService.getAdminProject0(id) ;
+    List<Task> l1 = this.taskRepo.findAllByProjectIn(projects);
+   return l1 ;
+
+  }
 }

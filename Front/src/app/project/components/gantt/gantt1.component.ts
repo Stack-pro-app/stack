@@ -5,7 +5,7 @@ import {Task} from "../../../interfaces/Gant/Task";
 import {map, Observable} from "rxjs";
 import {EditSettingsModel, PdfExport, ToolbarItem} from "@syncfusion/ej2-angular-gantt";
 import { GanttComponent } from '@syncfusion/ej2-angular-gantt';
-import { PdfColor} from '@syncfusion/ej2-pdf-export';
+
 import {MatDialog} from "@angular/material/dialog";
 import {AddTaskComponent} from "../add-task/add-task.component";
 import {StatisticsComponent} from "../statistics/statistics.component";

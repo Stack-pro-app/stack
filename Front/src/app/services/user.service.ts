@@ -17,6 +17,9 @@ export class UserService {
   getWithTsk(){
     return this.htpp.get<UserInter[]>(this.URL.concat("/userAndTasks"));
   }
+  getWithTsk90(id:any){
+    return this.htpp.get<UserInter[]>(this.URL.concat("/userAndTasks/admin/").concat(id));
+  }
   IdByName(name:any){
 
     return this.htpp.get(this.URL.concat("/user/").concat("IdByName/").concat(name));

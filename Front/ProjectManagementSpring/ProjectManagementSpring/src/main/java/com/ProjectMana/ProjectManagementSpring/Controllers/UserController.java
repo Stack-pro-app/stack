@@ -1,8 +1,10 @@
 package com.ProjectMana.ProjectManagementSpring.Controllers;
 
 import com.ProjectMana.ProjectManagementSpring.DTO.userDTO;
+import com.ProjectMana.ProjectManagementSpring.enteties.Task;
 import com.ProjectMana.ProjectManagementSpring.enteties.UserT;
 import com.ProjectMana.ProjectManagementSpring.repo.UserRepo;
+import com.ProjectMana.ProjectManagementSpring.services.taskService;
 import com.ProjectMana.ProjectManagementSpring.services.userService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.HttpStatus;
@@ -16,14 +18,16 @@ import java.util.stream.Collectors;
 @RestController
 public class UserController {
     private UserRepo userRespo ;
-    userService userService;
+  private   userService userService;
+    private taskService  taskService ;
 
-    public UserController(UserRepo userRespo, com.ProjectMana.ProjectManagementSpring.services.userService userService) {
-        this.userRespo = userRespo;
-        this.userService = userService;
-    }
+  public UserController(UserRepo userRespo, com.ProjectMana.ProjectManagementSpring.services.userService userService, com.ProjectMana.ProjectManagementSpring.services.taskService taskService) {
+    this.userRespo = userRespo;
+    this.userService = userService;
+    this.taskService = taskService;
+  }
 
-    @PostMapping("/user")
+  @PostMapping("/user")
     public userDTO create(@RequestBody userDTO userDTO){
        return this.userService.post(userDTO);
     }
@@ -48,6 +52,13 @@ public class UserController {
         return  this.userRespo.findAll();
 
     }
+  @GetMapping ("/userAndTasks/admin/{id}")
+  public List<UserT> getAllTasks(@PathVariable Integer id ){
+    List<Task> l = this.taskService.getAllTasksAdmin1(id) ;
+    return  this.userRespo.findAllByTasksIn(l) ;
+
+
+  }
   @GetMapping("/user/IdByName/{name}")
   public Integer getIdByName(@PathVariable String name){
     return this.userService.getIdByName(name);
