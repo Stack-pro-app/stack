@@ -1,6 +1,7 @@
 ﻿using auth_service.Data;
 using auth_service.Models;
 using auth_service.Models.Dto;
+using auth_service.Producer;
 using auth_service.Services.IService;
 using Azure;
 using Microsoft.AspNetCore.Identity;
@@ -14,14 +15,16 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IRabbitMQProducer _producer;
 
     public AuthService(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, AppDbContext db,
-        IJwtTokenGenerator jwtTokenGenerator)
+        IJwtTokenGenerator jwtTokenGenerator, IRabbitMQProducer producer)
     {
         _roleManager = roleManager;
         _userManager = userManager;
         _db = db;
         _jwtTokenGenerator = jwtTokenGenerator;
+        _producer = producer;
     }
 
 
@@ -48,6 +51,7 @@ public class AuthService : IAuthService
                     Name = userToReturn.Name,
                     PhoneNumber = userToReturn.PhoneNumber
                 };
+                _producer.SendRegistration(userDto);
                 return "";
 
             }
@@ -59,7 +63,7 @@ public class AuthService : IAuthService
         }
         catch (Exception e)
         {
-            return "error encounterd";
+            return e.Message;
         }
 
     }
