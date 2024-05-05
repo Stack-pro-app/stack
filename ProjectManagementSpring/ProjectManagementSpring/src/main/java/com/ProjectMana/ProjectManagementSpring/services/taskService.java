@@ -87,6 +87,9 @@ public class taskService {
   public List<project> pp(){
    return this.projectRepo.findAll();
   }
+    public List<project> pp0(Integer id){
+        return this.projectService.getAdminProject0(id);
+    }
   public Task updateProgress(Integer no ,int progress ){
 
     Task t =  this.taskRepo.findById(no).get();
@@ -117,4 +120,6 @@ public class taskService {
    return l1 ;
 
   }
+
+
 }

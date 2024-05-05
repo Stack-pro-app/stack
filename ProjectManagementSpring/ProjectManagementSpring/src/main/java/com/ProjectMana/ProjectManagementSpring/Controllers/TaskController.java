@@ -60,10 +60,15 @@ public class TaskController {
     public taskDTO1 getByNo(@PathVariable Integer no){
         return this.taskService.getByNo(no);
     }
-  @GetMapping("/task/Gantt")
-  public List<project> getGantData(){
-      return this.taskService.pp();
+  @GetMapping("/task/Gantt/{id}")
+  public List<project> getGantData(@PathVariable Integer id){
+      return this.taskService.pp0(id);
   }
+    @GetMapping("/task/Gantt1")
+    public List<project> getGantData(){
+        return this.taskService.pp();
+    }
+
   @GetMapping("/task/{no}/{progress}")
   public Task updateProgress(@PathVariable int no , @PathVariable int progress){
 

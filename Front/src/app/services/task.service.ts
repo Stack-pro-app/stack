@@ -30,7 +30,11 @@ export class TaskService {
 
   }
   getGant(){
-    return this.htpp.get<GantInter[]>(this.URL.concat("/task/Gantt"));
+
+    return this.htpp.get<GantInter[]>(this.URL.concat("/task/Gantt1"));
+  }
+  getGant0(id:any){
+    return this.htpp.get<GantInter[]>(this.URL.concat("/task/Gantt/").concat(id));
   }
 
   updateProgrss(no:any,progress:any){
