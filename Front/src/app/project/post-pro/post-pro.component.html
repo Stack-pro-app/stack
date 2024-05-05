@@ -124,7 +124,9 @@
             <h4 class="congratulation-contents-title">ERROR! </h4>
             <p class="congratulation-contents-para"> Your project is not created .  </p>
             <div class="btn-wrapper mt-4">
-              <a href="javascript:void(0)" class="cmn-btn btn-bg-1"> Go to Home </a>
+
+              <a [routerLink]="['/project/', idAdmin]" class="cmn-btn btn-bg-1">Go to Home</a>
+              
             </div>
           </div>
         </div>

@@ -90,7 +90,7 @@ export class ListTasksComponent implements OnInit {
 
           const dialogConfig = new MatDialogConfig();
           dialogConfig.width = '696px';
-          dialogConfig.height = '552px';
+          dialogConfig.height = '585px';
           dialogConfig.panelClass = 'custom-dialog';
           dialogConfig.data = { idAdmin: this.idAdmin }; // Pass idAdmin to the dialog
 
@@ -141,7 +141,7 @@ export class ListTasksComponent implements OnInit {
   updateTask(taskId: number) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.width = '694px';
-    dialogConfig.height = '582px';
+    dialogConfig.height = '595px';
     dialogConfig.panelClass = 'custom-dialog';
     dialogConfig.data = { taskId: taskId,idAdmin:this.idAdmin }; // Pass task id to the dialog
 
