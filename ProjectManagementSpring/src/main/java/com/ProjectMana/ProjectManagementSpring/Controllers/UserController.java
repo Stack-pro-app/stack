@@ -57,8 +57,14 @@ public class UserController {
     }
   @GetMapping ("/userAndTasks/admin/{id}")
   public List<UserT> getAllTasks(@PathVariable Integer id ){
-    List<Task> l = this.taskService.getAllTasksAdmin1(id) ;
-    return  this.userRespo.findAllByTasksIn(l) ;
+    List<String> uniqueUserList = h(id);
+    List<UserT> allUsers = this.userRespo.findAll();
+
+    List<UserT> filteredUsers = allUsers.stream()
+            .filter(user -> uniqueUserList.contains(user.getAuthId()))
+            .collect(Collectors.toList());
+
+    return filteredUsers;
 
 
   }
