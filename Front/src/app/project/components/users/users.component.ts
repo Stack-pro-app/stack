@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from "../../../services/user.service";
 import {MatDialog} from "@angular/material/dialog";
-import {AddTaskComponent} from "../add-task/add-task.component";
-import {ActivityComponent} from "../../userTask/activity/activity.component";
+
 import {NgToastService} from "ng-angular-popup";
 import {ActivatedRoute} from "@angular/router";
 export interface PeriodicElement {
