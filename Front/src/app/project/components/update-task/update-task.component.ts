@@ -22,6 +22,7 @@ export class UpdateTaskComponent implements OnInit {
   arrProjects:any;
   task ?: TaskInter1 ;
   id ?: number ;
+  idAdmin: any ;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: any,private fb:FormBuilder , public dialog: MatDialogRef<AddTaskComponent> , public matDialog:MatDialog,private srv:UserService,private toast: NgToastService,private srv2:ProjectService,private  taskservice:TaskService) {
     this.f1 = fb.group({
@@ -35,17 +36,19 @@ export class UpdateTaskComponent implements OnInit {
     });
 
     this.id=data.taskId;
+    this.idAdmin = data.idAdmin;
+
   }
 
   ngOnInit(): void {
-    this.srv.findAll().subscribe(
+    this.srv.findAll(this.idAdmin).subscribe(
       {
         next: value =>{
           this.arrUsers=value;
         }
       }
     );
-    this.srv2.findAll().subscribe({
+    this.srv2.getAdminProjects(this.idAdmin).subscribe({
       next: value =>{
         this.arrProjects=value;
       }
@@ -65,6 +68,7 @@ export class UpdateTaskComponent implements OnInit {
 
 
     if(!this.f1.invalid){
+
       let idProject: any;
       let idUser: any;
 
@@ -75,42 +79,49 @@ export class UpdateTaskComponent implements OnInit {
         next: ([projectId, userId]) => {
           idProject = projectId;
           idUser = userId;
-          this.srv2.findProName(this.f1.get("projectName")?.value).subscribe({
-            next :value => {
-              const prj : ProjectInter = value ;
-              if (this.isAfterProjectEnd(this.f1.get("end")?.value,this.f1.get("start")?.value)){
+          this.srv.sameWork(idProject,idUser).subscribe({
+            next : value => {
+              this.srv2.findProName(this.f1.get("projectName")?.value).subscribe({
+                next :value => {
+                  const prj : ProjectInter = value ;
+                  if (this.isAfterProjectEnd(this.f1.get("end")?.value,this.f1.get("start")?.value)){
 
-                this.toast.error({detail:"ERROR",summary:'The Start Date Must Before The End Date  ',sticky:true});
-              }
-              else if(this.isBeforeProjectStart(prj.start,this.f1.get("start")?.value)){
-                this.toast.error({detail:"ERROR",summary:'The Task Can Not Start Before '+prj.start,sticky:true});
-              }
-              else if (this.isAfterProjectEnd(prj.end,this.f1.get("end")?.value)){
-                this.toast.error({detail:"ERROR",summary:'The Task Can Not End  After '+prj.end,sticky:true})
+                    this.toast.error({detail:"ERROR",summary:'The Start Date Must Before The End Date  ',sticky:true});
+                  }
+                  else if(this.isBeforeProjectStart(prj.start,this.f1.get("start")?.value)){
+                    this.toast.error({detail:"ERROR",summary:'The Task Can Not Start Before '+prj.start,sticky:true});
+                  }
+                  else if (this.isAfterProjectEnd(prj.end,this.f1.get("end")?.value)){
+                    this.toast.error({detail:"ERROR",summary:'The Task Can Not End  After '+prj.end,sticky:true})
 
-              }
-              else{
-                const task: TaskInter = {
-                  no: this.task?.no,
-                  title: this.f1.get("title")?.value,
-                  description: this.f1.get("descr")?.value,
-                  projectId: idProject,
-                  userId: idUser,
-                  start: this.f1.get("start")?.value,
-                  end: this.f1.get("end")?.value,
-                  status:this.task?.status
+                  }
+                  else{
+                    const task: TaskInter = {
+                      no: this.task?.no,
+                      title: this.f1.get("title")?.value,
+                      description: this.f1.get("descr")?.value,
+                      projectId: idProject,
+                      userId: idUser,
+                      start: this.f1.get("start")?.value,
+                      end: this.f1.get("end")?.value,
+                      status:this.task?.status
 
-                };
-
-
-                this.taskservice.createTask(task).subscribe({
-                  next: value => this.toast.success({ detail: "SUCCESS", summary: 'Task updated with success' }),
-                  error: value => this.toast.error({ detail: "ERROR", summary: 'NOT updated' + value, sticky: true })
-                });
-              }
+                    };
 
 
-            }});
+                    this.taskservice.createTask(task).subscribe({
+                      next: value => this.toast.success({ detail: "SUCCESS", summary: 'Task updated with success' }),
+                      error: value => this.toast.error({ detail: "ERROR", summary: 'NOT updated' + value, sticky: true })
+                    });
+                  }
+
+
+                }});
+
+            },
+            error: value => this.toast.error({ detail: "ERROR", summary: 'the user and the project are not in the same workspace', sticky: true })
+          })
+
 
         },
         error: error => console.error('Error fetching project and user IDs:', error)

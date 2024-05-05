@@ -40,6 +40,10 @@ public class TaskController {
     public List<taskDTO1> getAll(){
         return this.taskService.getAll();
     }
+  @GetMapping("/taskAdmin/{id}")
+  public List<taskDTO1> getAll0(@PathVariable Integer id ){
+    return this.taskService.getAll0(id);
+  }
 
     @DeleteMapping("/task/{id}")
     public void delete(@PathVariable Integer id ){
@@ -56,15 +60,20 @@ public class TaskController {
     public taskDTO1 getByNo(@PathVariable Integer no){
         return this.taskService.getByNo(no);
     }
-  @GetMapping("/task/Gantt")
-  public List<project> getGantData(){
-      return this.taskService.pp();
+  @GetMapping("/task/Gantt/{id}")
+  public List<project> getGantData(@PathVariable Integer id){
+      return this.taskService.pp0(id);
   }
+    @GetMapping("/task/Gantt1")
+    public List<project> getGantData(){
+        return this.taskService.pp();
+    }
+
   @GetMapping("/task/{no}/{progress}")
   public Task updateProgress(@PathVariable int no , @PathVariable int progress){
 
       Task t  = this.TaskRepo.findById(no).get();
-      int userId = t.getUser().id ;
+      Integer userId = t.getUser().id ;
       UserActivity u = new UserActivity() ;
       u.setDate(LocalDateTime.now());
       u.setUser(new UserT(userId));

@@ -1,5 +1,7 @@
 package com.ProjectMana.ProjectManagementSpring.Controllers;
 
+import com.ProjectMana.ProjectManagementSpring.DTO.WorkSpaceDTO;
+
 import com.ProjectMana.ProjectManagementSpring.DTO.projectDTO;
 import com.ProjectMana.ProjectManagementSpring.enteties.Task;
 import com.ProjectMana.ProjectManagementSpring.enteties.project;
@@ -70,6 +72,17 @@ private projectService projectService ;
     } else {
       return ResponseEntity.notFound().build();
     }
+  }
+
+  @GetMapping("/project/admin/{id}")
+  public List<projectDTO> find(@PathVariable Integer id ){
+    return this.projectService.getAdminProjects(id);
+
+  }
+  @GetMapping("/project/workspaces/{id}")
+  public List<WorkSpaceDTO> findWorkspaces(@PathVariable Integer id ){
+    return this.projectService.getAdminWorkspaces(id);
+
   }
 
 }

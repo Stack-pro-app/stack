@@ -21,7 +21,7 @@ export const routes: Routes = [
   { path: 'Call/:ChannelString', title: 'Call', component: VideoCallComponent },
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
   {
-    path: 'project',
+    path: 'project/:id',
     loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
   },
 ];

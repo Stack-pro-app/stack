@@ -12,14 +12,14 @@ button {
   font-size: 20px;
 }
 
-:host ::ng-deep table {
+/*:host ::ng-deep table {
 thead {
   background-color: #bc1059!important;
 .mat-header-cell {
   color: #FFF;
 }
-}
-}
+
+}*/
 
 /* Ensure specificity for .w-20 class */
 :host ::ng-deep .w-20 {

@@ -5,10 +5,10 @@ import {Task} from "../../../interfaces/Gant/Task";
 import {map, Observable} from "rxjs";
 import {EditSettingsModel, PdfExport, ToolbarItem} from "@syncfusion/ej2-angular-gantt";
 import { GanttComponent } from '@syncfusion/ej2-angular-gantt';
-import { PdfColor} from '@syncfusion/ej2-pdf-export';
+
 import {MatDialog} from "@angular/material/dialog";
-import {AddTaskComponent} from "../add-task/add-task.component";
-import {StatisticsComponent} from "../statistics/statistics.component";
+import {ActivatedRoute} from "@angular/router";
+
 @Component({
   selector: 'app-gantt',
   templateUrl: './gantt.component.html',
@@ -21,7 +21,9 @@ export class Gantt1Component implements OnInit{
   public taskSettings?: object;
   critical : boolean =false ;
   public toolbar?: ToolbarItem[];
-  public pdfExportInstance?: PdfExport;
+  act1:ActivatedRoute  ;
+  idAdmin :any;
+
 
 
   public editSettings?: EditSettingsModel;
@@ -31,39 +33,45 @@ export class Gantt1Component implements OnInit{
   public ganttObject: GanttComponent|undefined;
 
 
-  constructor(private  taskservice:TaskService,public dialog: MatDialog) {
+  constructor(private act0:ActivatedRoute,private  taskservice:TaskService,public dialog: MatDialog) {
+    this.act1=act0;
   }
 
   public ngOnInit(): void {
 
+    console.log(this.act1.paramMap.subscribe({
+      next :value =>{
+        this.idAdmin=value?.get('id');
+        this.data$ = this.taskservice.getGant0(this.idAdmin).pipe(
+          map(value => {
+            const data: Task[] = [];
+            for (const g of value) {
+              const x: Task = {
+                TaskID: g.id,
+                TaskName: g.projectName,
+                StartDate: new Date(g.start),
+                EndDate: new Date(g.end),
+              };
+              x.subtasks = [];
+              for (const h of g.tasks) {
+                x.subtasks.push({
+                  TaskID: h.no,
+                  TaskName: h.title,
+                  StartDate: new Date(h.start),
+                  Progress: h.status,
+                  Duration: this.duration(h.start,h.end),
 
-    this.data$ = this.taskservice.getGant().pipe(
-      map(value => {
-        const data: Task[] = [];
-        for (const g of value) {
-          const x: Task = {
-            TaskID: g.id,
-            TaskName: g.projectName,
-            StartDate: new Date(g.start),
-            EndDate: new Date(g.end),
-          };
-          x.subtasks = [];
-          for (const h of g.tasks) {
-            x.subtasks.push({
-              TaskID: h.no,
-              TaskName: h.title,
-              StartDate: new Date(h.start),
-              Progress: h.status,
-              Duration: this.duration(h.start,h.end),
+                });
+              }
+              data.push(x);
+              console.log(x);
+            }
+            return data;
+          })
+        );
 
-            });
-          }
-          data.push(x);
-          console.log(x);
-        }
-        return data;
-      })
-    );
+      }}))
+
     this.labelSettings = {
       leftLabel: 'TaskName',
       taskLabel: 'Progress'
