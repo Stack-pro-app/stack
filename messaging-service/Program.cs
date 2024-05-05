@@ -10,6 +10,9 @@ using messaging_service.Repository;
 using messaging_service.Repository.Interfaces;
 using messaging_service.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,7 +55,17 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Messaging APIs",
+        Description = "This the documentation for The Messaging Service Apis",
+    });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 builder.Services.AddHealthChecks();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IInvitationService,InvitationService>();
@@ -87,8 +100,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 await dbContext.Database.MigrateAsync();
-
-builder.Services.AddHealthChecks();
     
 app.UseAuthorization();
 app.UseStatusCodePages();

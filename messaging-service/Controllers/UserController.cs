@@ -29,7 +29,9 @@ namespace messaging_service.Controllers
         }
 
 
-        //Create a new Chat User
+        /// <summary>
+        /// Creates A new messaging service user.
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<ResponseDto>> CreateUser([FromBody]UserMinimalDto userDto)
         {
@@ -46,7 +48,9 @@ namespace messaging_service.Controllers
         }
 
 
-        // Get User by Authentification Id
+        /// <summary>
+        /// Get User Info using Authentication Id (required to use in order to get the messaging service user Id)
+        /// </summary>
         [HttpGet("{authId}")]
         public async Task<ActionResult<ResponseDto>> GetUser([FromRoute]string authId)
         {
@@ -60,7 +64,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
         }
-
+        /// <summary>
+        /// Get User Info using Messaging Service Id
+        /// </summary>
         [HttpGet("byId/{id}")]
         public async Task<ActionResult<ResponseDto>> GetUserById([FromRoute] int id)
         {
@@ -76,7 +82,9 @@ namespace messaging_service.Controllers
         }
 
 
-        //Delete User By authentification Id
+        /// <summary>
+        /// Deletes User By Authentication Id
+        /// </summary>
         [HttpDelete("{authId}")]
         public async Task<ActionResult<ResponseDto>> DeleteUser([FromRoute]string authId)
         {
@@ -90,8 +98,9 @@ namespace messaging_service.Controllers
                 return Ok(response);
         }
 
-
-        //Update User's Name & Email (and authId if needed)
+        /// <summary>
+        /// Update User's Name and Email (authentication Id is needed)
+        /// </summary>
         [HttpPut]
         public async Task<ActionResult<ResponseDto>> UpdateUser([FromBody]UserMinimalDto userDto)
         {
@@ -108,8 +117,9 @@ namespace messaging_service.Controllers
 
         //***************************** Custom Apis Here *************************************************************************
 
-
-        // Add multiple Users To a WorkSpace
+        /// <summary>
+        /// Add multiple Users To a WorkSpace (deprecated due to invite feature)
+        /// </summary>
         [HttpPost("Workspace")]
         public async Task<ActionResult<ResponseDto>> AddUsersToWorkspace([FromBody]UsersWorkSpaceDto usersDto)
         {
@@ -123,8 +133,9 @@ namespace messaging_service.Controllers
                 return Ok(response);
         }
 
-
-        // Get Users In a Workspace by workspaceId
+        /// <summary>
+        /// Get User's info for a workspace Members by workspaceId
+        /// </summary>
         [HttpGet("Workspace/{workspaceId}")]
         public async Task<ActionResult<ResponseDto>> GetUsersByWorkspaceId([FromRoute]int workspaceId)
         {
@@ -137,7 +148,9 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
         }
-        // Get Users In a Channel by channelId
+        /// <summary>
+        /// Get User's info for a channel Members by channelId (used for private channels especially)
+        /// </summary>
         [HttpGet("channel/{channelId}")]
         public async Task<ActionResult<ResponseDto>> GetUsersByChannelId([FromRoute] int channelId)
         {
@@ -153,8 +166,9 @@ namespace messaging_service.Controllers
                 return Ok(response);
         }
 
-
-        //  Multiple Users From a workspace by workspaceId & UsersIds
+        /// <summary>
+        /// Remove Multiple Users from a workspace using their Ids
+        /// </summary>
         [HttpDelete("{id}/Workspace/{workspaceId}")]
         public async Task<ActionResult<ResponseDto>> RemoveUsersFromWorkspace([FromRoute]int id, [FromRoute] int workspaceId)
         {
@@ -169,7 +183,9 @@ namespace messaging_service.Controllers
         }
 
 
-        // Get Your User by Email
+        /// <summary>
+        /// Get User's info by email (used to search for user before inviting)
+        /// </summary>
         [HttpGet("email/{email}")]
         public async Task<ActionResult<ResponseDto>> GetUserByEmail([FromRoute]string email)
         {
@@ -187,7 +203,7 @@ namespace messaging_service.Controllers
 
 
         /// <summary>
-        /// This Api Sets the Login time for a user & sends back his workspaces
+        /// Used to get the user's workspaces after logging (required to use!)
         /// </summary>
         [HttpGet("myworkspaces/{authId}")]
         public async Task<ActionResult<ResponseDto>> LoginAndGetUserWorkspaces([FromRoute]string authId)

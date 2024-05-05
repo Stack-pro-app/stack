@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.SetBasePath(builder.Environment.ContentRootPath)
     .AddJsonFile("ocelot.json",optional: false, reloadOnChange: true)
     .AddJsonFile("Ocelot.auth.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("ocelot.inv.json", optional: false, reloadOnChange: true)
     .AddEnvironmentVariables();
 
 builder.Services.AddSignalR();

@@ -14,14 +14,7 @@ var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
 var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
 var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
 
-Console.WriteLine($"DB_USER: {dbUser}");
-Console.WriteLine($"DB_PASSWORD: {dbPassword}");
-Console.WriteLine($"DB_HOST: {dbHost}");
-Console.WriteLine($"DB_PORT: {dbPort}");
-
 var mongoConnectionString = $"mongodb://{dbUser}:{dbPassword}@{dbHost}:{dbPort}";
-
-Console.WriteLine($"MongoDB Connection String: {mongoConnectionString}");
 
 builder.Services.Configure<NotificationDatabaseSettings>(options =>
 {

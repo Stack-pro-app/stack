@@ -8,9 +8,6 @@ using messaging_service.Models.Dto.Detailed;
 
 namespace messaging_service.Controllers
 {
-    /// <summary>
-    /// This is Invitations Controller
-    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class InvitationController:ControllerBase
@@ -26,6 +23,9 @@ namespace messaging_service.Controllers
 
         }
         // This Api Creates an invite and sends a notification to the user, an email also!
+        /// <summary>
+        /// Creates a new Invitation and sends a notification to the users (with email notification).
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<ResponseDto>> CreateInvitation([FromBody] InvitationRequestDto invitationDto)
         {
@@ -51,8 +51,10 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
-        // This Api Accepts an invite
-        [HttpPut("accept/{token}")]
+        /// <summary>
+        /// Accepts a generated Invite and adds the user to the workspace.
+        /// </summary>
+        [HttpPost("accept/{token}")]
         public async Task<ActionResult<ResponseDto>> AcceptInvitation([FromRoute] string token, [FromQuery] bool isEmail) 
         {
             try
@@ -79,8 +81,10 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
-        // This Api Declines an invite
-        [HttpPut("decline/{token}")]
+        /// <summary>
+        /// Declines a generated Invite and removes it.
+        /// </summary>
+        [HttpPost("decline/{token}")]
         public async Task<ActionResult<ResponseDto>> DeclineInvitation([FromRoute] string token, [FromQuery] bool isEmail)
         {
             try
@@ -108,8 +112,9 @@ namespace messaging_service.Controllers
             }
         }
 
-        // This Api Gets all invites for a user by user id
-
+        /// <summary>
+        /// Used to get all the invitations for a user by the messaging service user Id.
+        /// </summary>
         [HttpGet("{userId}")]
         public async Task<ActionResult<ResponseDto>> GetAllInvitations([FromRoute] int userId)
         {

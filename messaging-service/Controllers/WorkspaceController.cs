@@ -21,7 +21,9 @@ namespace messaging_service.Controllers
             _repository = repository;
             _mapper = mapper;
         }
-
+        /// <summary>
+        /// Used To Create a New Workspace by a User which will be the admin of the workspace
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<ResponseDto>> CreateWorkspace([FromBody]WorkspaceRequestDto workspace)
         {
@@ -35,7 +37,9 @@ namespace messaging_service.Controllers
                     };
                     return Ok(response);
         }
-        //Admin Middleware Here
+        /// <summary>
+        /// Used To delete a workspace
+        /// </summary>
         [HttpDelete("{workspaceId}")]
         public async Task<ActionResult<ResponseDto>> DeleteWorkspace([FromRoute]int workspaceId)
         {
@@ -49,8 +53,11 @@ namespace messaging_service.Controllers
                     return Ok(response);
 
         }
+        /// <summary>
+        /// Used To Change the workspace's name
+        /// </summary>
         [HttpPut("{workspaceId}")]
-        public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int workspaceId,[FromBody]WorkspaceName workspace)
+        public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int workspaceId,[FromQuery]WorkspaceName workspace)
         {
 
                 await _repository.UpdateWorkspaceAsync(workspaceId, workspace.Name);
@@ -62,7 +69,9 @@ namespace messaging_service.Controllers
                     };
                     return Ok(response);
         }
-
+        /// <summary>
+        /// Used When you enter a workspace to get the workspace's details including the channels (userId to get what the user has in the workspace)
+        /// </summary>
         [HttpGet("{workspaceId}")]
         public async Task<ActionResult<ResponseDto>> GetWorkspace([FromRoute]int workspaceId, [FromQuery]int userId)
         {
