@@ -26,8 +26,7 @@ const routes: Routes = [
   {path:"gg",component:Gantt1Component},
   {path:"post",component:PostProComponent},
   {path : "",component:DisplayProjectComponent},
-  {path : "edit/:id",component:EditProjectComponent},
-
+  { path: 'edit/:id', component: EditProjectComponent },
   {path : "tsk",component:ListTasksComponent},
   {path : "users",component:UsersComponent},
 

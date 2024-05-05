@@ -6,7 +6,7 @@ namespace messaging_service.Producer
 {
     public class RabbitMQProducer : IRabbitMQProducer
     {
-        public void SendNotification<T>(T notification)
+        public void SendToQueue<T>(T message,string queue)
         {
                 var factory = new ConnectionFactory
                 {
@@ -17,11 +17,11 @@ namespace messaging_service.Producer
                 };
                 var connection = factory.CreateConnection();
                 using var channel = connection.CreateModel();
-                channel.QueueDeclare("notification", durable: true, exclusive: false, autoDelete: false, arguments: null);
-                var json = JsonConvert.SerializeObject(notification);
+                channel.QueueDeclare(queue, durable: true, exclusive: false, autoDelete: false, arguments: null);
+                var json = JsonConvert.SerializeObject(message);
                 var body = Encoding.UTF8.GetBytes(json);
 
-                channel.BasicPublish(exchange: "", routingKey: "notification", body: body);
+                channel.BasicPublish(exchange: "", routingKey: queue, body: body);
         }
     }
 }

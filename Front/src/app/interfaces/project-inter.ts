@@ -5,6 +5,8 @@ export interface ProjectInter {
   start:string,
   end:string,
   budget?:number,
-  clientName?:string
+  clientName?:string,
+  workId?:string,
+  workName?:string
 
 }

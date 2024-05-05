@@ -7,9 +7,9 @@ namespace messaging_service.models.domain
         public int Id { get; set; }
         public Guid MessageId { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
         public int ChannelId { get; set; }
-        public Channel Channel { get; set; }
+        public Channel Channel { get; set; }= null!;
         [MaxLength(500)]
         public string? Message { get; set; }
         public bool Is_deleted { get; set; } = false;

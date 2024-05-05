@@ -2,7 +2,7 @@
 {
     public class WorkspaceRequestDto
     {
-        public string Name { get; set; }
-        public int userId { get; set; }
+        public string Name { get; set; } = null!;
+        public int adminId { get; set; }
     }
 }

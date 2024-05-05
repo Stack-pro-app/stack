@@ -30,6 +30,31 @@ namespace messaging_service.Data
                     typeof(UserWorkspace)
             };
 
+            modelBuilder.Entity<UserWorkspace>()
+            .HasOne(uw => uw.User)
+            .WithMany(u => u.UserWorkspaces)
+            .HasForeignKey(uw => uw.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserWorkspace>()
+            .HasOne(uw => uw.Workspace)
+            .WithMany(w => w.UserWorkspaces)
+            .HasForeignKey(uw => uw.WorkspaceId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Chat>()
+            .HasOne(c => c.User)
+            .WithMany(u => u.Messages)
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Member>()
+            .HasOne(m => m.User)
+            .WithMany(u => u.Memberships)
+            .HasForeignKey(m => m.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<Channel>()
             .Property(c => c.ChannelString)
             .HasDefaultValueSql("NEWID()");
@@ -37,10 +62,6 @@ namespace messaging_service.Data
             modelBuilder.Entity<User>()
             .Property(u => u.NotificationString)
             .HasDefaultValueSql("NEWID()");
-
-            modelBuilder.Entity<Workspace>()
-            .HasIndex(w => new { w.Name, w.AdminId })
-            .IsUnique();
 
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Email)

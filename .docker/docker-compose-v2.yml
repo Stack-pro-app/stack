@@ -1,10 +1,12 @@
 version: '3.8'
 services:
-  front:
-    image: oussamazaoui872/slack-front:latest
-    container_name: front
-    ports:
-      - "80:80"
+  # front:
+  #   build:
+  #     context: /front
+  #     dockerfile: Dockerfile
+  #   container_name: front
+  #   ports:
+  #     - "80:80"
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
@@ -16,16 +18,11 @@ services:
       - RABBITMQ_DEFAULT_PASS=password  
     networks:
       - backend
-  eureka:
-    container_name: eureka
-    image: oussamazaoui872/slack-eureka-server:latest
-    ports:
-      - "8761:8761"
-    networks:
-      - backend
   gateway-chat:
     container_name: gateway-chat
-    image: oussamazaoui872/slack-gateway-chat-server:latest
+    build:
+      context: /gateway-chat-server
+      dockerfile: Dockerfile
     ports:
       - "8091:8080"
     networks:
@@ -39,7 +36,9 @@ services:
       - MQ_PORT=5672
   messaging-service:
     container_name: messaging-service
-    image: oussamazaoui872/slack-messaging-service:latest
+    build:
+      context: /messaging-service
+      dockerfile: Dockerfile
     ports:
       - "8090:8080"
     networks:
@@ -58,13 +57,13 @@ services:
       - MQ_PORT=5672
   api-gateway:
     container_name: api-gateway
-    image: oussamazaoui872/slack-api-geteway:latest
+    build:
+      context: /api-gateway
+      dockerfile: Dockerfile
     ports:
       - "8084:8080"
     networks:
       - backend
-    depends_on:
-      - eureka
   database-1:
     container_name: database-1
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -77,14 +76,17 @@ services:
       - messaging
   notif-service:
     container_name: notif-service
-    image:
+    build:
+      context: /notif-service
+      dockerfile: Dockerfile
     ports:
-      - "8090:8080"
+      - "8092:8080"
     networks:
       - backend
       - notification
     depends_on:
       - database-2
+      - rabbitmq
     environment:
       - MQ_HOST=rabbitmq
       - MQ_USER=user
@@ -105,10 +107,39 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password@12345#
     networks:
       - notification
+  auth_service:
+    container_name: auth_service
+    build:
+      context: /auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8093:8080"
+    networks:
+      - backend
+      - auth
+    depends_on:
+      - database-3
+    environment:
+      - DB_HOST=database-1
+      - DB_NAME=stack-auth
+      - DB_PORT=1434
+      - DB_SA_PASSWORD=password@12345#
+  database-3:
+    container_name: database-3
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1434:1433"
+    environment:
+      - SA_PASSWORD=password@12345#
+      - ACCEPT_EULA=Y
+    networks:
+      - auth
 
 
 
 networks:
+  auth:
+    driver: bridge
   backend:
     driver: bridge
   messaging:

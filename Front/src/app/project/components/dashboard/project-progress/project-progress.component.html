@@ -9,8 +9,10 @@
       <div>In progress: {{element.inProgress}}</div>
       <div>Missed: {{element.missed}}</div>
       <div>Done: {{element.done}}
-        <p-progressBar [value]="element.progress"></p-progressBar>
+
       </div>
+      <div>progress : {{element.progress}}%</div>
+      <progress class="progress progress-success w-56" [value]="element.progress" max="100"></progress>
 
 
     </div>

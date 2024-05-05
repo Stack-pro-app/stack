@@ -11,6 +11,7 @@ using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto.Requests;
 using System.ComponentModel.DataAnnotations;
 using messaging_service.Repository.Interfaces;
+using messaging_service.Filters;
 
 
 namespace messaging_service.Controllers
@@ -110,6 +111,7 @@ namespace messaging_service.Controllers
 
         // Add multiple Users To a WorkSpace
         [HttpPost("Workspace")]
+        [ServiceFilter(typeof(AdminAccess))]
         public async Task<ActionResult<ResponseDto>> AddUsersToWorkspace([FromBody]UsersWorkSpaceDto usersDto)
         {
                 IEnumerable<string> result = await _userRepository.AddUsersToWorkspace(usersDto.WorkspaceId, usersDto.UsersId);
@@ -125,6 +127,7 @@ namespace messaging_service.Controllers
 
         // Get Users In a Workspace by workspaceId
         [HttpGet("Workspace/{workspaceId}")]
+        [ServiceFilter(typeof(WorkspaceAccessFilter))]
         public async Task<ActionResult<ResponseDto>> GetUsersByWorkspaceId([FromRoute]int workspaceId)
         {
                 IEnumerable<UserDetailDto> users = await _userRepository.GetUsersByWorkspaceAsync(workspaceId);
@@ -155,6 +158,7 @@ namespace messaging_service.Controllers
 
         //  Multiple Users From a workspace by workspaceId & UsersIds
         [HttpDelete("{id}/Workspace/{workspaceId}")]
+        [ServiceFilter(typeof(AdminAccess))]
         public async Task<ActionResult<ResponseDto>> RemoveUsersFromWorkspace([FromRoute]int id, [FromRoute] int workspaceId)
         {
                 await _userRepository.RemoveUserFromWorkspace(workspaceId, id);
@@ -194,15 +198,15 @@ namespace messaging_service.Controllers
                 User user = await _userRepository.GetUserAsync(authId);
                 if (user == null) throw new ValidationException("No User Was Found");
                 UserDetailDto userResponseDto = _mapper.Map<UserDetailDto>(user);
-                IEnumerable<Workspace> workspacs = await _userRepository.SetLoginAndGetWorkspaces(authId) ?? throw new ValidationException("Can't find user or workpaces");
-               // IEnumerable<WorkspaceMinimalDto> workspacesDto = _mapper.Map<IEnumerable<WorkspaceMinimalDto>>(workspaces);
+                IEnumerable<Workspace> workspaces = await _userRepository.SetLoginAndGetWorkspaces(authId) ?? throw new ValidationException("Can't find user or workpaces");
+               IEnumerable<WorkspaceMinimalDto> workspacesDto = _mapper.Map<IEnumerable<WorkspaceMinimalDto>>(workspaces);
                 ResponseDto response = new()
                 {
                     IsSuccess = true,
                     Result = new
                     {
                         user = userResponseDto,
-                        workspaces = workspacs
+                        workspaces = workspacesDto
                     },
                     Message = "Successfully logged in to the Chat!"
                 };

@@ -6,6 +6,7 @@ import {TaskService} from "../../../../services/task.service";
 import {UserService} from "../../../../services/user.service";
 import {ProjectService} from "../../../../services/project.service";
 import {NgToastService} from "ng-angular-popup";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-tasks-info',
@@ -15,13 +16,23 @@ import {NgToastService} from "ng-angular-popup";
 export class TasksInfoComponent implements OnInit  {
   arrTasks:any;
   displayedColumns: string[] = ['position','title', 'projectName',  'user', 'deadLineDate', 'status'];
-  constructor(private fb: FormBuilder,private  taskservice:TaskService) {
+  act1:ActivatedRoute  ;
+  idAdmin :any;
+  constructor(private act0:ActivatedRoute,private fb: FormBuilder,private  taskservice:TaskService) {
+    this.act1=act0;
   }
   ngOnInit(): void {
-    this.taskservice.getAllTasks().subscribe({
-      next:value => this.arrTasks=value ,
+    console.log(this.act1.paramMap.subscribe({
+      next :value =>{
+        this.idAdmin=value?.get('id');
+        this.taskservice.getAllTasks00(this.idAdmin).subscribe({
+          next:value => this.arrTasks=value ,
 
-    })
+        })
+      }
+    }))
+
+
   }
   isBeforeToday(dateStr: string): boolean {
     const today = new Date();

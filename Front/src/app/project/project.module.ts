@@ -33,7 +33,7 @@ import {
   MatTable
 } from "@angular/material/table";
 import {MatDialog, MatDialogClose} from "@angular/material/dialog";
-import {MatMomentDateModule} from "@angular/material-moment-adapter";
+
 import {UsersComponent} from "./components/users/users.component";
 import {UpdateTaskComponent} from "./components/update-task/update-task.component";
 import {
@@ -83,6 +83,7 @@ import { Charts0Component } from './components/dashboard/charts0/charts0.compone
 
 
 
+
 @NgModule({
   declarations: [
     PostProComponent,
@@ -124,7 +125,7 @@ import { Charts0Component } from './components/dashboard/charts0/charts0.compone
     ButtonModule,
     MatIconModule,
     MatSelectModule, MatTable, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatRowDef, MatHeaderCell, MatColumnDef, MatCell, MatHeaderRow, MatRow, MatDialogClose,
-    MatMomentDateModule,
+
     GanttModule,
     CircularChart3DAllModule,ChartModule,
     ScheduleModule,

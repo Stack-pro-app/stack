@@ -14,7 +14,7 @@
     <td mat-cell *matCellDef="let element">{{element.email}}</td>
   </ng-container>
 
-  <!-- Weight Column -->
+
 
   <ng-container matColumnDef="tasksAssigned">
     <th mat-header-cell *matHeaderCellDef>tasksAssigned</th>
@@ -35,7 +35,7 @@
     <th mat-header-cell *matHeaderCellDef class="w-20">Activities</th>
     <td mat-cell *matCellDef="let element">
       <!--<button class="btn btn-warning bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" mat-raised-button>Email</button>-->
-      <button [routerLink]="['/project/activity']" [queryParams]="{ userId: element.id, taskId:taskId}" mat-raised-button color="primary" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Activity</button>
+      <button [routerLink]="['/project', idAdmin, 'activity']" [queryParams]="{ userId: element.id, taskId:taskId}" mat-raised-button color="primary" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Activity</button>
     </td>
   </ng-container>
 

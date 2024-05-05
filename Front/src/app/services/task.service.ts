@@ -19,6 +19,9 @@ export class TaskService {
   getAllTasks(){
     return this.htpp.get<TaskInter1>(this.URL.concat("/task"));
   }
+  getAllTasks00(id:any){
+    return this.htpp.get<TaskInter1>(this.URL.concat("/taskAdmin/").concat(id));
+  }
   deleteTask(no:any){
     return this.htpp.delete(this.URL.concat("/task/").concat(no));
   }
@@ -27,7 +30,11 @@ export class TaskService {
 
   }
   getGant(){
-    return this.htpp.get<GantInter[]>(this.URL.concat("/task/Gantt"));
+
+    return this.htpp.get<GantInter[]>(this.URL.concat("/task/Gantt1"));
+  }
+  getGant0(id:any){
+    return this.htpp.get<GantInter[]>(this.URL.concat("/task/Gantt/").concat(id));
   }
 
   updateProgrss(no:any,progress:any){
