@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class ChatService {
-  url: string = 'http://localhost:5149/api/Chat';
+  url: string = 'http://localhost:8193/api/Chat';
   constructor(private http: HttpClient) {}
 
   GetMessages(ChannelId: any, id: any): Observable<any> {

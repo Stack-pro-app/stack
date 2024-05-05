@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @RestController
 public class UserController {
     private UserRepo userRespo ;
@@ -28,6 +29,7 @@ public class UserController {
   }
 
   @PostMapping("/user")
+
     public userDTO create(@RequestBody userDTO userDTO){
        return this.userService.post(userDTO);
     }
@@ -45,6 +47,7 @@ public class UserController {
 
       return filteredUsers;
 
+
     }
 
     @GetMapping ("/userAndTasks")
@@ -59,6 +62,7 @@ public class UserController {
 
 
   }
+
   @GetMapping("/user/IdByName/{name}")
   public Integer getIdByName(@PathVariable String name){
     return this.userService.getIdByName(name);
@@ -96,5 +100,6 @@ public class UserController {
     return uniqueUserList;
 
   }
+
 
 }

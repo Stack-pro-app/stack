@@ -95,7 +95,11 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/User/{authId}"
+      "DownstreamPathTemplate": "/api/User/{authId}",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKeys": [ "Bearer" ],
+        "AllowedScopes": []
+      }
     },
     {
       "UpstreamPathTemplate": "/api/User/Workspace",
@@ -182,7 +186,7 @@
       "DownstreamPathTemplate": "/api/Workspace/{id}"
     },
     {
-      "UpstreamPathTemplate": "/api/Workspace/{id}/user/{userId}",
+      "UpstreamPathTemplate": "/api/Workspace/{workspaceId}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -191,7 +195,7 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Workspace/{id}/user/{userId}"
+      "DownstreamPathTemplate": "/api/Workspace/{id}"
     },
     {
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
@@ -204,14 +208,65 @@
           "Port": 8080
         }
       ]
+    },
+    {
+      "UpstreamPathTemplate": "/api/Notification/Unseen/{notificationString}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Notification/Unseen/{notificationString}"
+    },
+    {
+      "UpstreamPathTemplate": "/api/Notification/Seen/{notificationString}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Notification/Seen/{notificationString}"
+    },
+    {
+      "UpstreamPathTemplate": "/api/Notification/SetSeen/{notificationString}",
+      "UpstreamHttpMethod": [ "Put" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Notification/SetSeen/{notificationString}"
+    },
+    {
+      "UpstreamPathTemplate": "/api/Notification",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Notification"
     }
-
-
-
-
-
-
   ],
+  "FileCacheOptions": {
+    "TtlSeconds": 10
+  },
+  "RateLimitOptions": {
+    "EnableRateLimiting": true,
+    "Period": "10s",
+    "PeriodTimespan": 10,
+    "Limit": 20
+  },
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:8084/"
   }

@@ -35,6 +35,7 @@ namespace gateway_chat_server.Hubs
                     ChannelId = message.ChannelId,
                     Message = message.Message,
                     ParentId = message.ParentId,
+                    MessageId = Guid.NewGuid()
                 };
                 _messagePublisher.SendMessage(messageToStore);
                 await Clients.Group(message.ChannelString).SendAsync("messageReceived", root);
@@ -44,6 +45,7 @@ namespace gateway_chat_server.Hubs
                 Console.WriteLine(ex.Message);
             }
         }
+
         //Step 3: Remove the client From the channel to keep it clean
         public async Task RemoveFromGroup(string channel)
         {

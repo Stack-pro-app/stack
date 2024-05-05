@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using messaging_service.Producer;
+using messaging_service.Models.Dto.Others;
 
 namespace messaging_service.Repository
 {
@@ -15,25 +17,21 @@ namespace messaging_service.Repository
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        public WorkspaceRepository(AppDbContext context,IMapper mapper) {
+        private readonly IRabbitMQProducer _producer;
+        public WorkspaceRepository(AppDbContext context,IMapper mapper,IRabbitMQProducer producer) {
             _context = context;
             _mapper = mapper;
+            _producer = producer;
         }
-        public async Task<bool> CreateWorkspaceAsync(string name,int adminId)
+        public async Task CreateWorkspaceAsync(Workspace workspace)
         {
-            try
-            {
-                var result = await _context.Users.FirstOrDefaultAsync(u=> u.Id == adminId);
-                if (result == null) throw new ValidationException("Invalid User");
-                if (name.IsNullOrEmpty()) throw new ValidationException("Invalid Name");
-                Workspace workspace = new();
-                workspace.Name = name;
-                workspace.AdminId = adminId;
+
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == workspace.AdminId) ?? throw new ValidationException("Invalid User");
                 _context.Workspaces.Add(workspace);
                 await _context.SaveChangesAsync();
                 UserWorkspace userWorkspace = new()
                 {
-                    UserId = adminId,
+                    UserId = workspace.AdminId,
                     WorkspaceId = workspace.Id,
                 };
                 _context.UsersWorkspaces.Add(userWorkspace);
@@ -46,79 +44,84 @@ namespace messaging_service.Repository
                 };
                 _context.Channels.Add(main);
                 await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+                PMWorkspaceDto PMworkspace = new()
+                {
+                    Id = workspace.Id,
+                    Name = workspace.Name,
+                    AdminId = user.AuthId,
+                };
+                _producer.SendToQueue(PMworkspace, "workspace");
         }
 
-        public async Task<bool> DeleteWorkspaceAsync(int workspaceId)
+        public async Task DeleteWorkspaceAsync(int workspaceId)
         {
-            try
-            {
                 if (workspaceId < 0) throw new ValidationException("Invalid Workspace Id");
                 var workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId)?? throw new ValidationException("Invalid Workspace");
                 _context.Workspaces.Remove(workspace);
                 await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error deleting workspace: {ex.Message}");
-                return false;
-            }
         }
 
         public async Task<WorkspaceDetailDto> GetWorkspaceAsync(int workspaceId,int userId)
         {
-            try
-            {
                 Workspace workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId)?? throw new ValidationException("invalid Workspace");
                 IEnumerable<Channel> channel = await _context.Channels.Where(x => x.WorkspaceId == workspaceId).ToListAsync() ?? throw new ValidationException("invalid Channels");
-                //Get the detailed main channel
                 Channel mainChannel = channel.FirstOrDefault(c => c.Name == "main") ?? throw new ValidationException("Invalid Workspace");
                 ChannelDetailDto mainDetail = _mapper.Map<ChannelDetailDto>(mainChannel);
-                //Get the minimal public channels
-                IEnumerable<Channel> publicChannels = channel.Where(c=>c.Is_private == false && c.Name != "main").ToList();
-                IEnumerable<ChannelMinimalDto> publicMinimal = _mapper.Map<IEnumerable<Channel>,IEnumerable<ChannelMinimalDto>>(publicChannels);
-                //Get the minimal Private Channels
-                IEnumerable<Channel> privateChannels = channel.Where(c => c.Is_private == true).ToList();
-                IEnumerable<ChannelMinimalDto> privateMinimal = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(privateChannels);
+                IEnumerable<Channel> publicChannels = channel.Where(c =>c.Name != "main" && c.Is_private == false).ToList();
+                IEnumerable<Channel> authorizedChannels;
+                if (await VerifyAdminStatusV2(userId, workspaceId))
+                {
+                    authorizedChannels = await _context.Channels.Where(c => c.Is_OneToOne == false).ToListAsync();
+                }
+                else
+                {
+                    authorizedChannels = await _context.Members.Where(m => m.UserId == userId).Include(m => m.Channel).Select(m => m.Channel).Where(c => c.Is_OneToOne == false).ToListAsync();
+                }
+                IEnumerable<Channel> channels = publicChannels.Concat(authorizedChannels);
+                IEnumerable<ChannelMinimalDto> minimalChannels = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(channels);
                 WorkspaceDetailDto detail = new()
                 {
                     Id = workspace.Id,
                     Name = workspace.Name,
-                    adminId = workspace.AdminId,
                     MainChannel = mainDetail,
-                    PublicChannels = publicMinimal.ToList(),
-                    PrivateChannels = privateMinimal.ToList(),
+                    Channels = minimalChannels.ToList(),
 
                 };
                 return detail;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error finding workspace: {ex.Message}");
-                throw;
-            }
         }
 
-        public async Task<bool> UpdateWorkspaceAsync(int id,string name)
+        public async Task<string> GetWorkspaceName(int workspaceId)
         {
-            try
-            {
+            var result = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == workspaceId) ?? throw new ValidationException("Invalid Workspace");
+            return result.Name;
+        }
+
+        public async Task UpdateWorkspaceAsync(int id,string name)
+        {
                 Workspace workspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == id) ?? throw new ValidationException("Can't Find User");
                 workspace.Name = name;
                 await _context.SaveChangesAsync();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error updating workspace: {ex.Message}");
-                return false;
-            }
+
+        }
+        public async Task<bool> VerifyAdminStatus(string authId, int workspaceId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId);
+            if (user == null) return false;
+
+            return await VerifyAdminStatusV2(user.Id, workspaceId);
+        }
+
+        public async Task<bool> VerifyAdminStatusV2(int userId, int workspaceId)
+        {
+            return await _context.Workspaces.AnyAsync(w => w.Id == workspaceId && w.Admin.Id == userId);
+        }
+
+        public async Task<bool> VerifyMembershipWorkspace(string authId, int workspaceId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId);
+            if (user == null) return false;
+
+            return await _context.UsersWorkspaces.AnyAsync(uw => uw.UserId == user.Id && uw.WorkspaceId == workspaceId);
         }
     }
 }

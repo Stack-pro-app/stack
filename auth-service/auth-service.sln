@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "auth-service", "auth-service\auth-service.csproj", "{76815A0C-F303-4D2C-8CFB-B572FF275E92}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "auth-service", "./auth-service.csproj", "{76815A0C-F303-4D2C-8CFB-B572FF275E92}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

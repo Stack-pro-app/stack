@@ -7,6 +7,7 @@ import com.ProjectMana.ProjectManagementSpring.enteties.WorkSpace;
 import com.ProjectMana.ProjectManagementSpring.enteties.project;
 import com.ProjectMana.ProjectManagementSpring.repo.UserRepo;
 import com.ProjectMana.ProjectManagementSpring.repo.WorkSpaceRepo;
+
 import com.ProjectMana.ProjectManagementSpring.repo.projectRepo;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +32,14 @@ public class projectService {
         List<project> l1 = this.projectRepo.findAll();
         for(project p : l1){
             l.add(new projectDTO(p.getId(),p.getProjectName(),p.getProjectDescrp(),p.getStart(),p.getEnd(),p.getBudget(),p.getClientName(),p.getWorkSpace().getId(),p.getWorkSpace().getName()));
+
         }
         return l ;
     }
     public projectDTO getById(int id){
         project p = this.projectRepo.findById(id).get();
        return new projectDTO(p.getId(),p.getProjectName(),p.getProjectDescrp(),p.getStart(),p.getEnd(),p.getBudget(),p.getClientName(),p.getWorkSpace().getId(),p.getWorkSpace().getName());
+
 
 
 
@@ -50,6 +53,7 @@ public class projectService {
         return prj ;
       }
       return null ;
+
 
 
     }
@@ -107,4 +111,5 @@ public class projectService {
       return null ;
     }}
 }
+
 

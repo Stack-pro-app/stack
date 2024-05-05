@@ -9,10 +9,11 @@ namespace gateway_chat_server.Producer
         public void SendMessage<T>(T message)
         {
             var factory = new ConnectionFactory {
+                //HostName = "localhost",
                 HostName = Environment.GetEnvironmentVariable("MQ_HOST"),
                 UserName = Environment.GetEnvironmentVariable("MQ_USER"),
                 Password = Environment.GetEnvironmentVariable("MQ_PASSWORD"),
-                Port = int.Parse(Environment.GetEnvironmentVariable("MQ_PORT"))
+                Port = int.Parse(Environment.GetEnvironmentVariable("MQ_PORT")??"5672")
             };
             var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();

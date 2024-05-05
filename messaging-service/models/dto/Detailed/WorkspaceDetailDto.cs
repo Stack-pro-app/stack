@@ -7,9 +7,7 @@ namespace messaging_service.models.dto.Detailed
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int adminId { get; set; }
         public ChannelDetailDto MainChannel { get; set; }
-        public List<ChannelMinimalDto>? PublicChannels { get; set; }
-        public List<ChannelMinimalDto>? PrivateChannels { get; set; }
+        public List<ChannelMinimalDto>? Channels { get; set; }
     }
 }

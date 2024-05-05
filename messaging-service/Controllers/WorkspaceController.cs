@@ -1,15 +1,12 @@
-﻿
-
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using messaging_service.Repository;
+﻿using Microsoft.AspNetCore.Mvc;
+using messaging_service.Repository.Interfaces;
 using AutoMapper;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Response;
 using messaging_service.models.dto.Others;
 using messaging_service.models.domain;
 using messaging_service.models.dto.Detailed;
-using System.ComponentModel.DataAnnotations;
+using messaging_service.Filters;
 
 namespace messaging_service.Controllers
 {
@@ -17,9 +14,9 @@ namespace messaging_service.Controllers
     [ApiController]
     public class WorkspaceController : ControllerBase
     {
-        private readonly WorkspaceRepository _repository;
+        private readonly IWorkspaceRepository _repository;
         private readonly IMapper _mapper;
-        public WorkspaceController(WorkspaceRepository repository,IMapper mapper)
+        public WorkspaceController(IWorkspaceRepository repository,IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -28,12 +25,8 @@ namespace messaging_service.Controllers
         [HttpPost]
         public async Task<ActionResult<ResponseDto>> CreateWorkspace([FromBody]WorkspaceRequestDto workspace)
         {
-            try
-            {
-                Console.Write(workspace);
-                bool result = await _repository.CreateWorkspaceAsync(workspace.Name,workspace.userId);
-                if (result)
-                {
+                Workspace ws = _mapper.Map<Workspace>(workspace);
+                await _repository.CreateWorkspaceAsync(ws);
                     ResponseDto response = new()
                     {
                         Result = null,
@@ -41,27 +34,12 @@ namespace messaging_service.Controllers
                         Message = "Workspace Succesfully Created",
                     };
                     return Ok(response);
-
-                }
-                else
-                {
-                    throw new ValidationException("Failed to ad !");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
         }
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<ResponseDto>> DeleteWorkspace([FromRoute]int id)
+        //Admin Middleware Here
+        [HttpDelete("{workspaceId}")]
+        public async Task<ActionResult<ResponseDto>> DeleteWorkspace([FromRoute]int workspaceId)
         {
-            try
-            {
-                bool result = await _repository.DeleteWorkspaceAsync(id);
-                if (result)
-                {
+                await _repository.DeleteWorkspaceAsync(workspaceId);
                     ResponseDto response = new()
                     {
                         Result = null,
@@ -70,26 +48,12 @@ namespace messaging_service.Controllers
                     };
                     return Ok(response);
 
-                }
-                else
-                {
-                    throw new ValidationException("Failed to Delete !");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-
         }
-        [HttpPut("{id}")]
-        public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int id,[FromBody]WorkspaceName workspace)
+        [HttpPut("{workspaceId}")]
+        public async Task<ActionResult<ResponseDto>> ChangeWorkspaceName([FromRoute]int workspaceId,[FromBody]WorkspaceName workspace)
         {
-            try
-            {
-                bool result = await _repository.UpdateWorkspaceAsync(id,workspace.Name);
-                if (result)
-                {
+
+                await _repository.UpdateWorkspaceAsync(workspaceId, workspace.Name);
                     ResponseDto response = new()
                     {
                         Result = null,
@@ -97,25 +61,14 @@ namespace messaging_service.Controllers
                         Message = "Workspace Name Succesfully Updated",
                     };
                     return Ok(response);
-
-                }
-                else
-                {
-                    throw new ValidationException("Failed to Update Name !");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
-            }
         }
-        //Workspace and it's channels by Id (and the user's Id extacted from jwt Token!)
-        [HttpGet("{id}/user/{userId}")]
-        public async Task<ActionResult<ResponseDto>> GetWorkspace([FromRoute]int id, [FromRoute]int userId)
+
+        [HttpGet("{workspaceId}")]
+        public async Task<ActionResult<ResponseDto>> GetWorkspace([FromRoute]int workspaceId, [FromQuery]int userId)
         {
             try
             {
-                WorkspaceDetailDto workspace = await _repository.GetWorkspaceAsync(id,userId);
+                WorkspaceDetailDto workspace = await _repository.GetWorkspaceAsync(workspaceId,userId);
                 ResponseDto response = new()
                 {
                     Result = workspace,

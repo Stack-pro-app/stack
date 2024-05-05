@@ -1,6 +1,7 @@
 package com.ProjectMana.ProjectManagementSpring.enteties;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
@@ -39,12 +40,17 @@ public class project {
   @JsonIgnore
   private WorkSpace workSpace;
 
+  @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+  @JsonManagedReference
+
+    public List<Task> tasks ;
 
 
   @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
   @JsonManagedReference
 
     public List<Task> tasks ;
+
 
     public project(Integer id) {
         this.id = id;

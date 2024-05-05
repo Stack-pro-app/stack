@@ -3,6 +3,7 @@ package com.ProjectMana.ProjectManagementSpring.enteties;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -29,6 +30,7 @@ public class UserT {
 
 
 
+
     @OneToMany(mappedBy = "user")
     @JsonManagedReference
      List<Task> tasks;
@@ -40,6 +42,7 @@ public class UserT {
   public UserT(String authId) {
     this.authId = authId;
   }
+
 
   public List<Task> getTasks() {
     return tasks;

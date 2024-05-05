@@ -1,0 +1,6 @@
+﻿obj/
+obj/*
+bin/
+bin/*
+.idea
+.vs*

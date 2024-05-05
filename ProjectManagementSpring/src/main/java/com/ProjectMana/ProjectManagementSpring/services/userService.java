@@ -5,12 +5,14 @@ import com.ProjectMana.ProjectManagementSpring.enteties.UserT;
 import com.ProjectMana.ProjectManagementSpring.enteties.WorkSpace;
 import com.ProjectMana.ProjectManagementSpring.repo.UserRepo;
 import com.ProjectMana.ProjectManagementSpring.repo.WorkSpaceRepo;
+
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import  com.ProjectMana.ProjectManagementSpring.repo.projectRepo;
+
 
 @Service
 public class userService {
@@ -29,11 +31,13 @@ public class userService {
         List<UserT> l1  = this.userRepo.findAll();
         for(UserT u : l1){
             l.add(new userDTO(u.id,u.userName,u.authId,u.email));
+
         }
         return l;
     }
   public userDTO post(userDTO user ){
     UserT u = new UserT(null,user.userName,user.AuthId,user.email,null);
+
     user.id= this.userRepo.save(u).id;
     return user ;
   }
@@ -84,6 +88,7 @@ public class userService {
     }
     return false ;
   }
+
 
 
 }
