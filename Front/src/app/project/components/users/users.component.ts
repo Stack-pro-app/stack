@@ -42,8 +42,6 @@ export class UsersComponent implements OnInit {
   }
 
 
-
-
   act() {
     console.log(this.taskId);
   }
