@@ -71,7 +71,7 @@ namespace messaging_service.Repository
                 IEnumerable<Channel> authorizedChannels;
                 if (await VerifyAdminStatusV2(userId, workspaceId))
                 {
-                    authorizedChannels = await _context.Channels.Where(c => c.Is_OneToOne == false).ToListAsync();
+                    authorizedChannels = await _context.Channels.Where(c => c.Is_OneToOne == false && c.Is_private == true).ToListAsync();
                 }
                 else
                 {

@@ -20,6 +20,12 @@ namespace messaging_service.Services
             _channelRepository = channelRepository;
             _producer = producer;
         }
+
+        public void SendNotification(NotificationDto notif)
+        {
+            _producer.SendToQueue(notif,"notification");
+        }
+
         public Task SendJoiningChannelNotif(int channelId)
         {
             throw new NotImplementedException();
@@ -43,10 +49,9 @@ namespace messaging_service.Services
                 workspaceId = channel.WorkspaceId,
                 Message = $"New Messages in {channel.Name}/{workspace}",
                 NotificationStrings = notifStrings
-
             };
             //Send notification
-            _producer.SendToQueue(notification,"notification");
+            SendNotification(notification);
         }
     }
 }

@@ -15,6 +15,9 @@ namespace notif_service.Controllers
             _notificationService = notificationService;
             _mapper = mapper;
         }
+        /// <summary>
+        /// Get Unseen Notifications , once you get them they become seen
+        /// </summary>
         [HttpGet("Unseen/{notificationString}")]
         public async Task<ActionResult<ResponseDto>> GetUnseenNotifications([FromRoute] string notificationString)
         {
@@ -34,7 +37,9 @@ namespace notif_service.Controllers
                 return BadRequest(response);
             }
         }
-
+        /// <summary>
+        /// Get old and seen Notifications by pages of 20
+        /// </summary>
         [HttpGet("Seen/{notificationString}")]
         public async Task<ActionResult<ResponseDto>> GetseenNotifications([FromRoute] string notificationString, [FromQuery]int page)
         {
@@ -55,7 +60,9 @@ namespace notif_service.Controllers
                 return BadRequest(response);
             }
         }
-
+        /// <summary>
+        /// Sets the all notifications of a user to seen (no need to use it for now)
+        /// </summary>
         [HttpPut("SetSeen/{notificationString}")]
         public async Task<ActionResult<ResponseDto>> SetSeenNotifications([FromRoute] string notificationString)
         {
@@ -74,7 +81,9 @@ namespace notif_service.Controllers
                 return BadRequest(response);
             }
         }
-
+        /// <summary>
+        /// Used To add a notification via Rest Api (used for 3rd party integration)
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<ResponseDto>> AddNotification([FromBody]NotificationDtoV2 notificationDto)
         {

@@ -17,7 +17,7 @@ namespace messaging_service.models.domain
         public bool? Is_OneToOne { get; set; } = false;
         public int WorkspaceId { get; set; }
         public Workspace Workspace { get; set; } = null!;
-        public ICollection<Member> Members { get; set; } = new List<Member>();
-        public ICollection<Chat> Messages { get; set; } = new HashSet<Chat>();
+        public ICollection<Member> Members { get; } = new List<Member>();
+        public ICollection<Chat> Messages { get; } = new HashSet<Chat>();
     }
 }

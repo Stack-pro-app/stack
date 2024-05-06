@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using messaging_service.Controllers;
+using messaging_service.models.domain;
 using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto.Others;
 using messaging_service.models.dto.Requests;
@@ -26,11 +27,12 @@ namespace messaging_service.tests.controller.tests
         public async Task CreateWorkspace_ValidWorkspace_ReturnsOkWithSuccessMessage()
         {
             // Arrange
-            var workspaceRequestDto = new WorkspaceRequestDto { };
-            Mock.Get(workspaceRepository).Setup(repo => repo.CreateWorkspaceAsync(workspaceRequestDto.Name, workspaceRequestDto.userId)).Returns(Task.CompletedTask);
+            var workspace = new Workspace();
+            var workspace1 = new WorkspaceRequestDto();
+            Mock.Get(workspaceRepository).Setup(repo => repo.CreateWorkspaceAsync(workspace)).Returns(Task.CompletedTask);
 
             // Act & Assert
-            async Task<ActionResult<ResponseDto>> Action() => await Controller.CreateWorkspace(workspaceRequestDto);
+            async Task<ActionResult<ResponseDto>> Action() => await Controller.CreateWorkspace(workspace1);
             var result = await Action();
 
             var okResult = Assert.IsType<OkObjectResult>(result.Result);

@@ -1,0 +1,53 @@
+{
+  "Routes": [
+    {
+      "UpstreamPathTemplate": "/api/Invitation",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "messaging-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Invitation"
+    },
+    {
+      "UpstreamPathTemplate": "/api/Invitation/{userId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "messaging-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Invitation/{userId}"
+    },
+    {
+      "UpstreamPathTemplate": "/api/Invitation/accept/{token}",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "messaging-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Invitation/accept/{token}"
+    },
+    {
+      "UpstreamPathTemplate": "/api/Invitation/decline/{token}",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "messaging-service",
+          "Port": 8080
+        }
+      ],
+      "DownstreamPathTemplate": "/api/Invitation/decline/{token}"
+    }
+
+  ]
+}

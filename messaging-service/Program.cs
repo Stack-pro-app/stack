@@ -3,13 +3,14 @@ using Amazon.S3;
 using messaging_service.Consumer;
 using messaging_service.Data;
 using messaging_service.Exceptions;
-using messaging_service.Filters;
 using messaging_service.MappingProfiles;
 using messaging_service.Producer;
 using messaging_service.Repository;
 using messaging_service.Repository.Interfaces;
 using messaging_service.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,11 +51,24 @@ builder.Services.AddAWSService<IAmazonS3>();
 builder.Services.AddScoped<IRabbitMQProducer,RabbitMQProducer>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Messaging APIs",
+        Description = "This the documentation for The Messaging Service Apis",
+    });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 builder.Services.AddHealthChecks();
 builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IInvitationService,InvitationService>();
+builder.Services.AddScoped<IInvitationRepository,InvitationRepository>()
+    .AddProblemDetails()
+    .AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddScoped<IUserRepository,UserRepository>()
     .AddProblemDetails()
     .AddExceptionHandler<GlobalExceptionHandler>();
@@ -67,15 +81,9 @@ builder.Services.AddScoped<IChatRepository,ChatRepository>()
 builder.Services.AddScoped<IChannelRepository,ChannelRepository>()
     .AddProblemDetails()
     .AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddScoped<WorkspaceAccessFilter>()
-    .AddProblemDetails()
-    .AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.AddScoped<AdminAccess>()
-    .AddProblemDetails()
-    .AddExceptionHandler<GlobalExceptionHandler>();
 
 
-builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile));
+builder.Services.AddAutoMapper(typeof(MemberProfile),typeof(UserProfile),typeof(WorkspaceProfile),typeof(ChannelProfile),typeof(ChatProfile),typeof(InvitationProfile));
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
 var rabbitMQConsumer = scope.ServiceProvider.GetRequiredService<RabbitMQConsumer>();
@@ -89,8 +97,6 @@ app.UseSwagger();
 app.UseSwaggerUI();
 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 await dbContext.Database.MigrateAsync();
-
-builder.Services.AddHealthChecks();
     
 app.UseAuthorization();
 app.UseStatusCodePages();
