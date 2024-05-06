@@ -1,4 +1,5 @@
 .vs
+.idea/
 # Logs
 logs
 *.log
@@ -9,6 +10,7 @@ lerna-debug.log*
 .pnpm-debug.log*
 
 obj/
+target/
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

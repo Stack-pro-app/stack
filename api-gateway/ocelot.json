@@ -210,6 +210,18 @@
       ]
     },
     {
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "UpstreamPathTemplate": "/notification/{catchAll}",
+      "DownstreamPathTemplate": "/{catchAll}",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
+          "Port": 8080
+        }
+      ]
+    },
+    {
       "UpstreamPathTemplate": "/api/Notification/Unseen/{notificationString}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "http",
