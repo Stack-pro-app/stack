@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using notif_service.Consumer;
 using notif_service.Hubs;
 using notif_service.Models;
@@ -5,6 +6,7 @@ using notif_service.Producer;
 using notif_service.Profiles;
 using notif_service.Services;
 using notif_service.Services.Email;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSignalR();
@@ -30,7 +32,17 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Messaging APIs",
+        Description = "This the documentation for The Messaging Service Apis",
+    });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 var app = builder.Build();
 using var scope = app.Services.CreateScope();

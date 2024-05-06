@@ -3,14 +3,12 @@ using Amazon.S3;
 using messaging_service.Consumer;
 using messaging_service.Data;
 using messaging_service.Exceptions;
-using messaging_service.Filters;
 using messaging_service.MappingProfiles;
 using messaging_service.Producer;
 using messaging_service.Repository;
 using messaging_service.Repository.Interfaces;
 using messaging_service.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -53,7 +51,6 @@ builder.Services.AddAWSService<IAmazonS3>();
 builder.Services.AddScoped<IRabbitMQProducer,RabbitMQProducer>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
