@@ -1,5 +1,3 @@
-import { NotificationService } from './../../../core/services/Notification/notification.service';
-import { Notification, ResponseDto } from './../../../core/Models/notification';
 import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { ChannelComponent } from '../../../shared/components/channel/channel.component';
@@ -17,8 +15,7 @@ import { WorkspaceService } from '../../../core/services/Workspace/workspace.ser
 import { Workspace } from '../../../core/Models/workspace';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
 import { UserService } from '../../../core/services/user.service';
-import { SignalrNotifService } from '../../../core/services/signalr-notif/signalr-notif.service';
-import { NotificationTestComponent } from '../notification/notification-test/notification-test.component';
+import { NotificationComponent } from '../notification/notification.component';
 
 @Component({
   selector: 'app-main',
@@ -29,7 +26,7 @@ import { NotificationTestComponent } from '../notification/notification-test/not
     ChannelComponent,
     ReactiveFormsModule,
     CommonModule,
-    NotificationTestComponent
+    NotificationComponent
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
@@ -78,9 +75,7 @@ export class MainComponent implements OnInit, OnChanges {
     private builder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private workspaceService: WorkspaceService,
-    private notificationService: NotificationService,
-    private signalRNotif: SignalrNotifService
+    private workspaceService: WorkspaceService
 
   ) {}
   public channelForm!: FormGroup;
@@ -140,21 +135,6 @@ export class MainComponent implements OnInit, OnChanges {
           console.error('Login error', error);
         },
       });
-      //================================Notifications==============================
-      this.signalRNotif.startConnection().subscribe(() => {
-        console.log('SignalR connection established');
-        this.signalRNotif.joinGroup(this.notifString);
-      }, error => {
-        console.error('Error starting SignalR connection:', error);
-      });
-
-      // Receive new notifications
-      this.signalRNotif.receiveMessage().subscribe((message: any) => {
-        console.log(message);
-        this.NewNotif = true;
-      }, error => {
-        console.error('Error receiving message:', error);
-      })
   }
   reload() {
     this.workspaceService
@@ -315,34 +295,5 @@ export class MainComponent implements OnInit, OnChanges {
   }
   filterItems() {}
   //===============================================================================
-  ShowOld: boolean = false;
-  notifications: Notification[]=[];
-  NewNotif: boolean = false;
-  notifString: string = 'CB10C1B1-B209-4AA1-8089-7316577F0127';
-  FetchNew(){
-    this.notificationService.GetUnSeenNotifications(this.notifString).subscribe((response:ResponseDto) => {
-      this.notifications = response.result;
-      console.log(this.notifications);
-    });
-    this.ShowOld = false;
-  };
-  FetchOld(){
-    this.notificationService.GetSeenNotifications(this.notifString).subscribe({
-      next: (response:ResponseDto) => {
-      this.notifications = response.result;
-    },
-    error: (error) => {
-      console.error(error);
-    },
-    complete: () => {},
-  });
-      this.ShowOld = true;
-  };
-  isNotifAvailable():boolean{
-    return this.notifications.length > 0;
-  }
-  CheckNotif(){
-    this.NewNotif = false;
-    this.FetchNew();
-  }
+
 }

@@ -14,6 +14,6 @@ export class NotificationService {
     return this.httpClient.get(`${this.url}/Unseen/${notifString}`);
   }
   GetSeenNotifications(notifString:string):Observable<any>{
-    return this.httpClient.get(`${this.url}/Seen/${notifString}?page=1`);
+    return this.httpClient.get(`${this.url}/Seen/${notifString}`);
   }
 }
