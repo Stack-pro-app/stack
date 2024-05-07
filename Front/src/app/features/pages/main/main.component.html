@@ -8,7 +8,7 @@
         <a class="btn btn-ghost text-xl" onclick="my_modal_8.showModal()"
           ># {{ currentChannelP.name }}</a
         >
-        <label
+        <!-- <label
           class="input input-bordered h-8 w-full m-3 ml-10 mr-10 flex items-center gap-2"
         >
           <input
@@ -16,6 +16,7 @@
             class="grow size"
             placeholder="Search {{ currentWorkspace.name }}"
           />
+
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -28,9 +29,8 @@
               clip-rule="evenodd"
             />
           </svg>
-        </label>
+        </label> -->
       </div>
-
       <dialog id="my_modal_8" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
           <form
@@ -124,7 +124,7 @@
               >
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">WorkSpace Name : </span>
+                    <span class="label-text">Workspace Name : </span>
                   </label>
                   <input
                     formControlName="workspaceName"
@@ -365,6 +365,35 @@
             ></path>
           </svg>
         </label>
+        <div class="dropdown dropdown-end">
+          <button tabindex="0" class="btn btn-ghost btn-circle" (click)="this.CheckNotif()">
+            <div class="indicator">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+              </svg>
+
+
+              <span class="badge badge-xs badge-primary indicator-item" *ngIf="this.NewNotif"></span>
+            </div>
+        </button>
+          <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-96">
+            <span class="flex justify-start p-6"><button class="btn btn-outline btn-primary w-16"
+              [ngClass]="{'btn-active': !ShowOld, 'btn-outline': ShowOld}" (click)="this.FetchNew()">New</button>
+            <button class="btn btn-outline ml-2 btn-primary w-16"  [ngClass]="{'btn-active': ShowOld, 'btn-outline': !ShowOld}" (click)="this.FetchOld()">Old</button></span>
+          <ng-container *ngIf="isNotifAvailable()">
+            <li *ngFor="let notification of this.notifications" class="max-w-96 h-16">
+              <div class="flex justify-between">
+              <span>
+                {{notification.message}}
+              </span>
+              <span style="opacity: 0.7;">
+                {{notification.createdAt}}h
+              </span>
+            </div>
+            </li>
+          </ng-container>
+          </ul>
+        </div>
         <button class="btn btn-ghost btn-circle">
           <a [routerLink]="['/Call', currentChannelP.channelString]">
             <div class="indicator">
@@ -383,8 +412,9 @@
                 />
               </svg>
               <!-- add if a video call is online  -->
-
-              <span class="badge badge-xs badge-primary indicator-item"></span>
+              <ng-container *ngIf="NewNotif">
+              <span class="badge badge-xs badge-primary indicator-item" ></span>
+            </ng-container>
             </div>
           </a>
         </button>

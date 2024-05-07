@@ -95,11 +95,7 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/User/{authId}",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKeys": [ "Bearer" ],
-        "AllowedScopes": []
-      }
+      "DownstreamPathTemplate": "/api/User/{authId}"
     },
     {
       "UpstreamPathTemplate": "/api/User/Workspace",

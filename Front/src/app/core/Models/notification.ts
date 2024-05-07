@@ -1,5 +1,11 @@
 export interface Notification{
-Id: string,
-Message: string,
-CreatedAt: Date,
+id: string,
+message: string,
+createdAt: any,
+}
+
+export interface ResponseDto{
+  isSuccess: boolean,
+  result: Notification[],
+  message: string
 }

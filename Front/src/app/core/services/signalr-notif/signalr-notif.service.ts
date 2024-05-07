@@ -6,7 +6,7 @@ import { AppConfig } from '../../../app.custom.config';
 @Injectable({
   providedIn: 'root',
 })
-export class SignalrService {
+export class SignalrNotifService {
   private hubConnection: signalR.HubConnection;
   private messageReceivedSubject = new Subject<any>();
   private sendSubject = new Subject<string>();
