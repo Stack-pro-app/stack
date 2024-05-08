@@ -38,7 +38,7 @@ export class InputComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
       console.log("this is the new channel : " , changes['currentChannelP'].currentValue);
-      
+
     }
   }
 
@@ -63,7 +63,7 @@ export class InputComponent implements OnInit, OnChanges {
       parentId: null,
     };
     this.signalrService.sendMessage(signalmessageDto);
-    this.service.SendMessage(this.messageDto).subscribe({
+  /*  this.service.SendMessage(this.messageDto).subscribe({
       next: (response) => {
         console.log(response);
       },
@@ -73,7 +73,7 @@ export class InputComponent implements OnInit, OnChanges {
       complete: () => {
         console.info('completed');
       },
-    });
+    });*/
     this.messageForm.reset();
   }
   get message(): FormControl {

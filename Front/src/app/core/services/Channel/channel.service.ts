@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Channel } from '../../Models/channel';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../../../enviromnents/enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChannelService {
-  url: string = 'http://localhost:8193/api/Channel';
+  url: string = environment.API_MESAAGING_URL + '/api/Channel';
   constructor(private http: HttpClient) {}
 
   CreateChannel(ChannelData: any): Observable<any> {
@@ -24,5 +25,9 @@ export class ChannelService {
       'Content-Type': 'application/json',
     });
     return this.http.put(RequestUrl, data, { headers });
+  }
+  GetChannelById(id: any): Observable<any> {
+    const RequestUrl = `${this.url}/${id}`;
+    return this.http.get(RequestUrl);
   }
 }

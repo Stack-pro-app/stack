@@ -420,11 +420,10 @@
       <div class="modal-box">
         <form
           [formGroup]="userForm"
-          (ngSubmit)="onAddUser()"
           class="card-body"
           method="dialog"
         >
-          <div class="form-control">
+          <div  class="form-control">
             <label class="label">
               <span class="label-text">User Email : </span>
             </label>
@@ -438,13 +437,31 @@
           </div>
 
           <div class="form-control mt-6">
-            <button type="submit" class="btn w-1/3 ml-auto">Add User</button>
+            <button type="submit" onclick="my_modal_19.showModal()" (click)="onFindUser()" (click)="Loading =!Loading" class="btn w-1/3 ml-auto">Add User</button>
             <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
           </div>
         </form>
         <form method="dialog"></form>
       </div>
+
     </dialog>
+    <!-- Open the modal using ID.showModal() method -->
+  <dialog id="my_modal_19" class="modal">
+  <div  class="modal-box">
+    <h3 *ngIf="!Loading" class="font-bold text-lg">{{foundUser.name}}</h3>
+    <p *ngIf="!Loading" class="py-4">{{foundUser.email}}</p>
+    <span *ngIf="Loading" class="loading loading-spinner loading-lg"></span>
+
+    <div class="modal-action">
+      <form method="dialog"
+      >
+        <!-- if there is a button in form, it will close the modal (ngSubmit)="onAddUser()" -->
+        <button class="btn mr-5">invite User</button>
+        <button class="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
     <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
       <div class="modal-box">
         <form
