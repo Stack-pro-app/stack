@@ -280,6 +280,8 @@ export class MainComponent implements OnInit, OnChanges {
     this.userService.getUersFromWorkSpace(this.currentWorkspace.id).subscribe({
       next: (response) => {
         this.CUsers = response.result;
+        this.CUsers = this.CUsers
+
         console.log('Users', this.CUsers);
       },
       error: (error) => {
@@ -304,4 +306,37 @@ export class MainComponent implements OnInit, OnChanges {
       });
   }
   filterItems() {}
+  onInviteUser() {
+    this.workspaceService
+      .onInviteUser(this.foundUser.id, this.currentWorkspace.id)
+      .subscribe({
+        next: (response) => {
+          console.log('Confirmation', response);
+        },
+        error: (error) => {
+          console.error('get Users  error', error);
+        },
+        complete: () => {
+          this.reload();
+        },
+      });
+  }
+  OneToOne(user:any) {
+    const requset = {
+      "user1": localStorage.getItem('userId'),
+  "user2": 1003,
+  "workspaceId": this.currentWorkspace.id
+    }
+    this.service.OneToOne(requset).subscribe({
+      next: (response) => {
+        console.log('Confirmation', response);
+        this.currentChannelP =response.result;
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {
+      },
+    });
+  }
 }

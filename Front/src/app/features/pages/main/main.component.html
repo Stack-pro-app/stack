@@ -437,7 +437,7 @@
           </div>
 
           <div class="form-control mt-6">
-            <button type="submit" onclick="my_modal_19.showModal()" (click)="onFindUser()" (click)="Loading =!Loading" class="btn w-1/3 ml-auto">Add User</button>
+            <button type="submit" onclick="my_modal_19.showModal()" (click)="onFindUser()" (click)="Loading =!Loading" class="btn w-1/3 ml-auto">Find User</button>
             <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
           </div>
         </form>
@@ -456,7 +456,7 @@
       <form method="dialog"
       >
         <!-- if there is a button in form, it will close the modal (ngSubmit)="onAddUser()" -->
-        <button class="btn mr-5">invite User</button>
+        <button class="btn mr-5" (click)="onInviteUser()">invite User</button>
         <button class="btn">Close</button>
       </form>
     </div>
@@ -591,11 +591,11 @@
                     >
                       {{ user.name.charAt(0).toUpperCase() }}
                     </div>
-                    <a routerLink="/Profile">
+                    <button (click)="OneToOne(user.id)">
                       <span class="font-semibold text-sm"
                         >{{ user.name }}
                       </span>
-                    </a>
+                    </button>
                   </div>
                 </li>
                 <li class="py-1">

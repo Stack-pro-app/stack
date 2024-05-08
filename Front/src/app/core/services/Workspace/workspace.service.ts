@@ -15,7 +15,7 @@ export class WorkspaceService {
   Create(obj: any): Observable<any> {
     console.log(obj);
     const WorkespaceDto = {
-      adminId: 1002,
+      adminId: obj.adminId,
       name: obj.name,
     };
     const CreateUrl = `${this.url}`;
@@ -63,5 +63,14 @@ export class WorkspaceService {
     console.log(token[0].token);
 
     return this.http.put(`${environment.API_MESAAGING_URL}/api/Invitation/decline/${token[0].token}`,{});
+  }
+  onInviteUser(userId:any,workspaceId:any):Observable<any>{
+    const requestBody =
+      {
+        "workspaceId": workspaceId,
+        "userId": userId
+      };
+
+    return this.http.post(`${environment.API_MESAAGING_URL}/api/Invitation`,requestBody);
   }
 }

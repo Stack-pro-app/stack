@@ -51,4 +51,8 @@ export class UserService {
     return this.http.delete(RequestUrl);
   }
 
+  getUserById(id:any):Observable<any>{
+    const RequestUrl = `${this.url}/byId/${id}`;
+    return this.http.get(RequestUrl);
+  }
 }

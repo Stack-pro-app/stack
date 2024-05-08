@@ -30,4 +30,8 @@ export class ChannelService {
     const RequestUrl = `${this.url}/${id}`;
     return this.http.get(RequestUrl);
   }
+  OneToOne(ChannelData: any): Observable<any> {
+    const RequestUrl = `${this.url}/OneToOne`;
+    return this.http.post(RequestUrl, ChannelData);
+  }
 }
