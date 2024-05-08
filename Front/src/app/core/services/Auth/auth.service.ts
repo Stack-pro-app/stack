@@ -26,7 +26,7 @@ export class AuthService {
   }
   logout() {
     console.log(this.store.isLogged());
-    localStorage.removeItem('token');
+    localStorage.clear();
     console.log(this.store.isLogged());
   }
   register(userData: any): Observable<any> {
