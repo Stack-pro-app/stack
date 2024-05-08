@@ -5,6 +5,7 @@ export const environment = {
   API_NOTIFICATION_URL : "http://localhost:8092",
   API_BASE_URL : "http://localhost:8094",
   API_CHAT_URL : "http://localhost:8094",
+  
 
 
 }
