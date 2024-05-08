@@ -15,6 +15,7 @@ import { WorkspaceService } from '../../../core/services/Workspace/workspace.ser
 import { Workspace } from '../../../core/Models/workspace';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
 import { UserService } from '../../../core/services/user.service';
+import { StoreService } from '../../../core/services/store/store.service';
 
 @Component({
   selector: 'app-main',
@@ -69,6 +70,7 @@ export class MainComponent implements OnInit, OnChanges {
       name: 'enma No Katana',
     },
   ];
+  isAdmin: Boolean = false;
   CUsers!: any[];
   channels: Channel[] = [];
   constructor(
@@ -79,6 +81,7 @@ export class MainComponent implements OnInit, OnChanges {
     private router: Router,
     private route: ActivatedRoute,
     private workspaceService: WorkspaceService,
+    private store: StoreService,
   ) {}
   public channelForm!: FormGroup;
   public workspaceForm!: FormGroup;
@@ -90,6 +93,7 @@ export class MainComponent implements OnInit, OnChanges {
     }
   }
   ngOnInit() {
+    this.isAdmin = this.store.isAdmin();
     this.id = this.route.snapshot.paramMap.get('id');
     this.channelForm = this.builder.group({
       channelName: this.builder.control(''),
@@ -123,6 +127,7 @@ export class MainComponent implements OnInit, OnChanges {
             is_private: response.result.mainChannel.is_private,
             name: response.result.mainChannel.name,
           };
+          this.channels.push(this.currentChannelP);
 
 
           this.onGetUsers();

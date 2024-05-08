@@ -31,7 +31,7 @@
         </label>
       </div>
 
-      <dialog id="my_modal_8" class="modal modal-bottom sm:modal-middle">
+      <dialog *ngIf="isAdmin" id="my_modal_8" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
           <form
             [formGroup]="channelForm"
@@ -141,13 +141,7 @@
                   >
                     Change Name
                   </button>
-                  <button
-                    type="button"
-                    onclick="my_modal_3.showModal()"
-                    class="btn btn-error w-1/3 ml-auto"
-                  >
-                    Delete
-                  </button>
+
                   <button
                     type="submit"
                     onclick="my_modal_14.showModal()"
@@ -388,29 +382,7 @@
             </div>
           </a>
         </button>
-        <button
-          class="btn btn-ghost btn-circle"
-          onclick="my_modal_11.showModal()"
-        >
-          <div class="">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
-              />
-            </svg>
 
-            <!-- add if a video call is online  -->
-          </div>
-        </button>
       </div>
     </div>
     <app-channel [currentChannelP]="currentChannelP"></app-channel>
@@ -552,7 +524,7 @@
 
                 <li class="" onclick="my_modal_5.showModal()">
                   <div class="flex items-center">
-                    <button class="flex items-center">
+                    <button *ngIf="isAdmin" class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -598,24 +570,10 @@
                     </button>
                   </div>
                 </li>
-                <li class="py-1">
-                  <div class="flex items-center">
-                    <img
-                      src="https://i.ibb.co/XJ5y9WM/me.jpg"
-                      alt="User Avatar"
-                      class="w-6 h-6 rounded-full mr-2"
-                    />
-
-                    <a routerLink="/Profile">
-                      <span class="font-semibold text-sm"
-                        >hayaoui Mouad (you)
-                      </span>
-                    </a>
-                  </div>
-                </li>
+             
                 <li class="" onclick="my_modal_11.showModal()">
                   <div class="flex items-center">
-                    <button class="flex items-center">
+                    <button *ngIf="isAdmin" class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -638,7 +596,7 @@
           </li>
           <li>
             <details open>
-              <summary class=" ">Apps</summary>
+              <summary class="">Apps</summary>
               <ul>
                 <li class="py-1">
                   <div class="flex items-center">
@@ -648,14 +606,14 @@
                       class="w-6 h-6 rounded-full mr-2"
                     />
 
-                    <a routerLink="">
-                      <span class="font-semibold text-sm">Google Drive </span>
+                    <a [routerLink]="['/Project', 1]">
+                      <span class="font-semibold text-sm">Project</span>
                     </a>
                   </div>
                 </li>
                 <li class="">
                   <div class="flex items-center">
-                    <button class="flex items-center">
+                    <button *ngIf="isAdmin" class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -679,7 +637,7 @@
         </ul>
         <div class="divider"></div>
 
-        <div class="btm-nav">
+        <div class="btm-nav fixed inset-x-0 bottom-0 flex justify-between ">
           <button routerLink="/Profile" class="hover:bg-base-200">
             <a href="">
               <svg
@@ -698,7 +656,7 @@
               </svg>
             </a>
           </button>
-          <button class="hover:bg-base-200" onclick="my_modal_1.showModal()">
+          <button *ngIf="isAdmin" class="hover:bg-base-200" onclick="my_modal_1.showModal()">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
