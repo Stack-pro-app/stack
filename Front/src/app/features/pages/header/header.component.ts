@@ -5,11 +5,12 @@ import { Router, RouterLink } from '@angular/router';
 import { StoreService } from '../../../core/services/store/store.service';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/Auth/auth.service';
+import { ThemeSwitcherComponent } from '../../../shared/components/theme-switcher/theme-switcher.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, ThemeSwitcherComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
@@ -28,6 +29,7 @@ export class HeaderComponent implements OnInit {
   OnLogout() {
     this.service.logout();
     this.router.navigate(['/Welcome']);
+
   }
   onGetUserInvitaions(){
     this.workspaceService.getUserSInvitions(localStorage.getItem('userId')).subscribe({
@@ -81,6 +83,8 @@ export class HeaderComponent implements OnInit {
       next:(data)=>{
         console.log(data);
         this.onGetUserInvitaions();
+        window.location.reload();
+
       },
       error:(err)=>{
         console.log(err);

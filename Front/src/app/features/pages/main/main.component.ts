@@ -16,6 +16,7 @@ import { Workspace } from '../../../core/Models/workspace';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
 import { UserService } from '../../../core/services/user.service';
 import { StoreService } from '../../../core/services/store/store.service';
+import { ThemeSwitcherComponent } from '../../../shared/components/theme-switcher/theme-switcher.component';
 
 @Component({
   selector: 'app-main',
@@ -26,6 +27,7 @@ import { StoreService } from '../../../core/services/store/store.service';
     ChannelComponent,
     ReactiveFormsModule,
     CommonModule,
+    ThemeSwitcherComponent
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
