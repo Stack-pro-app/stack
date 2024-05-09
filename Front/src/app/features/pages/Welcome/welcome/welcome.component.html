@@ -9,7 +9,7 @@
       <button class="btn btn-primary m-5" routerLink="/Register">
         Sign Up with Email
       </button>
-      <button class="btn btn-primary m-5">Sign Up with Google</button>
+      <button *ngIf="isLogged" class="btn btn-primary m-5">Sign Up with Google</button>
 
       <p class="mb-5">Stack is free to try for as long as you’d like</p>
     </div>
