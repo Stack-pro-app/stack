@@ -26,12 +26,12 @@ jobs:
 
       - name: Restore dependencies
         run: |
-         cd auth-service/auth-service
+         cd auth-service
          dotnet restore
 
       - name: Build project
         run: |
-         cd auth-service/auth-service
+         cd auth-service
          dotnet build
 
       #- name: Test project
