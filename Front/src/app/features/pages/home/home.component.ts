@@ -61,7 +61,7 @@ export class HomeComponent implements OnInit {
       complete: () => console.info('complete'),
     });
 
-   
+
   }
   OnLogout() {
     this.service.logout();

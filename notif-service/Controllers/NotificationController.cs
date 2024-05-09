@@ -19,12 +19,12 @@ namespace notif_service.Controllers
         /// Get Unseen Notifications , once you get them they become seen
         /// </summary>
         [HttpGet("Unseen/{notificationString}")]
-        public async Task<ActionResult<ResponseDto>> GetUnseenNotifications([FromRoute] string notificationString)
+        public async Task<ActionResult<ResponseDto>> GetUnseenNotifications([FromRoute] string notificationString, [FromQuery] int page)
         {
             ResponseDto response = new ResponseDto();
             try
             {
-                var notifications = await _notificationService.GetUnseenNotificationsAsync(notificationString);
+                var notifications = await _notificationService.GetUnseenNotificationsAsync(notificationString,page);
                 List<NotificationDto> notificationsDto = notifications.Select(n => _mapper.Map<NotificationDto>(n)).ToList();
                 response.Result = notificationsDto;
                 response.IsSuccess = true;

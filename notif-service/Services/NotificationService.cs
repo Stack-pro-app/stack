@@ -30,18 +30,26 @@ namespace notif_service.Services
             return notifications;
         }
 
-        public async Task<List<Notification>> GetUnseenNotificationsAsync(string notificationString)
+        public async Task<List<Notification>> GetUnseenNotificationsAsync(string notificationString, int page)
         {
             var filter = Builders<Notification>.Filter.ElemMatch(n => n.NotificationStrings, ns => ns.Value == notificationString && ns.IsSeen == false);
-
             var notifications = await _notifications.Find(filter)
-                                    .SortByDescending(n => n.CreatedAt)
-                                    .ToListAsync();
+                                                .SortByDescending(n => n.CreatedAt)
+                                                .Skip((page - 1) * 10)
+                                                .Limit(10)
+                                                .ToListAsync();
+
+            var notificationIds = notifications.Select(n => n.Id).ToList();
+            var updateFilter = Builders<Notification>.Filter.And(
+                filter,
+                Builders<Notification>.Filter.In(n => n.Id, notificationIds)
+            );
 
             var update = Builders<Notification>.Update.Set("NotificationStrings.$.IsSeen", true);
-            await _notifications.UpdateOneAsync(filter, update);
+            await _notifications.UpdateManyAsync(updateFilter, update);
 
             return notifications;
+
         }
 
         public async Task SetNotificationsSeenAsync(string notificationString)

@@ -9,7 +9,20 @@ using notif_service.Services.Email;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+                      policy =>
+                      {
+                        policy.WithOrigins("http://localhost:4200", "http://localhost:8084") // Change port to 4200
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                      });
+});
 builder.Services.AddSignalR();
+
 
 var dbUser = Environment.GetEnvironmentVariable("DB_USER");
 var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
@@ -30,7 +43,6 @@ builder.Services.AddScoped<IEmailservice,EmailService>();
 builder.Services.AddScoped<IRabbitMQProducer,RabbitMQProducer>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -38,7 +50,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Version = "v1",
         Title = "Messaging APIs",
-        Description = "This the documentation for The Messaging Service Apis",
+        Description = "This the documentation for The Notification Service Apis",
     });
     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
@@ -53,8 +65,7 @@ rabbitMQConsumer.StartConsuming();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-
-app.UseHttpsRedirection();
+app.UseCors(myAllowSpecificOrigins);
 
 app.UseAuthorization();
 

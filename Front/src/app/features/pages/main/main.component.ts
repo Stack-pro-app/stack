@@ -15,6 +15,7 @@ import { WorkspaceService } from '../../../core/services/Workspace/workspace.ser
 import { Workspace } from '../../../core/Models/workspace';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
 import { UserService } from '../../../core/services/user.service';
+import { NotificationComponent } from '../notification/notification.component';
 
 @Component({
   selector: 'app-main',
@@ -25,6 +26,7 @@ import { UserService } from '../../../core/services/user.service';
     ChannelComponent,
     ReactiveFormsModule,
     CommonModule,
+    NotificationComponent
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
@@ -74,6 +76,7 @@ export class MainComponent implements OnInit, OnChanges {
     private router: Router,
     private route: ActivatedRoute,
     private workspaceService: WorkspaceService
+
   ) {}
   public channelForm!: FormGroup;
   public workspaceForm!: FormGroup;
@@ -291,4 +294,6 @@ export class MainComponent implements OnInit, OnChanges {
       });
   }
   filterItems() {}
+  //===============================================================================
+
 }

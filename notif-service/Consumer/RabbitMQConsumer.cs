@@ -95,10 +95,15 @@ namespace notif_service.Consumer
                 
                 Notification notification = _mapper.Map<Notification>(notificationDto);
 
+                _logger.LogInformation(notification.ToString());
+
                 string notificationJson = await _notificationService.AddNotificationAsync(notification);
-                
-                foreach(NotificationString n in notification.NotificationStrings)
+
+                _logger.LogInformation(notificationJson);
+
+                foreach (NotificationString n in notification.NotificationStrings)
                 {
+                    _logger.LogInformation(n.Value);
                     await _notificationHub.Clients.Group(n.Value)
                         .SendAsync("notificationReceived", "New Notifications");
                 }

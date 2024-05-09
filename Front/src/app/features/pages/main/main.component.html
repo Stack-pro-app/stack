@@ -8,7 +8,7 @@
         <a class="btn btn-ghost text-xl" onclick="my_modal_8.showModal()"
           ># {{ currentChannelP.name }}</a
         >
-        <label
+        <!-- <label
           class="input input-bordered h-8 w-full m-3 ml-10 mr-10 flex items-center gap-2"
         >
           <input
@@ -16,6 +16,7 @@
             class="grow size"
             placeholder="Search {{ currentWorkspace.name }}"
           />
+
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 16 16"
@@ -28,9 +29,8 @@
               clip-rule="evenodd"
             />
           </svg>
-        </label>
+        </label> -->
       </div>
-
       <dialog id="my_modal_8" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
           <form
@@ -124,7 +124,7 @@
               >
                 <div class="form-control">
                   <label class="label">
-                    <span class="label-text">WorkSpace Name : </span>
+                    <span class="label-text">Workspace Name : </span>
                   </label>
                   <input
                     formControlName="workspaceName"
@@ -365,6 +365,7 @@
             ></path>
           </svg>
         </label>
+        <app-notification></app-notification>
         <button class="btn btn-ghost btn-circle">
           <a [routerLink]="['/Call', currentChannelP.channelString]">
             <div class="indicator">
@@ -383,8 +384,7 @@
                 />
               </svg>
               <!-- add if a video call is online  -->
-
-              <span class="badge badge-xs badge-primary indicator-item"></span>
+              <span class="badge badge-xs badge-primary indicator-item" ></span>
             </div>
           </a>
         </button>
