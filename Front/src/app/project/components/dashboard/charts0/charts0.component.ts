@@ -39,8 +39,6 @@ export class Charts0Component implements OnInit{
     console.log(this.act1.paramMap.subscribe({
       next :value =>{
         this.idAdmin=value?.get('id');
-        console.log("XXXXXXXXXXXX");
-        console.log(this.idAdmin);
         this.data$ = this.taskservice.getGant0(this.idAdmin).pipe(
           map(value => {
             const dt : Statis[] =[];

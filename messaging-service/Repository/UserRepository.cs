@@ -60,12 +60,18 @@ namespace messaging_service.Repository
 
         public async Task<IEnumerable<User>> GetUsersByChannelAsync(int channelId)
         {
-                IEnumerable<User> usersByChannel = await _context.Members
+            Channel channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId) ?? throw new ValidationException("Channel not found");
+            if (!channel.Is_private)
+            {
+                return await _context.UsersWorkspaces.Where(uw => uw.WorkspaceId == channel.WorkspaceId).Include(uw => uw.User).Select(uw => uw.User).ToListAsync();
+            }
+
+             IEnumerable<User> usersByChannel = await _context.Members
                     .Where(member => member.ChannelId == channelId)
                     .Include(m=>m.User)
                     .Select(m=>m.User)
                     .ToListAsync();
-                return usersByChannel;
+            return usersByChannel;
         }
 
         public async Task<IEnumerable<UserDetailDto>> GetUsersByWorkspaceAsync(int workspaceId)
@@ -145,7 +151,7 @@ namespace messaging_service.Repository
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new ValidationException("User not found");
                 user.Last_login = DateTime.Now;
                 await _context.SaveChangesAsync();
-                IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == 1).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
+                IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == user.Id).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
                 return workspaces;
         }
     }

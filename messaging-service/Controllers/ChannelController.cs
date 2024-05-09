@@ -1,13 +1,10 @@
 ﻿using messaging_service.models.dto.Response;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using messaging_service.models.domain;
-using messaging_service.Repository;
 using AutoMapper;
 using messaging_service.models.dto.Detailed;
 using messaging_service.models.dto.Requests;
 using messaging_service.models.dto.Others;
-using System.ComponentModel.DataAnnotations;
 using messaging_service.Repository.Interfaces;
 
 namespace messaging_service.Controllers
@@ -23,7 +20,9 @@ namespace messaging_service.Controllers
             _repository = repository;
             _mapper = mapper;
         }
-        //Create A Channel (Private or Public)
+        /// <summary>
+        /// Creates a channel, public or private
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<ResponseDto>> CreateChannel([FromBody]ChannelRequestDto channelDto)
         {
@@ -51,7 +50,9 @@ namespace messaging_service.Controllers
             }
 
         }
-        //Delete A Channel
+        /// <summary>
+        /// Deletes a channel by it's id
+        /// </summary>
         [HttpDelete("{id}")]
         public async Task<ActionResult<ResponseDto>> DeleteChannel([FromRoute]int id)
         {
@@ -78,7 +79,9 @@ namespace messaging_service.Controllers
             }
         }
 
-        //Update Channel
+        /// <summary>
+        /// Updates a channel (could be used to make it public)
+        /// </summary>
         [HttpPut]
         public async Task<ActionResult<ResponseDto>> UpdateChannel([FromBody]ChannelUpdateDto channelDto)
         {
@@ -106,7 +109,9 @@ namespace messaging_service.Controllers
             }
         }
 
-        //Get a channel info
+        /// <summary>
+        /// Used To get a channel by it's id
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseDto>> GetChannel([FromRoute]int id)
         {
@@ -133,8 +138,9 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
-
-        //Add Users To A Private Channel
+        /// <summary>
+        /// Used To Add a user to a private channel
+        /// </summary>
         [HttpPost("AddUser/{channelId}")]
         public async Task<ActionResult<ResponseDto>> AddToPrivateChannel([FromRoute] int channelId,[FromBody]UserMinDto user)
         {
@@ -160,7 +166,9 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
-
+        /// <summary>
+        /// Used To Remove a user from a private channel (first Id is the channel's id, the second is the user Id)
+        /// </summary>
         [HttpDelete("{channelId}/RemoveUser/{id}")]
         public async Task<ActionResult<ResponseDto>> RemoveFromPrivateChannel([FromRoute] int channelId, [FromRoute]int id)
         {
@@ -186,6 +194,9 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
+        /// <summary>
+        /// Used To Get a One To One Channel info, it creates a new one if it's not already created
+        /// </summary>
         [HttpPost("OneToOne")]
         public async Task<ActionResult<ResponseDto>> FindOrCreateOneToOneChannel([FromBody] OneToOneChannelRequest request)
         {

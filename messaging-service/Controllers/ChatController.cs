@@ -24,6 +24,9 @@ namespace messaging_service.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Used To Store a Message (Not adviced use Gateway Chat Service)
+        /// </summary>
         [HttpPost]
         public async Task<ActionResult<ResponseDto>> StoreMessage([FromBody]MessageRequestDto messageRequestDto)
         {
@@ -50,6 +53,9 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
+        /// <summary>
+        /// Used To Delete a certain message
+        /// </summary>
         [HttpDelete("{messageId}")]
         public async Task<ActionResult<ResponseDto>> DeleteMessage([FromRoute]Guid messageId)
         {
@@ -75,6 +81,9 @@ namespace messaging_service.Controllers
             }
         }
 
+        /// <summary>
+        /// Used To Update a certain message
+        /// </summary>
         [HttpPut("{id}")]
         public async Task<ActionResult<ResponseDto>> UpdateMessage([FromBody]MessageUpdateDto message)
         {
@@ -98,6 +107,9 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
+        /// <summary>
+        /// Used To get a certain message
+        /// </summary>
         [HttpGet("{id}")]
         public async Task<ActionResult<ResponseDto>> GetMessageById([FromRoute]int id)
         {
@@ -122,6 +134,9 @@ namespace messaging_service.Controllers
                 return BadRequest(response);
             }
         }
+        /// <summary>
+        /// Used To get a channel's messages using the channel's id and the page number (page 1 for the last 20 messages)
+        /// </summary>
         [HttpGet("channel/{channelId}")]
         public async Task<ActionResult<ResponseDto>> GetMessageByChannelId([FromRoute] int channelId, [FromQuery]int page)
         {

@@ -46,10 +46,7 @@ public class project {
     public List<Task> tasks ;
 
 
-  @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-  @JsonManagedReference
 
-    public List<Task> tasks ;
 
 
     public project(Integer id) {

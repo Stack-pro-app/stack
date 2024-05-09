@@ -53,4 +53,6 @@ export const routes: Routes = [
     path: 'project/:id',
     loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
   },
+  { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
+
 ];

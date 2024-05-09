@@ -12,8 +12,8 @@ using messaging_service.Data;
 namespace messaging_service.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240501202210_first_create")]
-    partial class first_create
+    [Migration("20240504145443_full_migration")]
+    partial class full_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,38 @@ namespace messaging_service.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("messaging_service.Models.Domain.Invitation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(max)")
+                        .HasDefaultValueSql("NEWID()");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WorkspaceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("Invitations", "chat");
+                });
 
             modelBuilder.Entity("messaging_service.models.domain.Channel", b =>
                 {
@@ -131,11 +163,8 @@ namespace messaging_service.Migrations
 
             modelBuilder.Entity("messaging_service.models.domain.Member", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ChannelId")
                         .HasColumnType("int");
@@ -145,14 +174,12 @@ namespace messaging_service.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("Id")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "ChannelId");
 
                     b.HasIndex("ChannelId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Members", "chat");
                 });
@@ -207,24 +234,21 @@ namespace messaging_service.Migrations
 
             modelBuilder.Entity("messaging_service.models.domain.UserWorkspace", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Created_at")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("getdate()");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<int>("WorkspaceId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("Created_at")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "WorkspaceId");
 
                     b.HasIndex("WorkspaceId");
 
@@ -262,6 +286,23 @@ namespace messaging_service.Migrations
                     b.ToTable("Workspaces", "chat");
                 });
 
+            modelBuilder.Entity("messaging_service.Models.Domain.Invitation", b =>
+                {
+                    b.HasOne("messaging_service.models.domain.User", "User")
+                        .WithMany("Invitations")
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+
+                    b.HasOne("messaging_service.models.domain.Workspace", "Workspace")
+                        .WithMany("Invitations")
+                        .HasForeignKey("WorkspaceId")
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("Workspace");
+                });
+
             modelBuilder.Entity("messaging_service.models.domain.Channel", b =>
                 {
                     b.HasOne("messaging_service.models.domain.Workspace", "Workspace")
@@ -288,7 +329,6 @@ namespace messaging_service.Migrations
                     b.HasOne("messaging_service.models.domain.User", "User")
                         .WithMany("Messages")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Channel");
@@ -309,7 +349,6 @@ namespace messaging_service.Migrations
                     b.HasOne("messaging_service.models.domain.User", "User")
                         .WithMany("Memberships")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Channel");
@@ -322,13 +361,11 @@ namespace messaging_service.Migrations
                     b.HasOne("messaging_service.models.domain.User", "User")
                         .WithMany("UserWorkspaces")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("messaging_service.models.domain.Workspace", "Workspace")
                         .WithMany("UserWorkspaces")
                         .HasForeignKey("WorkspaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -339,7 +376,7 @@ namespace messaging_service.Migrations
             modelBuilder.Entity("messaging_service.models.domain.Workspace", b =>
                 {
                     b.HasOne("messaging_service.models.domain.User", "Admin")
-                        .WithMany()
+                        .WithMany("WorkspacesAdmin")
                         .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -361,16 +398,22 @@ namespace messaging_service.Migrations
 
             modelBuilder.Entity("messaging_service.models.domain.User", b =>
                 {
+                    b.Navigation("Invitations");
+
                     b.Navigation("Memberships");
 
                     b.Navigation("Messages");
 
                     b.Navigation("UserWorkspaces");
+
+                    b.Navigation("WorkspacesAdmin");
                 });
 
             modelBuilder.Entity("messaging_service.models.domain.Workspace", b =>
                 {
                     b.Navigation("Channels");
+
+                    b.Navigation("Invitations");
 
                     b.Navigation("UserWorkspaces");
                 });

@@ -1,32 +1,60 @@
+using Microsoft.OpenApi.Models;
 using notif_service.Consumer;
 using notif_service.Hubs;
 using notif_service.Models;
+using notif_service.Producer;
 using notif_service.Profiles;
 using notif_service.Services;
+using notif_service.Services.Email;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: myAllowSpecificOrigins,
+                      policy =>
+                      {
+                        policy.WithOrigins("http://localhost:4200", "http://localhost:8084") // Change port to 4200
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                      });
+});
 builder.Services.AddSignalR();
 
-NotificationDatabaseSettings NotificationDatabase = new()
-{
-    ConnectionString = $"mongodb://{Environment.GetEnvironmentVariable("DB_USER")}:{Environment.GetEnvironmentVariable("DB_PASSWORD")}@{Environment.GetEnvironmentVariable("DB_HOST")}:{Environment.GetEnvironmentVariable("DB_PORT")}",
-    DatabaseName = "notifications-db",
-    NotificationsCollectionName = "Notifications"
-};
+
+var dbUser = Environment.GetEnvironmentVariable("DB_USER");
+var dbPassword = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var dbHost = Environment.GetEnvironmentVariable("DB_HOST");
+var dbPort = Environment.GetEnvironmentVariable("DB_PORT");
+
+var mongoConnectionString = $"mongodb://{dbUser}:{dbPassword}@{dbHost}:{dbPort}";
+
 builder.Services.Configure<NotificationDatabaseSettings>(options =>
 {
-    options.ConnectionString = NotificationDatabase.ConnectionString;
-    options.DatabaseName = NotificationDatabase.DatabaseName;
-    options.NotificationsCollectionName = NotificationDatabase.NotificationsCollectionName;
+    options.ConnectionString = mongoConnectionString;
+    options.DatabaseName = "notifications-db";
+    options.NotificationsCollectionName = "Notifications";
 });
-builder.Services.Configure<NotificationDatabaseSettings>(builder.Configuration.GetSection("NotificationDatabase"));
 builder.Services.AddAutoMapper(typeof(NotificationProfile));
 builder.Services.AddScoped<INotificationService,NotificationService>();
+builder.Services.AddScoped<IEmailservice,EmailService>();
+builder.Services.AddScoped<IRabbitMQProducer,RabbitMQProducer>();
 builder.Services.AddControllers();
 builder.Services.AddScoped<RabbitMQConsumer>();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Messaging APIs",
+        Description = "This the documentation for The Notification Service Apis",
+    });
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 var app = builder.Build();
 using var scope = app.Services.CreateScope();
@@ -37,8 +65,7 @@ rabbitMQConsumer.StartConsuming();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-
-app.UseHttpsRedirection();
+app.UseCors(myAllowSpecificOrigins);
 
 app.UseAuthorization();
 

@@ -1,4 +1,5 @@
 ﻿using messaging_service.models.domain;
+using messaging_service.Models.Domain;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
 using System.Xml;
@@ -16,6 +17,7 @@ namespace messaging_service.Data
         public DbSet<User> Users { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
         public DbSet<UserWorkspace> UsersWorkspaces { get; set; }
+        public DbSet<Invitation> Invitations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,30 +32,69 @@ namespace messaging_service.Data
                     typeof(UserWorkspace)
             };
 
+            // Configure UserWorkspace
             modelBuilder.Entity<UserWorkspace>()
-            .HasOne(uw => uw.User)
-            .WithMany(u => u.UserWorkspaces)
-            .HasForeignKey(uw => uw.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+                .HasKey(uw => new { uw.UserId, uw.WorkspaceId });
 
             modelBuilder.Entity<UserWorkspace>()
-            .HasOne(uw => uw.Workspace)
-            .WithMany(w => w.UserWorkspaces)
-            .HasForeignKey(uw => uw.WorkspaceId)
-            .OnDelete(DeleteBehavior.Cascade);
+                .HasOne<User>(uw => uw.User)
+                .WithMany(u => u.UserWorkspaces)
+                .HasForeignKey(uw => uw.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
-            modelBuilder.Entity<Chat>()
-            .HasOne(c => c.User)
-            .WithMany(u => u.Messages)
-            .HasForeignKey(c => c.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserWorkspace>()
+                .HasOne<Workspace>(uw => uw.Workspace)
+                .WithMany(w => w.UserWorkspaces)
+                .HasForeignKey(uw => uw.WorkspaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            // Configure Member
+            modelBuilder.Entity<Member>()
+                .HasKey(m => new { m.UserId, m.ChannelId });
 
             modelBuilder.Entity<Member>()
-            .HasOne(m => m.User)
-            .WithMany(u => u.Memberships)
-            .HasForeignKey(m => m.UserId)
-            .OnDelete(DeleteBehavior.Restrict);
+                .HasOne<User>(m => m.User)
+                .WithMany(u => u.Memberships)
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
+            modelBuilder.Entity<Member>()
+                .HasOne<Channel>(m => m.Channel)
+                .WithMany(c => c.Members)
+                .HasForeignKey(m => m.ChannelId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configure Chat
+            modelBuilder.Entity<Chat>()
+                .HasOne<User>(c => c.User)
+                .WithMany(u => u.Messages)
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Chat>()
+                .HasOne<Channel>(c => c.Channel)
+                .WithMany(c => c.Messages)
+                .HasForeignKey(c => c.ChannelId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Chat>()
+                .HasOne<Chat>(c => c.Parent)
+                .WithMany(p => p.Children)
+                .HasForeignKey(c => c.ParentId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            // Configure Invitation
+            modelBuilder.Entity<Invitation>()
+                .HasOne<User>(i => i.User)
+                .WithMany(u => u.Invitations)
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Invitation>()
+                .HasOne<Workspace>(i => i.Workspace)
+                .WithMany(w => w.Invitations)
+                .HasForeignKey(i => i.WorkspaceId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
             modelBuilder.Entity<Channel>()
             .Property(c => c.ChannelString)
@@ -61,6 +102,10 @@ namespace messaging_service.Data
 
             modelBuilder.Entity<User>()
             .Property(u => u.NotificationString)
+            .HasDefaultValueSql("NEWID()");
+
+            modelBuilder.Entity<Invitation>()
+            .Property(i => i.Token)
             .HasDefaultValueSql("NEWID()");
 
             modelBuilder.Entity<User>()
