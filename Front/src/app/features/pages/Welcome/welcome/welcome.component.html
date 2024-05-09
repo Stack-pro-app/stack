@@ -1,19 +1,15 @@
-<div
-  class="hero min-h-screen"
-  style="
-    background-image: url(https://daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg);
-  "
->
-  <div class="hero-overlay bg-opacity-60"><app-header></app-header></div>
+<div class="hero min-h-screen" style="background-image: url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg);">
+
+  <div class="hero-overlay "><app-header></app-header></div>
   <div class="hero-content text-center text-neutral-content">
     <div class="max-w-auto">
-      <h1 class="mb-5 text-5xl font-bold size-full">
+      <h1 class="mb-5 text-5xl font-bold size-full" appTypeWriter>
         Made for people. Built for productivity.
       </h1>
       <button class="btn btn-primary m-5" routerLink="/Register">
         Sign Up with Email
       </button>
-      <button class="btn btn-primary m-5">Sign Up with Google</button>
+      <button *ngIf="isLogged" class="btn btn-primary m-5">Sign Up with Google</button>
 
       <p class="mb-5">Stack is free to try for as long as you’d like</p>
     </div>

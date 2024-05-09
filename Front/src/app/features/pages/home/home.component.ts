@@ -65,5 +65,11 @@ export class HomeComponent implements OnInit {
   }
   OnLogout() {
     this.service.logout();
+    this.router.navigate(['/Welcome']);
   }
-}
+  onSetAdmin(id:any){
+    this.store.setAdmin(id);
+    console.log("Admin is set",localStorage.getItem('Admin'));
+
+  }
+  }

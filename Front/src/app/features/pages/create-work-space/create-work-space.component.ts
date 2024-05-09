@@ -74,7 +74,11 @@ export class CreateWorkSpaceComponent implements OnInit {
       /* */
       this.WorkspaceRequest.name = this.form.value.WName;
       this.WorkspaceRequest.MainChannel = this.form.value.CName;
-      this.service.Create(this.WorkspaceRequest).subscribe({
+      const request = {
+        name: this.form.value.WName,
+        adminId: localStorage.getItem('userId'),
+      }
+      this.service.Create(request).subscribe({
         next: (response) => {
           console.log(response);
           this.router.navigate(['/Home']);
@@ -90,7 +94,7 @@ export class CreateWorkSpaceComponent implements OnInit {
       this.form.get('coworkerEmails')?.value.split(',');
       console.log('Emails', this.form.value.coworkerEmails);
 
-      
+
     }
   }
 
