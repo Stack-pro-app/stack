@@ -1,9 +1,10 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {MatStepper} from "@angular/material/stepper";
 import {NgToastService} from "ng-angular-popup";
 import {ProjectInter} from "../../interfaces/project-inter";
 import {ProjectService} from "../../services/project.service";
+import {ActivatedRoute} from "@angular/router";
 
 
 @Component({
@@ -11,20 +12,25 @@ import {ProjectService} from "../../services/project.service";
   templateUrl: './post-pro.component.html',
   styleUrl: './post-pro.component.scss'
 })
-export class PostProComponent {
+export class PostProComponent implements OnInit{
   @ViewChild('stepper') stepper!: MatStepper;
   f1: FormGroup;
   f2: FormGroup;
   saved: boolean=false;
+  act1:ActivatedRoute  ;
+  idAdmin :any;
+  works : any ;
 
 
-  constructor(private fb: FormBuilder, private toast: NgToastService,private srv:ProjectService) {
+  constructor(private act0:ActivatedRoute,private fb: FormBuilder, private toast: NgToastService,private srv:ProjectService) {
+    this.act1=act0;
 
     this.f1 = fb.group({
       projectName: ['', Validators.required],
       projectDescr: ['', Validators.required],
       start : ['',Validators.required],
-      end : ['',Validators.required]
+      end : ['',Validators.required],
+      workId : ['',Validators.required]
     });
     this.f2=fb.group(
       {
@@ -33,6 +39,18 @@ export class PostProComponent {
 
       }
     );
+
+  }
+
+  ngOnInit(): void {
+    console.log(this.act1.paramMap.subscribe({
+        next :(value)=>{console.log(value);this.idAdmin=value?.get('id');},
+      }
+    ));
+    this.srv.findWorks(this.idAdmin).subscribe({
+      next : value => this.works = value ,
+      error :value=> console.log("EROOR")
+    })
 
   }
 
@@ -72,12 +90,14 @@ export class PostProComponent {
       end: this.transformDate(this.f1.get('end')?.value),
       projectDescrp: this.f1.get('projectDescr')?.value,
       projectName: this.f1.get('projectName')?.value,
-      start: this.transformDate(this.f1.get('start')?.value)
+      start: this.transformDate(this.f1.get('start')?.value),
+      workId : this.f1.get('workId')?.value
     }
+
 
     this.srv.createExam(pro).subscribe(
       {
-        next : value =>{this.toast.success({detail:"SUCCESS",summary:'EXAM CREATED WITH SUCCESS'});this.saved=true;this.stepper.next()} ,
+        next : value =>{this.toast.success({detail:"SUCCESS",summary:'Project CREATED WITH SUCCESS'});this.saved=true;this.stepper.next()} ,
         error :value=> {this.toast.error({detail:"ERROR",summary:'NOT created ',sticky:true});this.saved=false;this.stepper.next()}
       }
     );

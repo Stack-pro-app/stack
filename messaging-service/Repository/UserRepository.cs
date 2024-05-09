@@ -2,6 +2,8 @@
 using messaging_service.Data;
 using messaging_service.models.domain;
 using messaging_service.models.dto.Detailed;
+using messaging_service.Models.Dto.Others;
+using messaging_service.Producer;
 using messaging_service.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -13,11 +15,13 @@ namespace messaging_service.Repository
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger<UserRepository> _logger;
-        public UserRepository(AppDbContext context,IMapper mapper,ILogger<UserRepository> logger)
+        private readonly IRabbitMQProducer _producer;
+        public UserRepository(AppDbContext context,IMapper mapper,ILogger<UserRepository> logger,IRabbitMQProducer producer)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _producer = producer;
         }
 
         public async Task CreateUserAsync(User user)
@@ -56,12 +60,18 @@ namespace messaging_service.Repository
 
         public async Task<IEnumerable<User>> GetUsersByChannelAsync(int channelId)
         {
-                IEnumerable<User> usersByChannel = await _context.Members
+            Channel channel = await _context.Channels.FirstOrDefaultAsync(c => c.Id == channelId) ?? throw new ValidationException("Channel not found");
+            if (!channel.Is_private)
+            {
+                return await _context.UsersWorkspaces.Where(uw => uw.WorkspaceId == channel.WorkspaceId).Include(uw => uw.User).Select(uw => uw.User).ToListAsync();
+            }
+
+             IEnumerable<User> usersByChannel = await _context.Members
                     .Where(member => member.ChannelId == channelId)
                     .Include(m=>m.User)
                     .Select(m=>m.User)
                     .ToListAsync();
-                return usersByChannel;
+            return usersByChannel;
         }
 
         public async Task<IEnumerable<UserDetailDto>> GetUsersByWorkspaceAsync(int workspaceId)
@@ -100,6 +110,30 @@ namespace messaging_service.Repository
                 return results;
 
         }
+
+        public async Task<IEnumerable<string>> AddUserToWorkspace(int workspaceId, int userId)
+        {
+            var IsValidWorkspace = await _context.Workspaces.FirstOrDefaultAsync(w => w.Id == workspaceId) ?? throw new ValidationException("Workspace Invalid");
+            List<string> results = new List<string>();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId) ?? throw new ValidationException("Invalid User");
+                UserWorkspace userWorkspace = new()
+                {
+                    WorkspaceId = workspaceId,
+                    UserId = userId,
+                };
+
+                var result = await _context.UsersWorkspaces.AddAsync(userWorkspace);
+            await _context.SaveChangesAsync();
+            PMUser pmUser = new()
+            {
+                workspaceId = workspaceId,
+                authId = user.AuthId,
+            };
+            _producer.SendToQueue(pmUser, "UsersAdded");
+            return results;
+
+        }
+
         public async Task RemoveUserFromWorkspace(int workspaceId, int userId)
         {
                 UserWorkspace result = await _context.UsersWorkspaces.FirstOrDefaultAsync(w => w.WorkspaceId == workspaceId && w.UserId == userId) ?? throw new ValidationException("The User is already not a member");
@@ -117,7 +151,7 @@ namespace messaging_service.Repository
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new ValidationException("User not found");
                 user.Last_login = DateTime.Now;
                 await _context.SaveChangesAsync();
-                IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == 1).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
+                IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == user.Id).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
                 return workspaces;
         }
     }

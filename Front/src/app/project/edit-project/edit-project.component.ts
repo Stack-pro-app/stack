@@ -55,8 +55,10 @@ export class EditProjectComponent implements OnInit{
       end: this.transformDate(this.f1.get('end')?.value),
       projectDescrp: this.f1.get('projectDescr')?.value,
       projectName: this.f1.get('projectName')?.value,
-      start: this.transformDate(this.f1.get('start')?.value)
+      start: this.transformDate(this.f1.get('start')?.value),
+      workId : this.pro.workId
     }
+    //console.log(this.pro);
 
     this.srv.createExam(this.pro).subscribe(
       {

@@ -33,14 +33,14 @@ import {
   MatTable
 } from "@angular/material/table";
 import {MatDialog, MatDialogClose} from "@angular/material/dialog";
-import {MatMomentDateModule} from "@angular/material-moment-adapter";
+
 import {UsersComponent} from "./components/users/users.component";
 import {UpdateTaskComponent} from "./components/update-task/update-task.component";
 import {
   CriticalPathService,
   EditService, ExcelExportService,
   GanttModule,
-  PdfExportService, SelectionService,
+   SelectionService,
   ToolbarService
 } from "@syncfusion/ej2-angular-gantt";
 import {Gantt1Component} from "./components/gantt/gantt1.component";
@@ -52,10 +52,6 @@ import { ChartModule} from '@syncfusion/ej2-angular-charts';
 
 import { CategoryService, BarSeriesService, ColumnSeriesService, LineSeriesService,LegendService, DataLabelService, MultiLevelLabelService} from '@syncfusion/ej2-angular-charts';
 import { ActivityComponent } from './userTask/activity/activity.component';
-
-
-
-
 
 import {
   AgendaService, DayService, ICalendarExportService, ICalendarImportService, MonthAgendaService,
@@ -76,6 +72,7 @@ import {FloatLabelModule} from "primeng/floatlabel";
 import { UserProgressComponent } from './components/dashboard/user-progress/user-progress.component';
 import { ChartsComponent } from './components/dashboard/charts/charts.component';
 import { Charts0Component } from './components/dashboard/charts0/charts0.component';
+
 
 
 
@@ -108,10 +105,6 @@ import { Charts0Component } from './components/dashboard/charts0/charts0.compone
     Charts0Component,
 
 
-
-
-
-
   ],
   imports: [
     CommonModule,
@@ -124,14 +117,15 @@ import { Charts0Component } from './components/dashboard/charts0/charts0.compone
     ButtonModule,
     MatIconModule,
     MatSelectModule, MatTable, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatRowDef, MatHeaderCell, MatColumnDef, MatCell, MatHeaderRow, MatRow, MatDialogClose,
-    MatMomentDateModule,
+
     GanttModule,
     CircularChart3DAllModule,ChartModule,
     ScheduleModule,
     ProgressBarModule,
     RecurrenceEditorModule,
     CarouselModule,
-    FloatLabelModule
+    FloatLabelModule,
+
 
   ],
   providers: [

@@ -8,6 +8,8 @@ import {ConfirmationService} from "primeng/api";
 import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 
 import {EditProjectComponent} from "../edit-project/edit-project.component";
+import {ProjectInter} from "../../interfaces/project-inter";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-display-project',
@@ -16,14 +18,20 @@ import {EditProjectComponent} from "../edit-project/edit-project.component";
 })
 export class DisplayProjectComponent implements OnInit {
   empty: boolean = false;
-  arr: any;
+  arr: ProjectInter[]=[];
+  act1:ActivatedRoute  ;
+  id:any
 
-  constructor(public dialog: MatDialog, private srv: ProjectService, private toast: NgToastService, private confirmationService: ConfirmationService) {
-
+  constructor(private act0:ActivatedRoute,public dialog: MatDialog, private srv: ProjectService, private toast: NgToastService, private confirmationService: ConfirmationService) {
+    this.act1=act0;
   }
 
   ngOnInit(): void {
-    this.srv.findAll().subscribe({
+    console.log(this.act1.paramMap.subscribe({
+        next :(value)=>{console.log(value);this.id=value?.get('id');console.log(this.id)},
+      }
+    ));
+    this.srv.getAdminProjects(this.id).subscribe({
       next: value => {
         this.arr = value;
         if (this.arr.length != 0) {

@@ -182,7 +182,7 @@
       "DownstreamPathTemplate": "/api/Workspace/{id}"
     },
     {
-      "UpstreamPathTemplate": "/api/Workspace/{id}/user/{userId}",
+      "UpstreamPathTemplate": "/api/Workspace/{workspaceId}",
       "UpstreamHttpMethod": [ "Get" ],
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -191,7 +191,7 @@
           "Port": 8080
         }
       ],
-      "DownstreamPathTemplate": "/api/Workspace/{id}/user/{userId}"
+      "DownstreamPathTemplate": "/api/Workspace/{id}"
     },
     {
       "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
@@ -201,6 +201,18 @@
       "DownstreamHostAndPorts": [
         {
           "Host": "gateway-chat",
+          "Port": 8080
+        }
+      ]
+    },
+    {
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE", "OPTIONS" ],
+      "UpstreamPathTemplate": "/notification/{catchAll}",
+      "DownstreamPathTemplate": "/{catchAll}",
+      "DownstreamScheme": "ws",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "notif-service",
           "Port": 8080
         }
       ]
@@ -240,7 +252,7 @@
         }
       ],
       "DownstreamPathTemplate": "/api/Notification/SetSeen/{notificationString}"
-    }
+    },
     {
       "UpstreamPathTemplate": "/api/Notification",
       "UpstreamHttpMethod": [ "Post" ],
@@ -253,14 +265,16 @@
       ],
       "DownstreamPathTemplate": "/api/Notification"
     }
-
-
-
-
-
-
-
   ],
+  "FileCacheOptions": {
+    "TtlSeconds": 10
+  },
+  "RateLimitOptions": {
+    "EnableRateLimiting": true,
+    "Period": "10s",
+    "PeriodTimespan": 10,
+    "Limit": 20
+  },
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:8084/"
   }

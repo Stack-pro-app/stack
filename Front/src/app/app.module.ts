@@ -52,9 +52,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     provideClientHydration(),
     provideAnimationsAsync(),
     HttpClient,
-
-
   ],
-  bootstrap: [AppComponent]
+  bootstrap: []
 })
 export class AppModule { }

@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
+using messaging_service.Producer;
+using messaging_service.Models.Dto.Others;
 
 namespace messaging_service.Repository
 {
@@ -15,23 +17,21 @@ namespace messaging_service.Repository
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        public WorkspaceRepository(AppDbContext context,IMapper mapper) {
+        private readonly IRabbitMQProducer _producer;
+        public WorkspaceRepository(AppDbContext context,IMapper mapper,IRabbitMQProducer producer) {
             _context = context;
             _mapper = mapper;
+            _producer = producer;
         }
-        public async Task CreateWorkspaceAsync(string name,int adminId)
+        public async Task CreateWorkspaceAsync(Workspace workspace)
         {
-                var result = await _context.Users.FirstOrDefaultAsync(u=> u.Id == adminId);
-                if (result == null) throw new ValidationException("Invalid User");
-                if (name.IsNullOrEmpty()) throw new ValidationException("Invalid Name");
-                Workspace workspace = new();
-                workspace.Name = name;
-                workspace.AdminId = adminId;
+
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == workspace.AdminId) ?? throw new ValidationException("Invalid User");
                 _context.Workspaces.Add(workspace);
                 await _context.SaveChangesAsync();
                 UserWorkspace userWorkspace = new()
                 {
-                    UserId = adminId,
+                    UserId = workspace.AdminId,
                     WorkspaceId = workspace.Id,
                 };
                 _context.UsersWorkspaces.Add(userWorkspace);
@@ -44,6 +44,13 @@ namespace messaging_service.Repository
                 };
                 _context.Channels.Add(main);
                 await _context.SaveChangesAsync();
+                PMWorkspaceDto PMworkspace = new()
+                {
+                    Id = workspace.Id,
+                    Name = workspace.Name,
+                    AdminId = user.AuthId,
+                };
+                _producer.SendToQueue(PMworkspace, "workspace");
         }
 
         public async Task DeleteWorkspaceAsync(int workspaceId)
@@ -61,14 +68,21 @@ namespace messaging_service.Repository
                 Channel mainChannel = channel.FirstOrDefault(c => c.Name == "main") ?? throw new ValidationException("Invalid Workspace");
                 ChannelDetailDto mainDetail = _mapper.Map<ChannelDetailDto>(mainChannel);
                 IEnumerable<Channel> publicChannels = channel.Where(c =>c.Name != "main" && c.Is_private == false).ToList();
-                IEnumerable<Channel> authorizedChannels = await _context.Members.Where(m => m.UserId == userId).Include(m => m.Channel).Select(m => m.Channel).Where(c=>c.Is_OneToOne == false).ToListAsync();
+                IEnumerable<Channel> authorizedChannels;
+                if (await VerifyAdminStatusV2(userId, workspaceId))
+                {
+                    authorizedChannels = await _context.Channels.Where(c => c.Is_OneToOne == false && c.Is_private == true).ToListAsync();
+                }
+                else
+                {
+                    authorizedChannels = await _context.Members.Where(m => m.UserId == userId).Include(m => m.Channel).Select(m => m.Channel).Where(c => c.Is_OneToOne == false).ToListAsync();
+                }
                 IEnumerable<Channel> channels = publicChannels.Concat(authorizedChannels);
                 IEnumerable<ChannelMinimalDto> minimalChannels = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(channels);
                 WorkspaceDetailDto detail = new()
                 {
                     Id = workspace.Id,
                     Name = workspace.Name,
-                    adminId = workspace.AdminId,
                     MainChannel = mainDetail,
                     Channels = minimalChannels.ToList(),
 
@@ -88,6 +102,26 @@ namespace messaging_service.Repository
                 workspace.Name = name;
                 await _context.SaveChangesAsync();
 
+        }
+        public async Task<bool> VerifyAdminStatus(string authId, int workspaceId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId);
+            if (user == null) return false;
+
+            return await VerifyAdminStatusV2(user.Id, workspaceId);
+        }
+
+        public async Task<bool> VerifyAdminStatusV2(int userId, int workspaceId)
+        {
+            return await _context.Workspaces.AnyAsync(w => w.Id == workspaceId && w.Admin.Id == userId);
+        }
+
+        public async Task<bool> VerifyMembershipWorkspace(string authId, int workspaceId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId);
+            if (user == null) return false;
+
+            return await _context.UsersWorkspaces.AnyAsync(uw => uw.UserId == user.Id && uw.WorkspaceId == workspaceId);
         }
     }
 }

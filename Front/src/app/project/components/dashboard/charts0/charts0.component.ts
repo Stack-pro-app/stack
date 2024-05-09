@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Statis} from "../../../../interfaces/Gant/Statis";
 import {map, Observable} from "rxjs";
 import {TaskService} from "../../../../services/task.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-charts0',
@@ -11,6 +12,8 @@ import {TaskService} from "../../../../services/task.service";
 export class Charts0Component implements OnInit{
   public primaryXAxis?: Object;
   public primaryYAxis?: Object;
+  act1:ActivatedRoute  ;
+  idAdmin :any;
 
 
 
@@ -27,40 +30,49 @@ export class Charts0Component implements OnInit{
   public chartData?: Object[];
 
 
-  constructor(private  taskservice:TaskService) {
+  constructor(private act0:ActivatedRoute,private  taskservice:TaskService) {
+    this.act1=act0;
   }
 
   ngOnInit(): void {
 
+    console.log(this.act1.paramMap.subscribe({
+      next :value =>{
+        this.idAdmin=value?.get('id');
+        this.data$ = this.taskservice.getGant0(this.idAdmin).pipe(
+          map(value => {
+            const dt : Statis[] =[];
+            for (const g of value) {
+              const tmp: Statis = {
+                x:g.projectName,
+                y:0
+              };
+              let st :number=0;
+              let i = 0  ;
+              for (const h of g.tasks) {
 
-    this.data$ = this.taskservice.getGant().pipe(
-      map(value => {
-        const dt : Statis[] =[];
-        for (const g of value) {
-          const tmp: Statis = {
-            x:g.projectName,
-            y:0
-          };
-          let st :number=0;
-          let i = 0  ;
-          for (const h of g.tasks) {
+                if(!this.isBeforeToday(h.start)){
+                  st+=h.status;
+                  i++;
+                }
 
-            if(!this.isBeforeToday(h.start)){
-              st+=h.status;
-              i++;
+              }
+              if(i!=0){
+                tmp.y=st/i;
+              }
+
+              dt.push(tmp);
+              this.chartData?.push({})
             }
+            return dt ;
+          })
+        );
 
-          }
-          if(i!=0){
-            tmp.y=st/i;
-          }
 
-          dt.push(tmp);
-          this.chartData?.push({})
-        }
-        return dt ;
-      })
-    );
+
+
+      }}))
+
     this.primaryXAxis = {
       valueType: 'Category',
       title: 'Projects'

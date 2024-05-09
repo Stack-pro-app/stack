@@ -21,11 +21,7 @@
   </div>
   <div class="flex-shrink-0">
     <!-- Your image goes here -->
-    <img
-      src="your-image-source.jpg"
-      alt="Your Image"
-      class="w-64 h-64 object-cover"
-    />
+   
   </div>
 </div>
 <div class="divider">OR</div>
@@ -41,11 +37,11 @@
         <div class="divider"></div>
 
         <li *ngFor="let workspace of workspaces">
-          <a [routerLink]="['/Main',workspace.id]">{{ workspace.name }}</a>
+          <button (click)="onSetAdmin(workspace.adminId)" [routerLink]="['/Main',workspace.id]">{{ workspace.name }}</button>
         </li>
       </ul>
     </div>
     <p class="text-sm mb-4">Not seeing your workspace?</p>
-    <button class="btn btn-primary">Try Another Email</button>
+    <button (click)="OnLogout()" routerLink="/Login" class="btn btn-primary">Try Another Email</button>
   </div>
 </div>

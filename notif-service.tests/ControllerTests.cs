@@ -30,6 +30,7 @@ namespace notif_service.tests
         {
             // Arrange
             var notificationString = "test";
+            var page = 1;
             var notifications = new List<Notification>();
             var expectedResponse = new ResponseDto
             {
@@ -38,13 +39,13 @@ namespace notif_service.tests
                 Result = new List<NotificationDto>()
             };
 
-            Mock.Get(_service).Setup(x => x.GetUnseenNotificationsAsync(notificationString))
+            Mock.Get(_service).Setup(x => x.GetUnseenNotificationsAsync(notificationString,page))
                 .ReturnsAsync(notifications);
             Mock.Get(_mapper).Setup(x => x.Map<List<NotificationDto>>(notifications))
                 .Returns((List<NotificationDto>)expectedResponse.Result);
 
             // Act
-            var result = await _controller.GetUnseenNotifications(notificationString);
+            var result = await _controller.GetUnseenNotifications(notificationString,page);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);

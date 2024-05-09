@@ -1,12 +1,13 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../enviromnents/enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  url: string = 'http://localhost:8193/api/Chat';
+  url: string = environment.API_MESAAGING_URL+'/api/Chat';
   constructor(private http: HttpClient) {}
 
   GetMessages(ChannelId: any, id: any): Observable<any> {

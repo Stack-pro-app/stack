@@ -13,7 +13,7 @@ namespace notif_service.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public int? channelId { get; set; }
         public int? workspaceId { get; set; }
-
+        public Dictionary<string, string>? Links { get; set; } = new Dictionary<string, string>();
     }
 
     public class NotificationString

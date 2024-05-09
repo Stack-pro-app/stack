@@ -28,7 +28,7 @@ namespace gateway_chat_server.Controllers
         [HttpPost]
         public async Task<IActionResult> UploadFile(FileDto file)
         {
-            if (file == null || file.FormFile.Length == 0)
+            if (file == null || file.FormFile?.Length == 0)
             {
                 return BadRequest("No file uploaded or file is empty.");
             }
@@ -79,10 +79,6 @@ namespace gateway_chat_server.Controllers
 
             return Ok(fileRequest);
         }
-            
-
-            
-
 
     }
 }

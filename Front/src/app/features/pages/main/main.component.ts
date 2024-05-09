@@ -15,6 +15,9 @@ import { WorkspaceService } from '../../../core/services/Workspace/workspace.ser
 import { Workspace } from '../../../core/Models/workspace';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
 import { UserService } from '../../../core/services/user.service';
+import { StoreService } from '../../../core/services/store/store.service';
+import { ThemeSwitcherComponent } from '../../../shared/components/theme-switcher/theme-switcher.component';
+import { NotificationComponent } from '../notification/notification.component';
 
 @Component({
   selector: 'app-main',
@@ -25,11 +28,18 @@ import { UserService } from '../../../core/services/user.service';
     ChannelComponent,
     ReactiveFormsModule,
     CommonModule,
+    ThemeSwitcherComponent,
+    NotificationComponent
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
 export class MainComponent implements OnInit, OnChanges {
+  Loading: Boolean = false;
+  foundUser:any = {
+    name:"Couldn't find User",
+    email:"Couldn't find user",
+  };
   showDeleteButton:Boolean = false;
   searchTerm: string = '';
   id: string | null = '';
@@ -64,6 +74,7 @@ export class MainComponent implements OnInit, OnChanges {
       name: 'enma No Katana',
     },
   ];
+  isAdmin: Boolean = false;
   CUsers!: any[];
   channels: Channel[] = [];
   constructor(
@@ -73,7 +84,8 @@ export class MainComponent implements OnInit, OnChanges {
     private builder: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private workspaceService: WorkspaceService
+    private workspaceService: WorkspaceService,
+    private store: StoreService,
   ) {}
   public channelForm!: FormGroup;
   public workspaceForm!: FormGroup;
@@ -81,16 +93,11 @@ export class MainComponent implements OnInit, OnChanges {
   receivedMessage: any;
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
-      const messageDto = {
-        userId: localStorage.getItem('userId'),
-        channelId: 14,
-        ChannelString: '1D96A361-E812-460E-A21D-429B0C62F935',
-        message: 'this.messageForm.value.message',
-      };
-      this.signalrService.sendMessage(messageDto);
+      //add smt ?
     }
   }
   ngOnInit() {
+    this.isAdmin = this.store.isAdmin();
     this.id = this.route.snapshot.paramMap.get('id');
     this.channelForm = this.builder.group({
       channelName: this.builder.control(''),
@@ -124,8 +131,9 @@ export class MainComponent implements OnInit, OnChanges {
             is_private: response.result.mainChannel.is_private,
             name: response.result.mainChannel.name,
           };
-          console.log(this.currentChannelP);
-          console.log(this.channels);
+          this.channels.push(this.currentChannelP);
+
+
           this.onGetUsers();
         },
         error: (error) => {
@@ -166,7 +174,9 @@ export class MainComponent implements OnInit, OnChanges {
         this.reload();
       },
       error: (error) => {
-        console.error('Login error', error);
+        console.log(this.channelRequest);
+
+        console.error('Chaneel creating error', error);
       },
       complete: () => console.info('complete'),
     });
@@ -199,8 +209,18 @@ export class MainComponent implements OnInit, OnChanges {
     });
   }
   onChangeChannel(channel: Channel) {
-    this.currentChannelP = channel;
-    console.log('HEEEEEEEEEEEREE', this.currentChannelP);
+    this.service.GetChannelById(channel.id).subscribe({
+      next: (response) => {
+        console.log(" HEEEEEEEEEEEEEEEEEEEEER",response);
+        this.currentChannelP=response.result;
+      },
+      error: (error) => {
+        console.error('Getting Channel  error', error);
+      },
+      complete: () => {
+        console.log('Getting Channel  completed');
+      }
+  });
   }
   onDeleteChannel() {
     this.service.Delete(this.currentChannelP.id).subscribe({
@@ -235,18 +255,20 @@ export class MainComponent implements OnInit, OnChanges {
       },
     });
   }
-  onAddUser() {
+  onFindUser() {
     let userId = 0;
     this.userService.FindUserByEmail(this.userForm.value.userEmail).subscribe({
       next: (response) => {
         console.log(response.result.id);
         userId = response.result.id;
+        this.foundUser = response.result;
+        this.Loading = !this.Loading;
       },
       error: (error) => {
         console.error('get Users  error', error);
       },
       complete: () => {
-        this.userService
+       /* this.userService
           .addUserToWorkSpace(userId, this.currentWorkspace.id)
           .subscribe({
             next: (response) => {},
@@ -256,7 +278,7 @@ export class MainComponent implements OnInit, OnChanges {
             complete: () => {
               this.reload();
             },
-          });
+          });*/
       },
     });
   }
@@ -266,7 +288,9 @@ export class MainComponent implements OnInit, OnChanges {
   onGetUsers() {
     this.userService.getUersFromWorkSpace(this.currentWorkspace.id).subscribe({
       next: (response) => {
-        this.CUsers = response;
+        this.CUsers = response.result;
+        this.CUsers = this.CUsers
+
         console.log('Users', this.CUsers);
       },
       error: (error) => {
@@ -291,4 +315,37 @@ export class MainComponent implements OnInit, OnChanges {
       });
   }
   filterItems() {}
+  onInviteUser() {
+    this.workspaceService
+      .onInviteUser(this.foundUser.id, this.currentWorkspace.id)
+      .subscribe({
+        next: (response) => {
+          console.log('Confirmation', response);
+        },
+        error: (error) => {
+          console.error('get Users  error', error);
+        },
+        complete: () => {
+          this.reload();
+        },
+      });
+  }
+  OneToOne(user:any) {
+    const requset = {
+      "user1": localStorage.getItem('userId'),
+  "user2": 1003,
+  "workspaceId": this.currentWorkspace.id
+    }
+    this.service.OneToOne(requset).subscribe({
+      next: (response) => {
+        console.log('Confirmation', response);
+        this.currentChannelP =response.result;
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {
+      },
+    });
+  }
 }

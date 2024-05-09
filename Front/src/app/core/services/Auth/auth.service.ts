@@ -4,13 +4,14 @@ import { Observable, tap } from 'rxjs';
 import { LoginResponseDto } from '../../Models/login-response-dto';
 import { StoreService } from '../store/store.service';
 import { ChatUser } from '../../Models/chat-user';
+import { environment } from '../../../../enviromnents/enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  url: string = 'http://localhost:7004/api/auth/';
-  urlU: string = 'http://localhost:8193/api/User';
+  url: string = environment.API_AUTH_URL+'/api/auth/';
+  urlU: string = environment.API_MESAAGING_URL+'/api/User';
   constructor(private http: HttpClient, private store: StoreService) {}
 
   login(userData: any): Observable<any> {
@@ -26,7 +27,7 @@ export class AuthService {
   }
   logout() {
     console.log(this.store.isLogged());
-    localStorage.removeItem('token');
+    localStorage.clear();
     console.log(this.store.isLogged());
   }
   register(userData: any): Observable<any> {

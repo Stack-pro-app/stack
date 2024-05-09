@@ -29,5 +29,15 @@ export class StoreService {
       return decoded;
     }
   }
- 
+  setAdmin(id:any){
+    localStorage.setItem('Admin',id);
+
+  }
+  isAdmin(): boolean {
+    if (localStorage.getItem('Admin') == localStorage.getItem('userId')) {
+        return true;
+      }
+    return false;
+  }
+
 }

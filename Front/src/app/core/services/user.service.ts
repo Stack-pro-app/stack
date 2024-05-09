@@ -1,12 +1,13 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../../enviromnents/enviroment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  url: string = 'http://localhost:8193/api/User';
+  url: string = environment.API_MESAAGING_URL+'/api/User';
   constructor(private http: HttpClient) {}
 
   getWorkSpaces(userId: string): Observable<any> {
@@ -26,7 +27,7 @@ export class UserService {
   }
   addUserToWorkSpace(userId: any, id: any): Observable<any> {
     const RequestUrl = `${this.url}/Workspace`;
-   
+
     let data = {
       workspaceId: id,
       usersId: [userId],
@@ -50,4 +51,8 @@ export class UserService {
     return this.http.delete(RequestUrl);
   }
 
+  getUserById(id:any):Observable<any>{
+    const RequestUrl = `${this.url}/byId/${id}`;
+    return this.http.get(RequestUrl);
+  }
 }

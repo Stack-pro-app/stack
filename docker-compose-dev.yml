@@ -1,0 +1,155 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=password  
+    networks:
+      - backend
+  gateway-chat:
+    container_name: gateway-chat
+    build:
+      context: /gateway-chat-server
+      dockerfile: Dockerfile
+    ports:
+      - "8091:8080"
+    networks:
+      - backend
+    depends_on:
+      - rabbitmq
+    environment:
+      - MQ_HOST=rabbitmq
+      - MQ_USER=user
+      - MQ_PASSWORD=password
+      - MQ_PORT=5672
+      - AWS_ACCESS_KEY_ID=AKIAYI4HD5JJE7IVFNXH
+      - AWS_SECRET_ACCESS_KEY=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
+  messaging-service:
+    container_name: messaging-service
+    build:
+      context: /messaging-service
+      dockerfile: Dockerfile
+    ports:
+      - "8090:8080"
+    networks:
+      - backend
+      - messaging
+    depends_on:
+      - rabbitmq
+      - database-1
+    environment:
+      - DB_HOST=database-1
+      - DB_NAME=stack-messaging
+      - DB_SA_PASSWORD=password@12345#
+      - MQ_HOST=rabbitmq
+      - MQ_USER=user
+      - MQ_PASSWORD=password
+      - MQ_PORT=5672
+      - AWS_ACCESS_KEY_ID=AKIAYI4HD5JJE7IVFNXH
+      - AWS_SECRET_ACCESS_KEY=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
+      - DOMAIN=localhost
+      - PORT=8090
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: /api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8080"
+    networks:
+      - backend
+    environment:
+      - JWT_KEY=ThisIsAVerySecretKeyForJWTGeneration
+  database-1:
+    container_name: database-1
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      - SA_PASSWORD=password@12345#
+      - ACCEPT_EULA=Y
+    networks:
+      - messaging
+  notif-service:
+    container_name: notif-service
+    build:
+      context: /notif-service
+      dockerfile: Dockerfile
+    ports:
+      - "8092:8080"
+    networks:
+      - backend
+      - notification
+    depends_on:
+      - database-2
+      - rabbitmq
+    environment:
+      - MQ_HOST=rabbitmq
+      - MQ_USER=user
+      - MQ_PASSWORD=password
+      - MQ_PORT=5672
+      - DB_HOST=database-2
+      - DB_PORT=27017
+      - DB_USER=notif-service
+      - DB_PASSWORD=password12345#
+      - DOMAIN=localhost
+      - PORT=8090
+  database-2:
+    container_name: database-2
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: notif-service
+      MONGO_INITDB_ROOT_PASSWORD: password12345#
+    networks:
+      - notification
+  auth-service:
+    container_name: auth-service
+    build:
+      context: /auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "8093:8080"
+    networks:
+      - backend
+      - auth
+    depends_on:
+      - database-3
+    restart: on-failure
+    environment:
+      - DB_HOST=database-3
+      - DB_NAME=stack-auth
+      - DB_PORT=1433
+      - DB_SA_PASSWORD=password@12345#
+      - JWT_KEY=ThisIsAVerySecretKeyForJWTGeneration
+  database-3:
+    container_name: database-3
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1434:1433"
+    environment:
+      - SA_PASSWORD=password@12345#
+      - ACCEPT_EULA=Y
+    networks:
+      - auth
+
+
+
+networks:
+  auth:
+    driver: bridge
+  backend:
+    driver: bridge
+  messaging:
+    driver: bridge
+  notification:
+    driver: bridge
+
+
+
