@@ -1,12 +1,10 @@
 version: '3.8'
 services:
-  # front:
-  #   build:
-  #     context: /front
-  #     dockerfile: Dockerfile
-  #   container_name: front
-  #   ports:
-  #     - "80:80"
+  front:
+    image: oussamazaoui872/slack-front:latest
+    container_name: front
+    ports:
+      - "80:80"
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
@@ -57,9 +55,7 @@ services:
       - MQ_PORT=5672
   api-gateway:
     container_name: api-gateway
-    build:
-      context: /api-gateway
-      dockerfile: Dockerfile
+    image: oussamazaoui872/slack-api-geteway:latest
     ports:
       - "8084:8080"
     networks:
@@ -76,9 +72,7 @@ services:
       - messaging
   notif-service:
     container_name: notif-service
-    build:
-      context: /notif-service
-      dockerfile: Dockerfile
+    image: oussamazaoui872/slack-notification-service:latest
     ports:
       - "8092:8080"
     networks:
@@ -107,25 +101,46 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password@12345#
     networks:
       - notification
-  auth_service:
-    container_name: auth_service
-    build:
-      context: /auth-service
-      dockerfile: Dockerfile
+  projectManagement:
+    container_name: projectManagement
+    image: oussamazaoui872/slack-project-management-service:latest
     ports:
-      - "8093:8080"
-    networks:
-      - backend
-      - auth
+      - "8088:8080":
     depends_on:
       - database-3
-    environment:
-      - DB_HOST=database-1
-      - DB_NAME=stack-auth
-      - DB_PORT=1434
-      - DB_SA_PASSWORD=password@12345#
+    networks:
+      - project-management
+
   database-3:
-    container_name: database-3
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_DB: projectManag
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: imad
+    networks:
+      - project-management
+
+  auth-service:
+    container_name: auth-service
+    image: oussamazaoui872/slack-auth-service:latest
+    depends_on:
+      - database-4
+    ports:
+      - "8089:8080"
+    environment:
+      - DB_HOST=database-4
+      - DB_NAME=stack-auth
+      - DB_PORT=1433
+      - DB_SA_PASSWORD=password@12345#
+      - JWT_KEY=ThisIsAVerySecretKeyForJWTGeneration
+    networks:
+      - auth-service
+
+  database-4:
+    container_name: database-4
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
       - "1434:1433"
@@ -133,9 +148,15 @@ services:
       - SA_PASSWORD=password@12345#
       - ACCEPT_EULA=Y
     networks:
-      - auth
-
-
+      - auth-service
+      
+  email-service:
+    container_name: email-service
+    image: oussamazaoui872/slack-email-service:latest
+    ports:
+      - "8087:8080"
+    networks:
+      - backend  
 
 networks:
   auth:
@@ -145,6 +166,10 @@ networks:
   messaging:
     driver: bridge
   notification:
+    driver: bridge
+  project-management:
+    driver: bridge
+  auth-service:
     driver: bridge
 
 
