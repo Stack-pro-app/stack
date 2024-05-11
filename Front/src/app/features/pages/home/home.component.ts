@@ -7,10 +7,11 @@ import { HeaderComponent } from '../header/header.component';
 import { ChatUser } from '../../../core/Models/chat-user';
 import { UserService } from '../../../core/services/user.service';
 import { MainComponent } from '../main/main.component';
+import { InvitationsComponent } from '../invitations/invitations.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, CommonModule, HeaderComponent,MainComponent],
+  imports: [RouterLink, CommonModule, HeaderComponent,MainComponent,InvitationsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })

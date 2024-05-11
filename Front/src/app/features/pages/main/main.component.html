@@ -523,9 +523,9 @@
                   </a>
                 </li>
 
-                <li class="" onclick="my_modal_5.showModal()">
+                <li class="" *ngIf="isAdmin" onclick="my_modal_5.showModal()">
                   <div class="flex items-center">
-                    <button *ngIf="isAdmin" class="flex items-center">
+                    <button  class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -572,9 +572,9 @@
                   </div>
                 </li>
 
-                <li class="" onclick="my_modal_11.showModal()">
+                <li *ngIf="isAdmin" class="" onclick="my_modal_11.showModal()">
                   <div class="flex items-center">
-                    <button *ngIf="isAdmin" class="flex items-center">
+                    <button class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -602,19 +602,32 @@
                 <li class="py-1">
                   <div class="flex items-center">
                     <img
-                      src="https://i.ibb.co/Qc5fmj1/drive.png"
+                      src="../../../../assets/img/stack_project_icon.png"
                       alt="User Avatar"
-                      class="w-6 h-6 rounded-full mr-2"
+                      class="w-8 h-8 rounded-full mr-2"
                     />
 
                     <a [routerLink]="['/Project', 1]">
-                      <span class="font-semibold text-sm">Project</span>
+                      <span class="font-semibold text-md">Stack Project</span>
                     </a>
                   </div>
                 </li>
-                <li class="">
+                <li class="py-1">
                   <div class="flex items-center">
-                    <button *ngIf="isAdmin" class="flex items-center">
+                    <img
+                      src="../../../../assets/img/Stack_Meeting_icon.png"
+                      alt="User Avatar"
+                      class="w-8 h-8 rounded-full mr-2"
+                    />
+
+                    <a [routerLink]="['/Project', 1]">
+                      <span class="font-semibold text-md">Stack Meeting</span>
+                    </a>
+                  </div>
+                </li>
+                <li *ngIf="isAdmin" class="">
+                  <div class="flex items-center">
+                    <button  class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -628,7 +641,6 @@
                           d="M12 4.5v15m7.5-7.5h-15"
                         />
                       </svg>
-                      <span class="ml-1 text-sm">Add apps</span>
                     </button>
                   </div>
                 </li>
@@ -638,7 +650,7 @@
         </ul>
         <div class="divider"></div>
 
-        <div class="btm-nav fixed inset-x-0 bottom-0 flex justify-between ">
+        <div class="btm-nav fixed inset-x-0 bottom-0 flex justify-between items-end">
           <button routerLink="/Profile" class="hover:bg-base-200">
             <a href="">
               <svg
