@@ -1,39 +1,40 @@
-import { DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { UserService } from './../../../core/services/user.service';
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-message',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './message.component.html',
   styleUrl: './message.component.css',
-  providers: [DatePipe],
 })
 export class MessageComponent implements OnInit {
   constructor
   (private userService: UserService,
-    private datePipe:DatePipe
   ) {
   }
   @Input() message: any;
-  chat : any ={
-    message : "",
-    username : ""
-  }
+  username: string = "";
 
 ngOnInit(): void {
-    this.getUserById();
+  this.username = this.message.user?.name ?? "";
+  console.log(this.message.Attachement_Url);
+  console.log(this.message);
+  if(!this.isUsername()){
+   this.getUserById();
+  }
+}
+
+isUsername():boolean{
+  return this.message.user != null && this.message.user != undefined;
 }
 
   getUserById() {
-    this.userService.getUserById(this.message.userId).subscribe({
+    this.userService.getUserById(this.message.userId?? this.message.UserId).subscribe({
       next: (response) => {
-        console.log("the users that sent the message ",response);
-        this.chat = {
-          message:this.message.message,
-          username : response.result.name,
-        }
+        this.username = response.result.name;
+        console.log(this.username);
 
       },
       error: (error) => {
@@ -42,29 +43,36 @@ ngOnInit(): void {
     });
   }
 
+  isImageFileName(fileName: string | null): boolean {
+    if (!fileName) {
+      return false;
+    }
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+    const lowerCaseFileName = fileName.toLowerCase();
+    return imageExtensions.some(ext => lowerCaseFileName.endsWith(ext));
+  }
+
   OnClick(){
     console.log(this.message)
   }
 
   timeDifference(previous: string): string {
-    const current = new Date().getTime();
-    const previousDate = new Date(previous).getTime();
-    const elapsed = current - previousDate;
-
-    const seconds = Math.floor(elapsed / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (days > 0) {
-      return days === 1 ? '1 day ago' : `${days} days ago`;
-    } else if (hours > 0) {
-      return hours === 1 ? '1 hour ago' : `${hours} hours ago`;
-    } else if (minutes > 0) {
-      return minutes === 1 ? '1 minute ago' : `${minutes} minutes ago`;
-    } else {
-      return seconds < 5 ? 'just now' : `${seconds} seconds ago`;
+    let date = new Date(previous);
+    let now = new Date();
+    let diff = now.getTime() - date.getTime();
+    let hours = Math.floor(diff / 1000 / 60 / 60);
+    if(hours == 0){
+      let minutes = Math.floor(diff / 1000 / 60);
+      if(minutes==0){
+        return "Just now";
+      }
+      return minutes+" minutes ago";
     }
+    if(hours<24){
+      return hours+" hours ago";
+    }
+    let days = Math.floor(hours/24);
+    return days+" days ago";
   }
 
   onOpenEdit(data:any){

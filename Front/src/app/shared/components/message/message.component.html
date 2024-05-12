@@ -3,7 +3,8 @@
   <img src="https://i.ibb.co/XJ5y9WM/me.jpg" class="w-10 h-10 rounded mr-3" />
   <div class="flex-1 overflow-hidden">
     <div class="flex justify-between">
-      <span class="font-bold">{{chat.username}}</span><span class="opacity-70 mx-4">{{timeDifference(message.created_at)}}</span>
+      <span class="font-bold">{{this.username}}</span>
+      <span class="opacity-70 mx-4">{{timeDifference(message.created_at)}}</span>
       <!-- <button
       (click)="onOpenEdit(message.id)"
       >
@@ -22,5 +23,12 @@
       </button> -->
     </div>
     <p class="leading-normal" (click)="OnClick()">{{ message.message }}</p>
+    <div *ngIf="message.attachement_Url??message.Attachement_Url">
+      <div *ngIf="isImageFileName(message.attachement_Name??message.Attachement_Name)">
+        <img
+          [src]="message.attachement_Url??message.Attachement_Url"
+          class="w-40 h-40 rounded-lg mt-2"/>
+      </div>
+    </div>
   </div>
 </div>
