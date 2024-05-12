@@ -38,11 +38,9 @@ builder.Services.AddCors(options =>
 builder.Services.AddSingleton<IMessageProducer, RabbitMQProducer>();
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -53,13 +51,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseRouting();
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapControllers();
 app.MapHub<ChannelHub>("/channelHub");
 app.MapHub<FileHub>("/fileHub");
 app.UseCors(myAllowSpecificOrigins);
-
 
 app.Run();

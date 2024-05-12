@@ -2,10 +2,9 @@
 <div class="flex items-start mb-4 text-sm">
   <img src="https://i.ibb.co/XJ5y9WM/me.jpg" class="w-10 h-10 rounded mr-3" />
   <div class="flex-1 overflow-hidden">
-    <div>
-      <span class="font-bold">{{message.username}}</span>
-      <!-- <span class="text-grey text-xs"> date</span> -->
-      <button
+    <div class="flex justify-between">
+      <span class="font-bold">{{chat.username}}</span><span class="opacity-70 mx-4">{{timeDifference(message.created_at)}}</span>
+      <!-- <button
       (click)="onOpenEdit(message.id)"
       >
         <svg
@@ -20,8 +19,8 @@
             clip-rule="evenodd"
           />
         </svg>
-      </button>
+      </button> -->
     </div>
-    <p class="leading-normal">{{ message.message }}</p>
+    <p class="leading-normal" (click)="OnClick()">{{ message.message }}</p>
   </div>
 </div>

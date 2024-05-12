@@ -1,4 +1,4 @@
-<div class="hero min-h-screen" style="background-image: url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.jpg);">
+<div class="hero min-h-screen" style="background-image: url(../../../../../assets/img/bg-welcome.jpg);">
 
   <div class="hero-overlay "><app-header></app-header></div>
   <div class="hero-content text-center text-neutral-content">
@@ -6,12 +6,22 @@
       <h1 class="mb-5 text-5xl font-bold size-full" appTypeWriter>
         Made for people. Built for productivity.
       </h1>
+      <div *ngIf="!isLogged" >
       <button *ngIf="!isLogged" routerLink="/Login"  class="btn btn-primary m-5 w-32">Login
       </button>
       <p>Or</p>
       <button class="btn btn-neutral m-5 w-32" routerLink="/Register">
         Sign Up
       </button>
+    </div>
+    <div *ngIf="isLogged">
+      <button routerLink="/Login"  class="btn btn-primary m-5 w-32">Switch Account
+      </button>
+      <p>Or</p>
+      <button class="btn btn-neutral m-5 w-32" routerLink="/Register">
+        Create A New One
+      </button>
+    </div>
 
       <!-- <button *ngIf="isLogged" class="btn btn-primary m-5">Sign Up with Google</button> -->
 
