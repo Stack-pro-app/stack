@@ -8,7 +8,7 @@ namespace auth_service.Producer;
 
 public class RabbitMQProducer : IRabbitMQProducer
 {
-    public void SendRegistration<T>(T register)
+    public void SendRegistration<T>(T register,string queue)
     {
 
         var factory = new ConnectionFactory
@@ -26,7 +26,7 @@ public class RabbitMQProducer : IRabbitMQProducer
         var body = Encoding.UTF8.GetBytes(json);
         
         
-        channel.BasicPublish(exchange: "", routingKey:"registration" , body:body);
+        channel.BasicPublish(exchange: "", routingKey:queue , body:body);
 
     }
 }

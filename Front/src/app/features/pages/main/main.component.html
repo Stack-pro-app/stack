@@ -397,23 +397,25 @@
           class="card-body"
           method="dialog"
         >
+        <div class = "text-2xl font-bold">Send Invitation:</div>
+        <div class="divider"></div>
           <div  class="form-control">
             <label class="label">
-              <span class="label-text">User Email : </span>
+              <span class="label-text">Your Co-Worker's Email : </span>
             </label>
             <input
               formControlName="userEmail"
               type="email"
-              placeholder="Enter UserEmail ..."
+              placeholder="Email..."
               class="input input-bordered"
               required
             />
           </div>
 
-          <div class="form-control mt-6">
-            <button type="submit" onclick="my_modal_19.showModal()" (click)="onFindUser()" (click)="Loading =!Loading" class="btn w-1/3 ml-auto">Find User</button>
-            <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
-          </div>
+          <span class="mt-6 flex justify-between items-center">
+            <button type="" class="btn btn-error w-1/3" onclick="my_modal_11.showModal()">Close</button>
+            <button type="submit" onclick="my_modal_19.showModal()" (click)="onFindUser()" (click)="Loading =!Loading" class="btn btn-success w-1/3">Find User</button>
+          </span>
         </form>
         <form method="dialog"></form>
       </div>
@@ -422,18 +424,39 @@
     <!-- Open the modal using ID.showModal() method -->
   <dialog id="my_modal_19" class="modal">
   <div  class="modal-box">
-    <h3 *ngIf="!Loading" class="font-bold text-lg">{{foundUser.name}}</h3>
-    <p *ngIf="!Loading" class="py-4">{{foundUser.email}}</p>
-    <span *ngIf="Loading" class="loading loading-spinner loading-lg"></span>
-
-    <div class="modal-action">
-      <form method="dialog"
-      >
-        <!-- if there is a button in form, it will close the modal (ngSubmit)="onAddUser()" -->
-        <button class="btn mr-5" (click)="onInviteUser()">Invite User</button>
-        <button class="btn">Close</button>
-      </form>
+    <div class="flex justify-center h-32 w-auto">
+      <div class="grid grid-flow-row grid-rows-2 mt-12">
+        <span class="row-span-1">
+          <h3 *ngIf="!Loading" class="font-bold text-xl">{{foundUser.name}}?</h3>
+        </span>
+        <span class="row-span-1">
+          <p *ngIf="!Loading" class="py-4">{{foundUser.email}}</p>
+        </span>
     </div>
+      <div *ngIf="Loading" class="grid grid-flow-row grid-rows-3 mt-12">
+        <div class="flex justify-center items-center">
+          <span class="loading loading-spinner loading-lg row-span-2"></span>
+        </div>
+        <span class="row-span-1 opacity-70 text-center mt-2">
+        Looking Everywhere...
+        </span>
+      </div>
+    </div>
+
+    <form method="dialog">
+    <div class="modal-action flex justify-between items-center">
+
+        <!-- if there is a button in form, it will close the modal (ngSubmit)="onAddUser()" -->
+        <button type="" class="btn btn-circle btn-error"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        </button>
+        <button type="submit" class="btn btn-circle btn-success" (click)="onInviteUser()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        </button>
+    </div>
+  </form>
   </div>
 </dialog>
     <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
@@ -589,7 +612,7 @@
                           d="M12 4.5v15m7.5-7.5h-15"
                         />
                       </svg>
-                      <span class="ml-1 text-sm">Add coworkers</span>
+                      <span class="ml-1 text-sm">Add Co-Workers</span>
                     </button>
                   </div>
                 </li>

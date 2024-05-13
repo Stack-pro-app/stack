@@ -23,7 +23,6 @@ export class InvitationsComponent implements OnInit{
     this.workspaceService.getUserSInvitions(localStorage.getItem('userId')).subscribe({
       next:(data)=>{
         this.invitations = data.result;
-        console.log(this.invitations);
 
       },
       error:(err)=>{
@@ -38,6 +37,7 @@ export class InvitationsComponent implements OnInit{
       this.workspaceService.getWorkspace(invitation.workspaceId,localStorage.getItem('userId')).subscribe({
         next:(data)=>{
           this.invitaionsDtos.push(data.result);
+          console.log(this.invitaionsDtos);
         },
         error:(err)=>{
           console.log(err);
@@ -53,13 +53,14 @@ export class InvitationsComponent implements OnInit{
 
     this.workspaceService.onAcceptInvitation(invitation).subscribe({
       next:(data)=>{
-        console.log(data);
         this.onGetUserInvitaions();
       },
       error:(err)=>{
         console.log(err);
       },
-      complete:()=>{console.log("completed");
+      complete:()=>{
+        this.invitations = this.invitations.filter((inv)=>inv.WorkspaceId != invitaion.workspaceId);
+        this.invitaionsDtos = this.invitaionsDtos.filter((inv)=>inv.id != invitaion.workspaceId);
       }
     })
 
@@ -69,7 +70,6 @@ export class InvitationsComponent implements OnInit{
 
     this.workspaceService.onDeclineInvitation(invitation).subscribe({
       next:(data)=>{
-        console.log(data);
         this.onGetUserInvitaions();
         window.location.reload();
 

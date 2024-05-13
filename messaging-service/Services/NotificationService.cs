@@ -4,6 +4,7 @@ using messaging_service.models.domain;
 using messaging_service.Models.Dto.Others;
 using messaging_service.Producer;
 using messaging_service.Repository.Interfaces;
+using System.Threading.Channels;
 
 namespace messaging_service.Services
 {
@@ -11,6 +12,7 @@ namespace messaging_service.Services
     {
         private readonly IWorkspaceRepository _workspaceRepository;
         private readonly IChannelRepository _channelRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IRabbitMQProducer _producer;
         public NotificationService(IWorkspaceRepository workspaceRepository,IChannelRepository channelRepository,IMapper mapper,IRabbitMQProducer producer) 
@@ -31,9 +33,21 @@ namespace messaging_service.Services
             throw new NotImplementedException();
         }
 
-        public Task SendJoiningWorkspaceNotif(int workspaceId)
+        public async Task SendJoiningWorkspaceNotif(int userId,int workspaceId)
         {
-            throw new NotImplementedException();
+            var workspace = await _workspaceRepository.GetWorkspaceName(workspaceId);
+            var user = await _userRepository.GetUserAsync(userId);
+            List<string> notifStrings = await _workspaceRepository.GetNotifStringsWorkspace(workspaceId);
+            NotificationDto notification = new()
+            {
+                Title = "New Co-Worker",
+                channelId = null,
+                workspaceId = workspaceId,
+                Message = $"{user.Name} Just Joined {workspace}",
+                NotificationStrings = notifStrings
+            };
+            //Send notification
+            SendNotification(notification);
         }
 
         public async Task SendMessageNotif(int channelId)
@@ -45,9 +59,10 @@ namespace messaging_service.Services
             //Create notification
             NotificationDto notification = new()
             {
+                Title = "New Message",
                 channelId = channel.Id,
                 workspaceId = channel.WorkspaceId,
-                Message = $"New Messages in {channel.Name}/{workspace}",
+                Message = $"New Messages in {workspace}/{channel.Name}",
                 NotificationStrings = notifStrings
             };
             //Send notification

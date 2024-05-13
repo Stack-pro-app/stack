@@ -121,7 +121,7 @@ namespace messaging_service.Controllers
             try
             {
                 IEnumerable<Invitation> invitations = await _invitationService.GetAllInvitations(userId);
-                IEnumerable<InvitationDetailDto> invs = invitations.Select(inv => _mapper.Map<InvitationDetailDto>(inv));
+                IEnumerable<InvitationDetailDto> invs = invitations.Select(_mapper.Map<InvitationDetailDto>);
 
                 ResponseDto response = new()
                 {

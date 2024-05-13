@@ -51,9 +51,9 @@ public class AuthService : IAuthService
                     Name = userToReturn.Name,
                     PhoneNumber = userToReturn.PhoneNumber
                 };
-                _producer.SendRegistration(userDto);
+                _producer.SendRegistration(userDto,"register-msg");
+                _producer.SendRegistration(userDto,"register-pm");
                 return "";
-
             }
             else
             {

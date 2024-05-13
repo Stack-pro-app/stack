@@ -57,7 +57,7 @@ namespace messaging_service.Controllers
         /// Used To Delete a certain message
         /// </summary>
         [HttpDelete("{messageId}")]
-        public async Task<ActionResult<ResponseDto>> DeleteMessage([FromRoute]Guid messageId)
+        public async Task<ActionResult<ResponseDto>> DeleteMessage([FromRoute]string messageId)
         {
             try
             {

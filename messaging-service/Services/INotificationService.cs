@@ -6,7 +6,7 @@ namespace messaging_service.Services
     {
         public Task SendMessageNotif(int channelId);
         public Task SendJoiningChannelNotif(int channelId);
-        public Task SendJoiningWorkspaceNotif(int workspaceId);
+        public Task SendJoiningWorkspaceNotif(int userId, int workspaceId);
         public void SendNotification(NotificationDto notif);
     }
 }

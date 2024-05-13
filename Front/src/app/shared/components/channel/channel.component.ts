@@ -1,5 +1,5 @@
 import { FileService } from './../../../services/file.service';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   Component,
   ElementRef,
@@ -22,7 +22,6 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
   imports: [CommonModule, MessageComponent,InfiniteScrollModule],
   templateUrl: './channel.component.html',
   styleUrl: './channel.component.css',
-  providers: [DatePipe],
 })
 export class ChannelComponent implements OnInit, OnChanges {
   @ViewChild('scrollable') scrollable: ElementRef | undefined;
@@ -34,7 +33,6 @@ export class ChannelComponent implements OnInit, OnChanges {
   //add the messaging service here
   constructor(private service: ChatService,
     private channelService: ChannelService,
-    private datePipe: DatePipe,
     private fileService: FileService,
     private signalrService : SignalrService) {
 

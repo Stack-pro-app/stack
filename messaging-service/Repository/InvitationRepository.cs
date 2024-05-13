@@ -1,7 +1,10 @@
 ﻿using messaging_service.Data;
 using messaging_service.models.domain;
 using messaging_service.Models.Domain;
+using messaging_service.Models.Dto.Others;
+using messaging_service.Producer;
 using messaging_service.Repository.Interfaces;
+using messaging_service.Services;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,9 +13,13 @@ namespace messaging_service.Repository
     public class InvitationRepository : IInvitationRepository
     {
         private readonly AppDbContext _context;
-        public InvitationRepository(AppDbContext context)
+        private readonly IRabbitMQProducer _pr;
+        private readonly INotificationService _ns;
+        public InvitationRepository(AppDbContext context,IRabbitMQProducer pr,INotificationService ns)
         {
             _context = context;
+            _pr = pr;
+            _ns = ns;
         }
 
         public async Task<Invitation> FindInvitationByToken (string token)
@@ -25,14 +32,23 @@ namespace messaging_service.Repository
         public async Task AcceptInvitation(string token)
         {
             Invitation res = await FindInvitationByToken(token);
+            User user = await _context.Users.FirstOrDefaultAsync(u => u.Id == res.UserId) ?? throw new ValidationException("User not found");
             UserWorkspace uw = new()
             {
                 WorkspaceId = res.WorkspaceId,
                 UserId = res.UserId
             };
             _context.UsersWorkspaces.Add(uw);
+            // Send to PM Service
+            PMUser pMUser = new()
+            {
+                workspaceId = res.WorkspaceId,
+                authId = user.AuthId
+            };
+            _pr.SendToQueue(pMUser,"workspaceJoin");
             _context.Remove(res);
             await _context.SaveChangesAsync();
+            await _ns.SendJoiningWorkspaceNotif(user.Id,res.WorkspaceId);
         }
 
         public async Task CreateInvitation(Invitation inv)

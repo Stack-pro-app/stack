@@ -167,7 +167,7 @@ namespace messaging_service.Controllers
         }
 
         /// <summary>
-        /// Remove Multiple Users from a workspace using their Ids
+        /// Remove A User from a workspace using their Ids
         /// </summary>
         [HttpDelete("{id}/Workspace/{workspaceId}")]
         public async Task<ActionResult<ResponseDto>> RemoveUsersFromWorkspace([FromRoute]int id, [FromRoute] int workspaceId)
