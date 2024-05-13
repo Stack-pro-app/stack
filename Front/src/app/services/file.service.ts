@@ -10,6 +10,7 @@ export class FileService {
   constructor(private httpClient: HttpClient) {
    }
 
+   fileSent: boolean = false;
    uploadFile(file: File, channelString: string, userId: string, channelId: number, message?: string): Observable<any> {
     const formData = new FormData();
     formData.append('channelString', channelString);

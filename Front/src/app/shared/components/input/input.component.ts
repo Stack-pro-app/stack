@@ -41,6 +41,8 @@ export class InputComponent implements OnInit, OnChanges {
     message: '',
     parentId: 0,
   };
+  fileLoading : boolean = false;
+  imageDataUrl: string | ArrayBuffer | null = null;
   files: any = [];
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
@@ -56,7 +58,13 @@ export class InputComponent implements OnInit, OnChanges {
   }
 
   getFileName(): any {
-    return this.fileUpload?.nativeElement.files[0]?.name?? "No file selected";
+    if (!this.fileUpload) {
+      return false;
+    }
+    if(this.fileUpload.nativeElement.files.length == 0){
+      return false;
+    }
+    return this.fileUpload?.nativeElement.files[0]?.name?? "Unknown";
   }
 
   onSend() {
@@ -68,11 +76,12 @@ export class InputComponent implements OnInit, OnChanges {
     };
     if (this.fileUpload) {
       const file = this.fileUpload.nativeElement.files[0];
-      console.log(this.fileUpload.nativeElement.files);
       if(file){
         this.sendFile(file);
         this.fileUpload.nativeElement.value = '';
         this.messageForm.reset();
+        this.imageDataUrl = null;
+        this.fileService.fileSent = true;
         return;
       }
     }
@@ -83,18 +92,67 @@ export class InputComponent implements OnInit, OnChanges {
     return this.messageForm.get('message') as FormControl;
   }
   //=======================================================================================================
+  onFileChange(event: any) {
+    this.fileLoading = true
+    if(event.target.files.length > 0) {
+      this.fileLoading = false;
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+      reader.onload = (_event) => {
+        this.imageDataUrl = reader.result;
+      };
+    }
+    else{
+      setTimeout(()=>{
+        this.fileLoading = false;
+      },5000);
+    }
+  }
+
+  GetFile(){
+    console.log(this.fileUpload?.nativeElement.files[0]);
+    return this.fileUpload?.nativeElement.files[0];
+  }
+
   sendFile(file:any) {
     console.log(file);
     const userId = localStorage.getItem('userId');
     if (!userId) {
       console.error("User ID not found in local storage.");
       return;
+    };
+    console.log(file.name)
+    this.fileService.uploadFile(file,this.currentChannelP.channelString,userId,this.currentChannelP.id,this.messageForm.value.message).subscribe(
+      {
+        complete: () => {
+        },
+      }
+      );
+  }
+  isImageFileName(fileName: string | null): boolean {
+    if (!fileName) {
+      return false;
     }
-    console.log(file);
-    this.fileService.uploadFile(file,this.currentChannelP.channelString,userId,this.currentChannelP.id,this.messageForm.value.message).subscribe((event: any) => {
-        if (typeof (event) === 'object') {
-          console.log(event.body);
-        }
-      });
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
+    const lowerCaseFileName = fileName.toLowerCase();
+    return imageExtensions.some(ext => lowerCaseFileName.endsWith(ext));
+  }
+
+  getFileSent(){
+    return this.fileService.fileSent;
+  }
+
+  getFileExtension(fileName: string): string {
+    return fileName.split('.').pop()!.toLowerCase();
+  }
+
+  getFileImg(): string {
+    const extention = this.getFileExtension(this.fileUpload?.nativeElement.files[0]?.name);
+    const availableExt = ['pdf','docx','xlsx','pptx','txt','csv'];
+    console.log(extention);
+    if(availableExt.includes(extention)){
+      return "../../../../assets/img/"+extention+".svg";
+    }
+    return "../../../../assets/img/unknown.svg";
   }
 }

@@ -1,3 +1,4 @@
+import { FileService } from './../../../services/file.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import {
   Component,
@@ -34,6 +35,7 @@ export class ChannelComponent implements OnInit, OnChanges {
   constructor(private service: ChatService,
     private channelService: ChannelService,
     private datePipe: DatePipe,
+    private fileService: FileService,
     private signalrService : SignalrService) {
 
     }
@@ -63,6 +65,11 @@ export class ChannelComponent implements OnInit, OnChanges {
   AddMessage(message: any) {
     message.created_at = this.formatDate(new Date().toISOString());
     this.messages.push(message);
+    if(message.attachement_Url??message.Attachement_Url){
+      this.fileService.fileSent = false;
+      console.log("Got the file!");
+    }
+    console.log("Just a message");
   }
   formatDate(date: string): Date {
     return new Date(date);
@@ -92,7 +99,6 @@ export class ChannelComponent implements OnInit, OnChanges {
       next: (response) => {
         this.messages=[];
         this.messages = response.result;
-        console.log(this.messages);
       },
       error: (error) => {
         console.error('Getting Messages  error', error);
