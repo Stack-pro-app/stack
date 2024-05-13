@@ -1,34 +1,39 @@
-<!-- A message -->
 <div class="flex items-start mb-4 text-sm">
   <img src="https://i.ibb.co/XJ5y9WM/me.jpg" class="w-10 h-10 rounded mr-3" />
   <div class="flex-1 overflow-hidden">
     <div class="flex justify-between">
       <span class="font-bold">{{this.username}}</span>
       <span class="opacity-70 mx-4">{{timeDifference(message.created_at)}}</span>
-      <!-- <button
-      (click)="onOpenEdit(message.id)"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          class="w-5 h-5"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </button> -->
     </div>
-    <p class="leading-normal" (click)="OnClick()">{{ message.message }}</p>
-    <div *ngIf="message.attachement_Url??message.Attachement_Url">
-      <div *ngIf="isImageFileName(message.attachement_Name??message.Attachement_Name)">
+    <p class="leading-normal" (click)="OnClick()">{{ message.message ?? message.Message }}</p>
+    <div *ngIf="message.attachement_Url ?? message.Attachement_Url">
+      <div *ngIf="isImageFileName(message.attachement_Name ?? message.Attachement_Name); else NotImage">
         <img
-          [src]="message.attachement_Url??message.Attachement_Url"
-          class="w-40 h-40 rounded-lg mt-2"/>
+          [src]="message.attachement_Url ?? message.Attachement_Url"
+          class="min-w-40 min-h-40 max-w-72 max-h-72 rounded-lg mt-2"
+          (load)="loading = false"
+        />
+        <div *ngIf="loading" class="w-40 h-40 rounded-lg mt-2 flex justify-center items-center">
+          <span class="loading loading-spinner loading-md text-primary"></span>
+        </div>
       </div>
+      <ng-template #NotImage>
+        <div class="min-w-40 min-h-20 max-w-72 max-h-40 p-2 mt-2 grid grid-flow-col grid-cols-5 bg-neutral rounded-md">
+          <div class="col-span-1 flex justify-center items-center">
+            <span><img [src]="this.getFileImg(message.attachement_Name ?? message.Attachement_Name)" class="w-10 h-10 rounded mr-3" /></span>
+          </div>
+          <div class="col-span-3 flex justify-start items-center">
+            <span class="font-bold">{{message.attachement_Name ?? message.Attachement_Name}}</span>
+          </div>
+          <div class="col-span-1 flex justify-center items-center">
+            <a [href]="message.attachement_Url || message.Attachement_Url" [download]="message.attachement_Name || message.Attachement_Name">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>

@@ -16,11 +16,10 @@ export class MessageComponent implements OnInit {
   }
   @Input() message: any;
   username: string = "";
+  loading:boolean = false;
 
 ngOnInit(): void {
   this.username = this.message.user?.name ?? "";
-  console.log(this.message.Attachement_Url);
-  console.log(this.message);
   if(!this.isUsername()){
    this.getUserById();
   }
@@ -51,6 +50,34 @@ isUsername():boolean{
     const lowerCaseFileName = fileName.toLowerCase();
     return imageExtensions.some(ext => lowerCaseFileName.endsWith(ext));
   }
+
+  getFileExtension(fileName: string): string {
+    return fileName.split('.').pop()!.toLowerCase();
+  }
+
+  getFileImg(fileName: string): string {
+    const extention = this.getFileExtension(fileName);
+    const availableExt = ['pdf','docx','xlsx','pptx','txt','csv'];
+    if(availableExt.includes(extention)){
+      return "../../../../assets/img/"+extention+".svg";
+    }
+    return "../../../../assets/img/unknown.svg";
+  }
+
+downloadFile(url: string, fileName: string) {
+  fetch(url)
+    .then(response => response.blob())
+    .then(blob => {
+      const objectUrl = window.URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = objectUrl;
+      anchor.download = fileName;
+      document.body.appendChild(anchor);
+      anchor.click();
+      document.body.removeChild(anchor);
+      window.URL.revokeObjectURL(objectUrl);
+    });
+}
 
   OnClick(){
     console.log(this.message)

@@ -27,7 +27,6 @@ import { CommonModule } from '@angular/common';
 })
 export class InputComponent implements OnInit, OnChanges {
   @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef | undefined;
-  files:any[]  = [];
   @Input({ required: true }) currentChannelP: any;
   constructor(
     private builder: FormBuilder,
@@ -42,6 +41,7 @@ export class InputComponent implements OnInit, OnChanges {
     message: '',
     parentId: 0,
   };
+  files: any = [];
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
       console.log("this is the new channel : " , changes['currentChannelP'].currentValue);
@@ -55,6 +55,10 @@ export class InputComponent implements OnInit, OnChanges {
     });
   }
 
+  getFileName(): any {
+    return this.fileUpload?.nativeElement.files[0]?.name?? "No file selected";
+  }
+
   onSend() {
     var signalmessageDto = {
       userId: localStorage.getItem('userId'),
@@ -64,6 +68,7 @@ export class InputComponent implements OnInit, OnChanges {
     };
     if (this.fileUpload) {
       const file = this.fileUpload.nativeElement.files[0];
+      console.log(this.fileUpload.nativeElement.files);
       if(file){
         this.sendFile(file);
         this.fileUpload.nativeElement.value = '';
