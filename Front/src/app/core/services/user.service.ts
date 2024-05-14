@@ -55,4 +55,10 @@ export class UserService {
     const RequestUrl = `${this.url}/byId/${id}`;
     return this.http.get(RequestUrl);
   }
+
+  updateProfilePic(profilePic:FormData):Observable<any>{
+    console.log(profilePic);
+    const RequestUrl = `${this.url}/Picture`;
+    return this.http.put(RequestUrl,profilePic);
+  }
 }

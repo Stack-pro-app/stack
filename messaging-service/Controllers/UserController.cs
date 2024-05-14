@@ -260,7 +260,7 @@ namespace messaging_service.Controllers
                 };
                 string url = _s3Client.GetPreSignedURL(urlRequest);
                 // Store the Profile Picture
-                await _userRepository.StoreProfilePicture(pictureDto.authId, url);
+                await _userRepository.StoreProfilePicture(pictureDto.authId, url , filePath);
                 ResponseDto response = new()
                 {
                     IsSuccess = true,

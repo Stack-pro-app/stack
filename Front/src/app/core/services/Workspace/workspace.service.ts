@@ -43,7 +43,7 @@ export class WorkspaceService {
     return this.http.delete(RequestUrl);
   }
   Update(id: any, diffname: string) {
-    const RequestUrl = `${this.url}/${id}`;
+    const RequestUrl = `${this.url}/${id}?Name=${diffname}`;
     const data = {
       name: diffname,
     };
@@ -51,7 +51,7 @@ export class WorkspaceService {
       accept: 'text/plain',
       'Content-Type': 'application/json',
     });
-    return this.http.put(RequestUrl, diffname, { headers });
+    return this.http.put(RequestUrl, { headers });
   }
   getUserSInvitions(id:any):Observable<any>{
     return this.http.get(`${environment.API_MESAAGING_URL}/api/Invitation/${id}`);

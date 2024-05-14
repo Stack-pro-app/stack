@@ -211,7 +211,6 @@ export class MainComponent implements OnInit, OnChanges {
   onChangeChannel(channel: Channel) {
     this.service.GetChannelById(channel.id).subscribe({
       next: (response) => {
-        console.log(" HEEEEEEEEEEEEEEEEEEEEER",response);
         this.currentChannelP=response.result;
       },
       error: (error) => {
@@ -259,7 +258,6 @@ export class MainComponent implements OnInit, OnChanges {
     let userId = 0;
     this.userService.FindUserByEmail(this.userForm.value.userEmail).subscribe({
       next: (response) => {
-        console.log(response.result.id);
         userId = response.result.id;
         this.foundUser = response.result;
         this.Loading = !this.Loading;
@@ -290,8 +288,6 @@ export class MainComponent implements OnInit, OnChanges {
       next: (response) => {
         this.CUsers = response.result;
         this.CUsers = this.CUsers
-
-        console.log('Users', this.CUsers);
       },
       error: (error) => {
         console.error('get Users  error', error);

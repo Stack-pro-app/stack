@@ -16,13 +16,12 @@ export class MessageComponent implements OnInit {
   }
   @Input() message: any;
   username: string = "";
+  profilePic: string = "../../../../assets/img/user-square.svg";
   loading:boolean = false;
 
 ngOnInit(): void {
   this.username = this.message.user?.name ?? "";
-  if(!this.isUsername()){
-   this.getUserById();
-  }
+  this.getUserById();
 }
 
 isUsername():boolean{
@@ -33,7 +32,8 @@ isUsername():boolean{
     this.userService.getUserById(this.message.userId?? this.message.UserId).subscribe({
       next: (response) => {
         this.username = response.result.name;
-        console.log(this.username);
+        this.profilePic = response.result.profilePicture?? "../../../../assets/img/user-square.svg";
+        console.log(response.result);
 
       },
       error: (error) => {
