@@ -4,13 +4,15 @@ import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } 
 import { Router, RouterLink } from '@angular/router';
 import { LoginRequestDto } from '../../../core/Models/login-request-dto';
 import { StoreService } from '../../../core/services/store/store.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    CommonModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
@@ -18,6 +20,7 @@ import { StoreService } from '../../../core/services/store/store.service';
 })
 export class LoginComponent implements OnInit {
   token: string = '';
+  Loading: boolean = false;
   loginrequest: LoginRequestDto = {
     userName: '',
     password: '',
@@ -41,15 +44,17 @@ export class LoginComponent implements OnInit {
   }
   onLoging() {
     this.loginrequest = this.loginForm.value;
+    this.Loading = true;
     this.service.login(this.loginrequest).subscribe({
       next: (response) => {
         this.store.setToken(response.result.token);
         console.log(response);
           console.log(response.result.token);
-
+        this.Loading = false;
         this.router.navigate(['Home']);
       },
       error: (error) => {
+        this.Loading = false;
         console.error('Login error', error);
       },
       complete: () => console.info('complete'),

@@ -445,14 +445,19 @@
   <dialog id="my_modal_19" class="modal">
   <div  class="modal-box">
     <div class="flex justify-center h-32 w-auto">
-      <div class="grid grid-flow-row grid-rows-2 mt-12">
-        <span class="row-span-1">
-          <h3 *ngIf="!Loading" class="font-bold text-xl">{{foundUser.name}}?</h3>
-        </span>
-        <span class="row-span-1">
-          <p *ngIf="!Loading" class="py-4">{{foundUser.email}}</p>
-        </span>
-    </div>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="col-span-1 flex justify-center items-center">
+          <img [src]="foundUser.profilePicture" class="h-32 w-32 rounded-full shadow-md" />
+        </div>
+        <div class="col-span-2 grid grid-flow-row grid-rows-2 p-6">
+          <span class="row-span-1">
+            <h3 *ngIf="!Loading" class="font-bold text-xl">{{foundUser.name}}?</h3>
+          </span>
+          <span class="row-span-1">
+            <p *ngIf="!Loading" >{{foundUser.email}}</p>
+          </span>
+        </div>
+      </div>
       <div *ngIf="Loading" class="grid grid-flow-row grid-rows-3 mt-12">
         <div class="flex justify-center items-center">
           <span class="loading loading-spinner loading-lg row-span-2"></span>

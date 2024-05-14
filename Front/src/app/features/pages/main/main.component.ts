@@ -260,6 +260,7 @@ export class MainComponent implements OnInit, OnChanges {
       next: (response) => {
         userId = response.result.id;
         this.foundUser = response.result;
+        console.log(this.foundUser);
         this.Loading = !this.Loading;
       },
       error: (error) => {

@@ -78,6 +78,7 @@ export class ProfileComponent implements OnInit {
       this.user.profilePicture = reader.result;
     };
     reader.readAsDataURL(file);
+    this.OnUpload();
   }
   OnUpload():boolean{
     const decoded = this.store.getUser();
@@ -87,8 +88,10 @@ export class ProfileComponent implements OnInit {
     console.log(this.fileUpload?.nativeElement.files[0])
     console.log(decoded);
     profilePic.append('authId',decoded.sub);
+    console.log("sent");
     this.userService.updateProfilePic(profilePic).subscribe({
       next: (response) => {
+        console.log("reeived");
         console.log(response);
       },
       error: (error) => {

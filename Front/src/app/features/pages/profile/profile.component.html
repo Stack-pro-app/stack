@@ -37,16 +37,15 @@
                     alt="..."
                     *ngIf="this.user.profilePicture"
                     [src]="this.user.profilePicture"
-                    class="shadow-xl rounded-full h-auto align-middle border-none absolute"
+                    class="shadow-xl rounded-full align-middle border-none absolute"
                   />
-                </div>
-
-                <img
+                  <img
                   alt="..."
                   *ngIf="!this.user.profilePicture"
                   src="../../../../assets/img/user-square.svg"
-                  class="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
+                  class="shadow-xl rounded-full align-middle border-none absolute"
                 />
+                </div>
               </div>
             </div>
             <div
