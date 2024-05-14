@@ -11,5 +11,6 @@ namespace messaging_service.models.dto.Detailed
         public DateTime? Last_login { get; set; }
         public string AuthId { get; set; }
         public string NotificationString { get; set; }
+        public string? ProfilePicture { get; set; }
     }
 }

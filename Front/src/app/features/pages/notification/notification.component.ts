@@ -25,6 +25,7 @@ export class NotificationComponent implements OnInit,OnChanges{
   ngOnInit(): void {
     this.signalRNotif.startConnection().subscribe(() => {
       console.log('SignalR connection established');
+      console.log(this.notifString);
       this.signalRNotif.joinGroup(this.notifString);
     }, error => {
       console.error('Error starting SignalR connection:', error);
@@ -47,7 +48,7 @@ export class NotificationComponent implements OnInit,OnChanges{
   NewNotif: boolean = false;
   Loading: boolean = true;
   page: number = 1;
-  notifString: string = localStorage.getItem("notifString")?? "90102568-5B09-445D-BBA8-125F2741BA9B";
+  notifString: string = localStorage.getItem('notifString')?? "90102568-5B09-445D-BBA8-125F2741BA9B";
 
   Fetch(){
     if(this.ShowOld){

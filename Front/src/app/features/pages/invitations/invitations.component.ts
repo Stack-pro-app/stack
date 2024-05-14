@@ -16,14 +16,16 @@ export class InvitationsComponent implements OnInit{
 
   }
   ngOnInit(): void {
-    this.onGetUserInvitaions( );
   }
 
+  OnClick(){
+    this.onGetUserInvitaions( );
+  }
   onGetUserInvitaions(){
     this.workspaceService.getUserSInvitions(localStorage.getItem('userId')).subscribe({
       next:(data)=>{
         this.invitations = data.result;
-
+        console.log(this.invitations);
       },
       error:(err)=>{
         console.log(err);
@@ -54,13 +56,13 @@ export class InvitationsComponent implements OnInit{
     this.workspaceService.onAcceptInvitation(invitation).subscribe({
       next:(data)=>{
         this.onGetUserInvitaions();
+        window.location.reload();
+
       },
       error:(err)=>{
         console.log(err);
       },
       complete:()=>{
-        this.invitations = this.invitations.filter((inv)=>inv.WorkspaceId != invitaion.workspaceId);
-        this.invitaionsDtos = this.invitaionsDtos.filter((inv)=>inv.id != invitaion.workspaceId);
       }
     })
 

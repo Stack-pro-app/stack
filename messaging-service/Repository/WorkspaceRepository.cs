@@ -10,6 +10,7 @@ using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using messaging_service.Producer;
 using messaging_service.Models.Dto.Others;
+using messaging_service.Models.Dto.Requests;
 
 namespace messaging_service.Repository
 {

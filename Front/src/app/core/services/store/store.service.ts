@@ -29,6 +29,11 @@ export class StoreService {
       return decoded;
     }
   }
+
+  setNotifString(notifString:string){
+    localStorage.setItem('notifString',notifString);
+  }
+
   setAdmin(id:any){
     localStorage.setItem('Admin',id);
 

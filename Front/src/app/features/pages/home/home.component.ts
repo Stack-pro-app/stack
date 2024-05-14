@@ -42,11 +42,13 @@ export class HomeComponent implements OnInit {
       next: (response) => {
         this.loggeduser=response.result;
         localStorage.setItem("userId",this.loggeduser.id.toString());
-        console.log(this.loggeduser);
+        console.log("User id is",localStorage.getItem('userId'));
          this.userService.getWorkSpaces(this.loggeduser.authId).subscribe({
            next: (response) => {
              console.log(response);
              this.workspaces= response.result.workspaces;
+             console.log(response.result);
+             this.store.setNotifString(response.result.user.notificationString);
              console.log(this.workspaces);
            },
            error: (error) => {

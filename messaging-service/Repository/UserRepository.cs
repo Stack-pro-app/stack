@@ -154,5 +154,11 @@ namespace messaging_service.Repository
                 IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == user.Id).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
                 return workspaces;
         }
+        public async Task StoreProfilePicture(string authId, string url)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new ValidationException("Invalid User");
+            user.ProfilePicture = url;
+            await _context.SaveChangesAsync();
+        }
     }
 }

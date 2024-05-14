@@ -16,5 +16,6 @@ namespace messaging_service.Repository.Interfaces
         Task RemoveUserFromWorkspace(int workspaceId, int userId);
         Task<IEnumerable<Workspace>> SetLoginAndGetWorkspaces(string authId);
         Task<User> GetUserByEmailAsync(string email);
+        Task StoreProfilePicture(string authId, string url);
     }
 }

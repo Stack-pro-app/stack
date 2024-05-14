@@ -57,12 +57,12 @@ export class WorkspaceService {
     return this.http.get(`${environment.API_MESAAGING_URL}/api/Invitation/${id}`);
   }
   onAcceptInvitation(token:any):Observable<any>{
-    return this.http.put(`${environment.API_MESAAGING_URL}/api/Invitation/accept/${token[0].token}`,{});
+    return this.http.post(`${environment.API_MESAAGING_URL}/api/Invitation/accept/${token[0].token}`,{});
   }
   onDeclineInvitation(token:any):Observable<any>{
     console.log(token[0].token);
 
-    return this.http.put(`${environment.API_MESAAGING_URL}/api/Invitation/decline/${token[0].token}`,{});
+    return this.http.post(`${environment.API_MESAAGING_URL}/api/Invitation/decline/${token[0].token}`,{});
   }
   onInviteUser(userId:any,workspaceId:any):Observable<any>{
     const requestBody =

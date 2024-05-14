@@ -20,7 +20,6 @@ export class RegisterComponent implements OnInit {
   registerRequest: any = {
     email: '',
     name: '',
-    phoneNumber: '',
     password: '',
     rolename:''
   };
@@ -35,7 +34,6 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     this.registerForm = this.builder.group({
       name: this.builder.control('', Validators.required),
-      phoneNumber: this.builder.control('', Validators.required),
       email: this.builder.control(
         '',
         Validators.compose([Validators.required, Validators.email])
@@ -65,13 +63,11 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.valid) {
       this.registerRequest = {
         name : this.registerForm.value.name,
-        phoneNumber :this.registerForm.value.phoneNumber,
         email : this.registerForm.value.email,
         password : this.registerForm.value.password,
       };
       this.service.register(this.registerRequest).subscribe({
         next: (response) => {
-          console.log(response);
           this.router.navigate(['/Home'], {
             queryParams: { registration: true },
           });
@@ -81,18 +77,18 @@ export class RegisterComponent implements OnInit {
         },
       complete: () => console.info('complete'),
       }
-        
+
       );
     } else console.log('failed a broski');
   }
 
-       
+
   get Name(): FormControl {
     return this.registerForm.get('name') as FormControl;
   }
-  get PhoneNumber(): FormControl {
-    return this.registerForm.get('phoneNumber') as FormControl;
-  }
+  // get PhoneNumber(): FormControl {
+  //   return this.registerForm.get('phoneNumber') as FormControl;
+  // }
   get Email(): FormControl {
     return this.registerForm.get('email') as FormControl;
   }

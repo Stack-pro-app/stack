@@ -44,6 +44,7 @@ export class LoginComponent implements OnInit {
     this.service.login(this.loginrequest).subscribe({
       next: (response) => {
         this.store.setToken(response.result.token);
+        console.log(response);
           console.log(response.result.token);
 
         this.router.navigate(['Home']);
@@ -61,5 +62,4 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('userName') as FormControl;
   }
 }
-  
-   
+

@@ -15,11 +15,13 @@ namespace messaging_service.Repository
         private readonly AppDbContext _context;
         private readonly IRabbitMQProducer _pr;
         private readonly INotificationService _ns;
-        public InvitationRepository(AppDbContext context,IRabbitMQProducer pr,INotificationService ns)
+        private readonly ILogger<InvitationRepository> _logger;
+        public InvitationRepository(AppDbContext context,IRabbitMQProducer pr,INotificationService ns,ILogger<InvitationRepository> logger)
         {
             _context = context;
             _pr = pr;
             _ns = ns;
+            _logger = logger;
         }
 
         public async Task<Invitation> FindInvitationByToken (string token)
@@ -48,6 +50,7 @@ namespace messaging_service.Repository
             _pr.SendToQueue(pMUser,"workspaceJoin");
             _context.Remove(res);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Invitation Accepted");
             await _ns.SendJoiningWorkspaceNotif(user.Id,res.WorkspaceId);
         }
 

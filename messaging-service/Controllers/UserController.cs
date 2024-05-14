@@ -12,6 +12,9 @@ using messaging_service.models.dto.Requests;
 using System.ComponentModel.DataAnnotations;
 using messaging_service.Repository.Interfaces;
 using messaging_service.Filters;
+using messaging_service.Models.Dto.Requests;
+using Amazon.S3.Model;
+using Amazon.S3;
 
 
 namespace messaging_service.Controllers
@@ -22,10 +25,13 @@ namespace messaging_service.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        public UserController(IUserRepository userRepository,IMapper mapper)
+        private readonly IAmazonS3 _s3Client;
+        private int MaxFileSize = 50 * 1024 * 1024;
+        public UserController(IUserRepository userRepository,IMapper mapper,IAmazonS3 s3)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _s3Client = s3;
         }
 
 
@@ -225,10 +231,49 @@ namespace messaging_service.Controllers
                 };
                 return Ok(response);
         }
+        [HttpPut("Picture")]
+        public async Task<ActionResult<ResponseDto>> SetProfilePicture([FromForm] ProfilePictureDto pictureDto)
+        {
+            try
+            {
+                if (pictureDto.picture == null) return BadRequest("No Picture Found");
+                if (pictureDto.picture.ContentType != "image/jpeg" && pictureDto.picture.ContentType != "image/png") return BadRequest("Only JPEG and PNG files are allowed");
+                if (pictureDto.authId.IsNullOrEmpty()) return BadRequest("No AuthId Found");
+                if (pictureDto.picture.Length > MaxFileSize) return BadRequest("File size is too large");
+                var bucketName = "stack-messaging-service";
+                var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Client, bucketName);
+                if (!bucketExists) return NotFound($"Bucket not found");
+                var filePath = $"profile-picture/{pictureDto.picture.FileName}";
+                var request = new PutObjectRequest()
+                {
+                    BucketName = bucketName,
+                    Key = filePath,
+                    InputStream = pictureDto.picture.OpenReadStream(),
+                };
+                request.Metadata.Add("Content-Type", pictureDto.picture.ContentType);
+                await _s3Client.PutObjectAsync(request);
+                var urlRequest = new GetPreSignedUrlRequest
+                {
+                    BucketName = bucketName,
+                    Key = filePath,
+                    Expires = DateTime.UtcNow.AddYears(1) // Set the expiration time to a far-future date
+                };
+                string url = _s3Client.GetPreSignedURL(urlRequest);
+                // Store the Profile Picture
+                await _userRepository.StoreProfilePicture(pictureDto.authId, url);
+                ResponseDto response = new()
+                {
+                    IsSuccess = true,
+                    Result = url,
+                    Message = "Successfully Uploaded Profile Picture",
+                };
+                return Ok(response);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-
-
-
-
+        }
     }
 }

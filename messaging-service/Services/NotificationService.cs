@@ -14,17 +14,22 @@ namespace messaging_service.Services
         private readonly IChannelRepository _channelRepository;
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<NotificationService> _logger;
         private readonly IRabbitMQProducer _producer;
-        public NotificationService(IWorkspaceRepository workspaceRepository,IChannelRepository channelRepository,IMapper mapper,IRabbitMQProducer producer) 
+        public NotificationService(IWorkspaceRepository workspaceRepository,IChannelRepository channelRepository,IMapper mapper,IRabbitMQProducer producer
+            ,ILogger<NotificationService> logger,IUserRepository ur) 
         {
             _mapper = mapper;
             _workspaceRepository = workspaceRepository;
             _channelRepository = channelRepository;
             _producer = producer;
+            _logger = logger;
+            _userRepository = ur;
         }
 
         public void SendNotification(NotificationDto notif)
         {
+            _logger.LogInformation("Sending Notification to RabbitMQ");
             _producer.SendToQueue(notif,"notification");
         }
 
@@ -36,8 +41,11 @@ namespace messaging_service.Services
         public async Task SendJoiningWorkspaceNotif(int userId,int workspaceId)
         {
             var workspace = await _workspaceRepository.GetWorkspaceName(workspaceId);
+            _logger.LogInformation("getworkpsacename working "+workspace);
             var user = await _userRepository.GetUserAsync(userId);
+            _logger.LogInformation("getuser working "+user.Name);
             List<string> notifStrings = await _workspaceRepository.GetNotifStringsWorkspace(workspaceId);
+            _logger.LogInformation("getnotifstrings working "+notifStrings);
             NotificationDto notification = new()
             {
                 Title = "New Co-Worker",
@@ -46,8 +54,10 @@ namespace messaging_service.Services
                 Message = $"{user.Name} Just Joined {workspace}",
                 NotificationStrings = notifStrings
             };
+            _logger.LogInformation("notification created");
             //Send notification
             SendNotification(notification);
+            _logger.LogInformation("notification sent");
         }
 
         public async Task SendMessageNotif(int channelId)

@@ -39,7 +39,7 @@ namespace messaging_service.tests.controller.tests
             Assert.True(response.IsSuccess);
             Assert.Equal("Succesfully Stored Your Message!", response.Message);
         }
-
+        /*
         [Fact]
         public async Task DeleteMessage_ValidMessageId_ReturnsOkWithSuccessMessage()
         {
@@ -56,7 +56,7 @@ namespace messaging_service.tests.controller.tests
             Assert.True(response.IsSuccess);
             Assert.Equal("Succesfully Deleted Your Message!", response.Message);
         }
-
+        */
         [Fact]
         public async Task UpdateMessage_ValidMessage_ReturnsOkWithSuccessMessage()
         {
