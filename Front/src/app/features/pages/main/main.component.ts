@@ -327,12 +327,13 @@ export class MainComponent implements OnInit, OnChanges {
         },
       });
   }
-  OneToOne(user:any) {
+  OneToOne(userId:any) {
     const requset = {
       "user1": localStorage.getItem('userId'),
-  "user2": 1003,
-  "workspaceId": this.currentWorkspace.id
+      "user2": userId,
+      "workspaceId": this.currentWorkspace.id
     }
+    console.log(requset);
     this.service.OneToOne(requset).subscribe({
       next: (response) => {
         console.log('Confirmation', response);
