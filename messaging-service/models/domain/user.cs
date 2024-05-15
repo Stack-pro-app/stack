@@ -18,6 +18,8 @@ namespace messaging_service.models.domain
         public ICollection<Workspace> WorkspacesAdmin { get; } = new List<Workspace>();
         public string AuthId { get; set; } = null!;
         public string NotificationString { get; set; } = null!;
+        public string? ProfilePicture { get; set; }
+        public string? ProfilePictureKey { get; set; }
         
 
     }

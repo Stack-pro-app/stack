@@ -12,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 using Amazon.S3;
 using messaging_service.Producer;
 using messaging_service.Models.Dto.Others;
+using messaging_service.Services;
 
 namespace messaging_service.Repository
 {
@@ -20,6 +21,7 @@ namespace messaging_service.Repository
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IAmazonS3 _S3client;
+        private readonly INotificationService _notificationService;
         public ChatRepository(AppDbContext context,IMapper mapper, IAmazonS3 client
             )
         {
@@ -32,6 +34,8 @@ namespace messaging_service.Repository
         {
                 _context.Chats.Add(message);
                 await _context.SaveChangesAsync();
+                await _notificationService.SendMessageNotif(message.ChannelId);
+
         }
 
         public async Task DeleteChatPartAsync(int messageId)
@@ -40,7 +44,7 @@ namespace messaging_service.Repository
                 message.Is_deleted = true;
                 await _context.SaveChangesAsync();
         }
-
+        
         public async Task DeleteChatPermAsync(int messageId)
         {
                 Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.Id == messageId) ?? throw new ValidationException("Message Inexistant");
@@ -49,9 +53,10 @@ namespace messaging_service.Repository
                 await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteChatPermAsync(Guid messageId)
+        public async Task DeleteChatPermAsync(string messageId)
         {
-                Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.MessageId == messageId) ?? throw new ValidationException("Message Inexistant");
+                Chat message = await _context.Chats.FirstOrDefaultAsync(x => x.MessageId.ToString() == messageId) ?? throw new ValidationException("Message Inexistant");
+                if(message.Attachement_Key != null)
                 await _S3client.DeleteObjectAsync("stack-messaging-service", message.Attachement_Key);
                 _context.Chats.Remove(message);
                 await _context.SaveChangesAsync();

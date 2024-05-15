@@ -4,6 +4,14 @@
     <!-- Page content here -->
 
     <div class="navbar bg-base-300">
+      <label
+      for="my-drawer-2"
+      class="btn btn-ghost btn-circle drawer-button lg:hidden"
+    >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+    </svg>
+    </label>
       <div class="flex-1">
         <a class="btn btn-ghost text-xl" onclick="my_modal_8.showModal()"
           ># {{ currentChannelP.name }}</a
@@ -58,7 +66,7 @@
                   type="checkbox"
                   class="checkbox"
                 />
-                <span class="label-text mr-auto ml-2">private</span>
+                <span class="label-text mr-auto ml-2">Private</span>
               </label>
             </div>
             <div class="form-control mt-6">
@@ -104,12 +112,18 @@
       <!-- Open the modal using ID.showModal() method -->
       <dialog id="my_modal_1" class="modal modal-bottom sm:modal-middle">
         <div class="w-500 modal-box">
+          <span class="flex justify-end items-center">
+            <button type="" class="btn btn-circle btn-ghost btn-sm" onclick="document.getElementById('my_modal_1').close()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+            </button>
+          </span>
           <div role="tablist" class="tabs tabs-lifted">
             <input
               type="radio"
               name="my_tabs_2"
               role="tab"
-              class="tab"
+              class="tab font-bold text-md"
               aria-label="Settings"
             />
             <div
@@ -118,38 +132,52 @@
             >
               <form
                 [formGroup]="workspaceForm"
-                (ngSubmit)="onUpdateWorkspace()"
                 class="card-body"
                 method="dialog"
               >
-                <div class="form-control">
+                <div class="form-control ">
                   <label class="label">
-                    <span class="label-text">Workspace Name : </span>
+                    <span class="label-text text-lg">Change Workspace Name : </span>
                   </label>
+                  <div class="grid grid-flow-col grid-cols-4 gap-1">
+                  <span class="col-span-3">
                   <input
                     formControlName="workspaceName"
                     type="text"
-                    placeholder="Workspace name: ..."
+                    placeholder="Be Creative..."
                     class="input input-bordered"
                     required
                   />
-                </div>
-                <div class="form-control mt-6">
+                </span>
+                <span class="col-span-1">
                   <button
-                    type="submit"
-                    class="btn btn-warning my-2 w-1/3 ml-auto"
+                  type="submit"
+                  (click)="onUpdateWorkspace()"
+                  class="btn btn-warning w-16"
                   >
-                    Change Name
-                  </button>
-
-                  <button
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                  </svg>
+                </button>
+              </span>
+            </div>
+                </div>
+                <div class="mt-6">
+                  <span class="text-lg">Delete Workspace:</span>
+                  <div class="flex justify-center items-center p-6">
+                  <div class="form-control">
+                    <button
                     type="submit"
                     onclick="my_modal_14.showModal()"
-                    class="btn btn-error w-1/3 ml-auto"
-                  >
+                    class="btn btn-error w-32"
+                    >
                     Delete
-                  </button>
-                  <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
+                    </button>
+                  </div>
+                </div>
+                    <span class="text-xs font-bold">
+                      This action is irreversible and all data associated with this workspace will be permanently lost. Once deleted, you cannot recover any of the data. Please make sure this is what you intend to do.
+                    </span>
                 </div>
 
                 <!-- Open the modal using ID.showModal() method -->
@@ -208,8 +236,8 @@
               type="radio"
               name="my_tabs_2"
               role="tab"
-              class="tab"
-              aria-label="Coworkers"
+              class="tab font-bold text-md"
+              aria-label="CoWorkers"
               checked
             />
             <div
@@ -324,7 +352,7 @@
               </div>
             </div>
 
-            <input
+            <!-- <input
               type="radio"
               name="my_tabs_2"
               role="tab"
@@ -336,31 +364,13 @@
               class="tab-content bg-base-100 border-base-300 rounded-box p-6"
             >
               Tab content 3
-            </div>
+            </div> -->
           </div>
         </div>
       </dialog>
       <div class="flex-none">
-        <label
-          for="my-drawer-2"
-          class="btn btn-primary drawer-button lg:hidden"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            class="inline-block w-5 h-5 stroke-current"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-            ></path>
-          </svg>
-        </label>
         <app-notification></app-notification>
-        <button class="btn btn-ghost btn-circle">
+        <!-- <button class="btn btn-ghost btn-circle">
           <a [routerLink]="['/Call', currentChannelP.channelString]">
             <div class="indicator">
               <svg
@@ -377,12 +387,13 @@
                   d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
                 />
               </svg>
-              <!-- add if a video call is online  -->
               <span class="badge badge-xs badge-primary indicator-item" ></span>
             </div>
           </a>
-        </button>
-        <app-theme-switcher></app-theme-switcher>
+        </button> -->
+        <div class="mx-4 flex justify-center items-center">
+          <app-theme-switcher></app-theme-switcher>
+          </div>
 
       </div>
     </div>
@@ -396,23 +407,25 @@
           class="card-body"
           method="dialog"
         >
+        <div class = "text-2xl font-bold">Send Invitation</div>
+        <div class="divider"></div>
           <div  class="form-control">
             <label class="label">
-              <span class="label-text">User Email : </span>
+              <span class="label-text">Your Co-Worker's Email : </span>
             </label>
             <input
               formControlName="userEmail"
               type="email"
-              placeholder="Enter UserEmail ..."
+              placeholder="Email..."
               class="input input-bordered"
               required
             />
           </div>
 
-          <div class="form-control mt-6">
-            <button type="submit" onclick="my_modal_19.showModal()" (click)="onFindUser()" (click)="Loading =!Loading" class="btn w-1/3 ml-auto">Find User</button>
-            <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
-          </div>
+          <span class="mt-6 flex justify-between items-center">
+            <button type="" class="btn btn-error w-1/3" onclick="my_modal_11.showModal()">Close</button>
+            <button type="submit" onclick="my_modal_19.showModal()" (click)="onFindUser()" (click)="Loading =!Loading" class="btn btn-success w-1/3">Find User</button>
+          </span>
         </form>
         <form method="dialog"></form>
       </div>
@@ -421,26 +434,55 @@
     <!-- Open the modal using ID.showModal() method -->
   <dialog id="my_modal_19" class="modal">
   <div  class="modal-box">
-    <h3 *ngIf="!Loading" class="font-bold text-lg">{{foundUser.name}}</h3>
-    <p *ngIf="!Loading" class="py-4">{{foundUser.email}}</p>
-    <span *ngIf="Loading" class="loading loading-spinner loading-lg"></span>
-
-    <div class="modal-action">
-      <form method="dialog"
-      >
-        <!-- if there is a button in form, it will close the modal (ngSubmit)="onAddUser()" -->
-        <button class="btn mr-5" (click)="onInviteUser()">invite User</button>
-        <button class="btn">Close</button>
-      </form>
+    <div class="flex justify-center h-32 w-auto">
+      <div class="grid grid-cols-3 gap-2">
+        <div class="col-span-1 flex justify-center items-center">
+          <img [src]="foundUser.profilePicture" class="h-32 w-32 rounded-full shadow-md" />
+        </div>
+        <div class="col-span-2 grid grid-flow-row grid-rows-2 p-6">
+          <span class="row-span-1">
+            <h3 *ngIf="!Loading" class="font-bold text-xl">{{foundUser.name}}?</h3>
+          </span>
+          <span class="row-span-1">
+            <p *ngIf="!Loading" >{{foundUser.email}}</p>
+          </span>
+        </div>
+      </div>
+      <div *ngIf="Loading" class="grid grid-flow-row grid-rows-3 mt-12">
+        <div class="flex justify-center items-center">
+          <span class="loading loading-spinner loading-lg row-span-2"></span>
+        </div>
+        <span class="row-span-1 opacity-70 text-center mt-2">
+        Looking Everywhere...
+        </span>
+      </div>
     </div>
+
+    <form method="dialog">
+    <div class="modal-action flex justify-between items-center">
+
+        <!-- if there is a button in form, it will close the modal (ngSubmit)="onAddUser()" -->
+        <button type="" class="btn btn-circle btn-error"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        </button>
+        <button type="submit" class="btn btn-circle btn-success" (click)="onInviteUser()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        </button>
+    </div>
+  </form>
   </div>
 </dialog>
     <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
       <div class="modal-box">
+        <div>
+          <h1 class="text-2xl font-bold pt-6">New Channel</h1>
+        </div>
+        <div class="divider"></div>
         <form
           [formGroup]="channelForm"
-          (ngSubmit)="onCreateChannel()"
-          class="card-body"
+          class="card-body -mt-8"
           method="dialog"
         >
           <div class="form-control">
@@ -450,7 +492,7 @@
             <input
               formControlName="channelName"
               type="text"
-              placeholder="channel name"
+              placeholder="Channel's name..."
               class="input input-bordered"
               required
             />
@@ -462,7 +504,7 @@
             <input
               formControlName="channelDescription"
               type="text"
-              placeholder="channel Description"
+              placeholder="Channel's Description..."
               class="input input-bordered"
               required
             />
@@ -474,19 +516,21 @@
                 type="checkbox"
                 class="checkbox"
               />
-              <span class="label-text mr-auto ml-2">private</span>
+              <span class="label-text mr-auto ml-2">Private</span>
             </label>
           </div>
-          <div class="form-control mt-6">
-            <button type="submit" class="btn w-1/3 ml-auto">Create</button>
-            <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
+          <div class="flex justify-between items-center">
+          <button onclick="document.getElementById('my_modal_5').close()" class="btn btn-error w-32 h-auto">Close</button>
+          <div class="form-control w-32 h-auto">
+            <button type="submit" (click)="onCreateChannel()" class="btn btn-success">Create</button>
           </div>
+        </div>
         </form>
         <form method="dialog"></form>
       </div>
     </dialog>
   </div>
-  <div class="drawer-side">
+  <div class="drawer-side" id="drawerSide">
     <div class="bg-base-300">
       <label
         for="my-drawer-2"
@@ -495,7 +539,18 @@
       ></label>
       <ul class="menu p-4 w-80 min-h-full bg-base-100 text-base-content">
         <!-- Sidebar content here -->
-        <a class="btn btn-ghost text-xl">{{ currentWorkspace.name }} </a>
+        <div class="grid grid-cols-5 grid-flow-col">
+        <a class="btn btn-ghost text-xl lg:col-span-5 col-span-4" >{{ currentWorkspace.name }} </a>
+        <span class="lg:hidden col-span-1 flex justify-center items-center">
+          <button for="my-drawer-2"
+          class="btn btn-ghost btn-circle" onclick="document.getElementById('my-drawer-2').click()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+
+          </button>
+        </span>
+      </div>
 
         <ul class="menu mt-10 bg-base-100 w-56 rounded-box">
           <li>
@@ -523,9 +578,9 @@
                   </a>
                 </li>
 
-                <li class="" onclick="my_modal_5.showModal()">
+                <li class="" *ngIf="isAdmin" onclick="my_modal_5.showModal()">
                   <div class="flex items-center">
-                    <button *ngIf="isAdmin" class="flex items-center">
+                    <button  class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -572,9 +627,9 @@
                   </div>
                 </li>
 
-                <li class="" onclick="my_modal_11.showModal()">
+                <li *ngIf="isAdmin" class="" onclick="my_modal_11.showModal()">
                   <div class="flex items-center">
-                    <button *ngIf="isAdmin" class="flex items-center">
+                    <button class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -588,7 +643,7 @@
                           d="M12 4.5v15m7.5-7.5h-15"
                         />
                       </svg>
-                      <span class="ml-1 text-sm">Add coworkers</span>
+                      <span class="ml-1 text-sm">Add Co-Workers</span>
                     </button>
                   </div>
                 </li>
@@ -602,34 +657,27 @@
                 <li class="py-1">
                   <div class="flex items-center">
                     <img
-                      src="https://i.ibb.co/Qc5fmj1/drive.png"
+                      src="../../../../assets/img/stack_project_icon.png"
                       alt="User Avatar"
-                      class="w-6 h-6 rounded-full mr-2"
+                      class="w-8 h-8 rounded-full mr-2"
                     />
 
                     <a [routerLink]="['/Project', 1]">
-                      <span class="font-semibold text-sm">Project</span>
+                      <span class="font-semibold text-md">Stack Project</span>
                     </a>
                   </div>
                 </li>
-                <li class="">
+                <li class="py-1">
                   <div class="flex items-center">
-                    <button *ngIf="isAdmin" class="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-4 h-4"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M12 4.5v15m7.5-7.5h-15"
-                        />
-                      </svg>
-                      <span class="ml-1 text-sm">Add apps</span>
-                    </button>
+                    <img
+                      src="../../../../assets/img/Stack_Meeting_icon.png"
+                      alt="User Avatar"
+                      class="w-8 h-8 rounded-full mr-2"
+                    />
+
+                    <a [routerLink]="['/Call', currentChannelP.channelString]">
+                      <span class="font-semibold text-md">Stack Meeting</span>
+                    </a>
                   </div>
                 </li>
               </ul>
@@ -637,10 +685,8 @@
           </li>
         </ul>
         <div class="divider"></div>
-
-        <div class="btm-nav fixed inset-x-0 bottom-0 flex justify-between ">
-          <button routerLink="/Profile" class="hover:bg-base-200">
-            <a href="">
+        <div class="btm-nav fixed inset-x-0 bottom-0">
+          <button [routerLink]="['/Profile']" class="hover:bg-base-200">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -655,7 +701,6 @@
                   d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                 />
               </svg>
-            </a>
           </button>
           <button *ngIf="isAdmin" class="hover:bg-base-200" onclick="my_modal_1.showModal()">
             <svg
@@ -679,7 +724,7 @@
             </svg>
           </button>
           <button class="hover:bg-base-200">
-            <a routerLink="/Home">
+            <a [routerLink]="['/Home']">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -698,6 +743,7 @@
           </button>
         </div>
       </ul>
+
     </div>
   </div>
 </div>

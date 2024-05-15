@@ -19,34 +19,13 @@
         <div class="flex justify-between items-center">
           <!-- Button Group -->
           <div class="flex items-center">
-            <!-- Mic Button -->
-            <button
-              type="button"
-              class="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:text-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-            >
-              <svg
-                class="flex-shrink-0 size-4"
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect width="18" height="18" x="3" y="3" rx="2"></rect>
-                <line x1="9" x2="15" y1="15" y2="9"></line>
-              </svg>
-            </button>
-            <!-- End Mic Button -->
-
             <!-- Attach Button -->
             <button
               type="button"
+              (click)="fileUpload.click()"
               class="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-gray-500 hover:text-blue-600 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:hover:text-blue-500 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
             >
+            <input type="file" #fileUpload id="fileUpload" (change)="onFileChange($event)" name="fileUpload" multiple="multiple" accept="*/*" style="display: none;"/>
               <svg
                 class="flex-shrink-0 size-4"
                 xmlns="http://www.w3.org/2000/svg"
@@ -64,9 +43,26 @@
                 ></path>
               </svg>
             </button>
+            <div *ngIf="this.getFileName()">
+              <div class = "grid grid-cols-4 grid-flow-col p-2 mx-2 gap-2">
+                <span *ngIf="isImageFileName(getFileName());else NotImg" class="col-span-1 flex justify-center items-center">
+                  <img [src]="imageDataUrl" class="w-10 h-10 rounded-lg" alt="image" />
+                </span>
+                <ng-template #NotImg>
+                <span class="col-span-1 flex justify-center items-center">
+                  <img [src]="getFileImg()" class="w-10 h-10 rounded-lg" alt="file" />
+                </span>
+              </ng-template>
+                <span class="text-sm col-span-3 flex text-start items-center">{{getFileName()}}</span>
+              </div>
+            </div>
+            <div *ngIf="fileLoading">
+              <span class="loading loading-dots loading-sm p-2 mx-2"></span>
+            </div>
             <!-- End Attach Button -->
           </div>
           <!-- End Button Group -->
+
 
           <!-- Button Group -->
           <div class="flex items-center bg-base-100 gap-x-1">
@@ -98,7 +94,7 @@
 
             <!-- Send Button -->
             <button
-              type="submit"
+              type="submit" *ngIf="!getFileSent();else LoadingSubmit"
               class="inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-white bg-gray-950 hover:bg-gray-900 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:outline-none black:focus:ring-1 black:focus:ring-gray-600"
             >
               <svg
@@ -114,6 +110,15 @@
                 ></path>
               </svg>
             </button>
+            <ng-template #LoadingSubmit>
+              <span>
+                <button
+              class="btn-disabled inline-flex flex-shrink-0 justify-center items-center size-8 rounded-lg text-white bg-gray-950 hover:bg-gray-900 focus:z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:outline-none black:focus:ring-1 black:focus:ring-gray-600"
+            >
+            <span class="loading loading-spinner loading-xs"></span>
+              </button>
+              </span>
+            </ng-template>
             <!-- End Send Button -->
           </div>
           <!-- End Button Group -->

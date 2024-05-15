@@ -43,7 +43,7 @@ export class WorkspaceService {
     return this.http.delete(RequestUrl);
   }
   Update(id: any, diffname: string) {
-    const RequestUrl = `${this.url}/${id}`;
+    const RequestUrl = `${this.url}/${id}?Name=${diffname}`;
     const data = {
       name: diffname,
     };
@@ -51,18 +51,18 @@ export class WorkspaceService {
       accept: 'text/plain',
       'Content-Type': 'application/json',
     });
-    return this.http.put(RequestUrl, diffname, { headers });
+    return this.http.put(RequestUrl, { headers });
   }
   getUserSInvitions(id:any):Observable<any>{
     return this.http.get(`${environment.API_MESAAGING_URL}/api/Invitation/${id}`);
   }
   onAcceptInvitation(token:any):Observable<any>{
-    return this.http.put(`${environment.API_MESAAGING_URL}/api/Invitation/accept/${token[0].token}`,{});
+    return this.http.post(`${environment.API_MESAAGING_URL}/api/Invitation/accept/${token[0].token}`,{});
   }
   onDeclineInvitation(token:any):Observable<any>{
     console.log(token[0].token);
 
-    return this.http.put(`${environment.API_MESAAGING_URL}/api/Invitation/decline/${token[0].token}`,{});
+    return this.http.post(`${environment.API_MESAAGING_URL}/api/Invitation/decline/${token[0].token}`,{});
   }
   onInviteUser(userId:any,workspaceId:any):Observable<any>{
     const requestBody =

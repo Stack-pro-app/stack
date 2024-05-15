@@ -13,5 +13,6 @@ namespace messaging_service.Repository.Interfaces
         public Task<bool> VerifyAdminStatus(string authId, int workspaceId);
         public Task<bool> VerifyMembershipWorkspace(string authId, int workspaceId);
         public Task<bool> VerifyAdminStatusV2(int userId, int workspaceId);
+        public Task<List<string>> GetNotifStringsWorkspace(int workspaceId);
     }
 }

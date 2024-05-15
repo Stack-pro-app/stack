@@ -1,0 +1,49 @@
+<div class="dropdown dropdown-end ">
+  <div tabindex="0" role="button" (click)="OnClick()" class="btn btn-circle btn-ghost">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" />
+    </svg>
+
+  </div>
+
+  <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box grid grid-flow-row grid-rows-5 w-96 h-96">
+    <div class="row-span-1"><h1 class="text-2xl font-bold px-6">Invitations</h1>
+    <div class="divider"></div></div>
+    <div class="row-span-4 overflow-y-scroll">
+    <ng-container *ngIf="invitaionsDtos.length!==0;else NoInv">
+      <li *ngFor="let invitaion of invitaionsDtos">
+          <div class="flex justify-between items-center mx-4 p-4">
+            <p class="text-md">Join {{invitaion.name}}</p>
+            <div class="grid grid-cols-2 grid-rows-1 grid-flow-col">
+              <span class="col-span-1">
+              <button class="btn btn-circle btn-error btn-xs" (click)="onDeclineInvitation(invitaion)" title="decline invitation">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </span>
+              <span class="col-span-1">
+              <button class="btn btn-circle btn-success ml-3 btn-xs" (click)="onAceptInvitaion(invitaion)" title="Accept Invitation">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                </svg>
+              </button>
+            </span>
+            </div>
+          </div>
+      </li>
+    </ng-container>
+    <ng-template #NoInv>
+      <div class="h-full flex justify-center items-center">
+        <div class="grid grid-flow-row grid-rows-4">
+          <div class="flex justify-center items-center row-span-3">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 opacity-70">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m6 4.125 2.25 2.25m0 0 2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+        </svg></div>
+        <p class="opacity-70 text-sm row-span-1">No Invitations!</p>
+      </div>
+        </div>
+    </ng-template>
+  </div>
+  </ul>
+</div>

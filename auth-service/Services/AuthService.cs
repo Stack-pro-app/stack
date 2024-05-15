@@ -15,16 +15,18 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly ILogger<AuthService> _logger;
     private readonly IRabbitMQProducer _producer;
 
     public AuthService(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager, AppDbContext db,
-        IJwtTokenGenerator jwtTokenGenerator, IRabbitMQProducer producer)
+        IJwtTokenGenerator jwtTokenGenerator, IRabbitMQProducer producer, ILogger<AuthService> logger)
     {
         _roleManager = roleManager;
         _userManager = userManager;
         _db = db;
         _jwtTokenGenerator = jwtTokenGenerator;
         _producer = producer;
+        _logger = logger;
     }
 
 
@@ -36,7 +38,7 @@ public class AuthService : IAuthService
             Email = regiterationRequestDto.Email,
             NormalizedEmail = regiterationRequestDto.Email.ToUpper(),
             Name = regiterationRequestDto.Name,
-            PhoneNumber = regiterationRequestDto.PhoneNumber
+            //PhoneNumber = regiterationRequestDto.PhoneNumber
         };
         try
         {
@@ -49,11 +51,10 @@ public class AuthService : IAuthService
                     Email = userToReturn.Email,
                     ID = userToReturn.Id,
                     Name = userToReturn.Name,
-                    PhoneNumber = userToReturn.PhoneNumber
                 };
-                _producer.SendRegistration(userDto);
+                _producer.SendRegistration(userDto,"register-msg");
+                _producer.SendRegistration(userDto,"register-pm");
                 return "";
-
             }
             else
             {
@@ -86,7 +87,7 @@ public class AuthService : IAuthService
             Email = user.UserName,
             ID = user.Id,
             Name = user.Name,
-            PhoneNumber = user.PhoneNumber
+            //PhoneNumber = user.PhoneNumber
         };
 
         LoginResponseDto loginResponseDto = new LoginResponseDto()

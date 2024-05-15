@@ -7,10 +7,11 @@ import { HeaderComponent } from '../header/header.component';
 import { ChatUser } from '../../../core/Models/chat-user';
 import { UserService } from '../../../core/services/user.service';
 import { MainComponent } from '../main/main.component';
+import { InvitationsComponent } from '../invitations/invitations.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, CommonModule, HeaderComponent,MainComponent],
+  imports: [RouterLink, CommonModule, HeaderComponent,MainComponent,InvitationsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -41,11 +42,13 @@ export class HomeComponent implements OnInit {
       next: (response) => {
         this.loggeduser=response.result;
         localStorage.setItem("userId",this.loggeduser.id.toString());
-        console.log(this.loggeduser);
+        console.log("User id is",localStorage.getItem('userId'));
          this.userService.getWorkSpaces(this.loggeduser.authId).subscribe({
            next: (response) => {
              console.log(response);
              this.workspaces= response.result.workspaces;
+             console.log(response.result);
+             this.store.setNotifString(response.result.user.notificationString);
              console.log(this.workspaces);
            },
            error: (error) => {

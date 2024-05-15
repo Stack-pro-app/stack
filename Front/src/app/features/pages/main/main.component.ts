@@ -211,7 +211,6 @@ export class MainComponent implements OnInit, OnChanges {
   onChangeChannel(channel: Channel) {
     this.service.GetChannelById(channel.id).subscribe({
       next: (response) => {
-        console.log(" HEEEEEEEEEEEEEEEEEEEEER",response);
         this.currentChannelP=response.result;
       },
       error: (error) => {
@@ -259,9 +258,9 @@ export class MainComponent implements OnInit, OnChanges {
     let userId = 0;
     this.userService.FindUserByEmail(this.userForm.value.userEmail).subscribe({
       next: (response) => {
-        console.log(response.result.id);
         userId = response.result.id;
         this.foundUser = response.result;
+        console.log(this.foundUser);
         this.Loading = !this.Loading;
       },
       error: (error) => {
@@ -290,8 +289,6 @@ export class MainComponent implements OnInit, OnChanges {
       next: (response) => {
         this.CUsers = response.result;
         this.CUsers = this.CUsers
-
-        console.log('Users', this.CUsers);
       },
       error: (error) => {
         console.error('get Users  error', error);
@@ -330,12 +327,13 @@ export class MainComponent implements OnInit, OnChanges {
         },
       });
   }
-  OneToOne(user:any) {
+  OneToOne(userId:any) {
     const requset = {
       "user1": localStorage.getItem('userId'),
-  "user2": 1003,
-  "workspaceId": this.currentWorkspace.id
+      "user2": userId,
+      "workspaceId": this.currentWorkspace.id
     }
+    console.log(requset);
     this.service.OneToOne(requset).subscribe({
       next: (response) => {
         console.log('Confirmation', response);

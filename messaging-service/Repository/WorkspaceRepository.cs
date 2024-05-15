@@ -10,6 +10,7 @@ using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using messaging_service.Producer;
 using messaging_service.Models.Dto.Others;
+using messaging_service.Models.Dto.Requests;
 
 namespace messaging_service.Repository
 {
@@ -57,8 +58,12 @@ namespace messaging_service.Repository
         {
                 if (workspaceId < 0) throw new ValidationException("Invalid Workspace Id");
                 var workspace = await _context.Workspaces.FirstOrDefaultAsync(x => x.Id == workspaceId)?? throw new ValidationException("Invalid Workspace");
+                // Delete related UsersWorkspaces records
+                _context.UsersWorkspaces.RemoveRange(workspace.UserWorkspaces);
+
+                // Now delete the Workspace
                 _context.Workspaces.Remove(workspace);
-                await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public async Task<WorkspaceDetailDto> GetWorkspaceAsync(int workspaceId,int userId)
@@ -71,11 +76,11 @@ namespace messaging_service.Repository
                 IEnumerable<Channel> authorizedChannels;
                 if (await VerifyAdminStatusV2(userId, workspaceId))
                 {
-                    authorizedChannels = await _context.Channels.Where(c => c.Is_OneToOne == false && c.Is_private == true).ToListAsync();
+                    authorizedChannels = await _context.Channels.Where(c => c.Is_OneToOne == false && c.Is_private == true && c.WorkspaceId == workspaceId).ToListAsync();
                 }
                 else
                 {
-                    authorizedChannels = await _context.Members.Where(m => m.UserId == userId).Include(m => m.Channel).Select(m => m.Channel).Where(c => c.Is_OneToOne == false).ToListAsync();
+                    authorizedChannels = await _context.Members.Where(m => m.UserId == userId).Include(m => m.Channel).Select(m => m.Channel).Where(c => c.Is_OneToOne == false && c.WorkspaceId == workspaceId).ToListAsync();
                 }
                 IEnumerable<Channel> channels = publicChannels.Concat(authorizedChannels);
                 IEnumerable<ChannelMinimalDto> minimalChannels = _mapper.Map<IEnumerable<Channel>, IEnumerable<ChannelMinimalDto>>(channels);
@@ -122,6 +127,12 @@ namespace messaging_service.Repository
             if (user == null) return false;
 
             return await _context.UsersWorkspaces.AnyAsync(uw => uw.UserId == user.Id && uw.WorkspaceId == workspaceId);
+        }
+
+        public async Task<List<string>> GetNotifStringsWorkspace(int workspaceId)
+        {
+            List<string> notifStrings = await _context.UsersWorkspaces.Where(uw => uw.WorkspaceId == workspaceId).Include(uw => uw.User).Select(uw => uw.User.NotificationString).ToListAsync();
+            return notifStrings;
         }
     }
 }
