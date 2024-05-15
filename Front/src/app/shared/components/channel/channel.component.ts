@@ -29,6 +29,7 @@ export class ChannelComponent implements OnInit, OnChanges {
   page: number = 1;
   throttle = 0;
   distance = 1;
+  users: any[] = [];
   messages: any[] = [];
   //add the messaging service here
   constructor(private service: ChatService,

@@ -3,3 +3,13 @@
   left: -9999px;
   top: -9999px;
 }
+
+/* your-component.component.css */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

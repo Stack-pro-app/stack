@@ -47,6 +47,7 @@ export class MainComponent implements OnInit, OnChanges {
   channelToDelete:Channel|null = null;
   channelToModify:Channel|null = null;
   channelToModifyName:string = '';
+  channelUsers: any[] = [];
   searchTerm: string = '';
   id: string | null = '';
   channelRequest: any = {
@@ -86,6 +87,7 @@ export class MainComponent implements OnInit, OnChanges {
   constructor(
     private signalrService: SignalrService,
     private userService: UserService,
+    private channelService:ChannelService,
     private service: ChannelService,
     private builder: FormBuilder,
     private router: Router,
@@ -170,6 +172,34 @@ export class MainComponent implements OnInit, OnChanges {
         },
       });
     this.onGetUsers();
+  }
+  fetchMembers() {
+    this.userService.getChannelUsers(this.currentChannelP.id).subscribe({
+      next: (response) => {
+        console.log(response.result);
+        this.channelUsers = response.result;
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {},
+    });
+  }
+  AddUserToChannel(userId: number){
+    this.channelService.AddUserToChannel(this.currentChannelP.id,userId).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {
+        this.fetchMembers();
+      },
+    });
+  }
+  isUserInChannel(userId:number){
+    return this.channelUsers.some(user=>user.id == userId);
   }
   onCreateChannel() {
     this.channelRequest.name = this.channelForm.value.channelName;

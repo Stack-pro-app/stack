@@ -34,4 +34,11 @@ export class ChannelService {
     const RequestUrl = `${this.url}/OneToOne`;
     return this.http.post(RequestUrl, ChannelData);
   }
+  AddUserToChannel(channelId:number,userId:number): Observable<any> {
+    const RequestUrl = `${this.url}/AddUser/${channelId}`;
+    const data = {
+      userid: userId,
+    }
+    return this.http.post(RequestUrl, data);
+  }
 }
