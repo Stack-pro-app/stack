@@ -312,6 +312,9 @@ export class MainComponent implements OnInit, OnChanges {
       });
   }
   filterItems() {}
+  handleButtonClick(event: Event) {
+    event.stopPropagation();
+}
   onInviteUser() {
     this.workspaceService
       .onInviteUser(this.foundUser.id, this.currentWorkspace.id)
