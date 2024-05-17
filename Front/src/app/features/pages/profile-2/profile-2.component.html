@@ -1,0 +1,41 @@
+<div class="dropdown dropdown-end">
+  <button tabindex="0" class="btn btn-ghost btn-circle" (click)="onOpen()">
+    <div>
+      <div class="flex items-center">
+        <img
+          *ngIf="user.profilePicture != null"
+          [src]="user.profilePicture"
+          alt="User Avatar"
+          class="w-8 h-8 rounded-full object-cover"
+        />
+        <div
+          *ngIf="user.profilePicture == null"
+          class="w-8 h-8 rounded-full flex items-center justify-center text-lg bg-gray-300 text-gray-600"
+        >
+          {{ user.name.charAt(0).toUpperCase() }}
+        </div>
+    </div>
+    </div>
+  </button>
+  <div class="dropdown-content z-[1] menu shadow bg-base-100 rounded-box w-96 h-36 p-6 grid grid-cols-3 gap-3 grid-flow-col">
+    <div class="col-span-1">
+      <div class="flex items-center">
+        <img
+          *ngIf="user.profilePicture"
+          [src]="user.profilePicture"
+          alt="User Avatar"
+          class="w-24 h-24 rounded-full object-cover"
+        />
+        <div
+          *ngIf="user.profilePicture == null"
+          class="w-24 h-24 rounded-full flex items-center justify-center text-4xl bg-gray-300 text-gray-600"
+        >
+          {{ user.name.charAt(0).toUpperCase() }}
+        </div>
+    </div>
+    </div>
+    <div class="col-span-2">
+    <div class="text-xl">{{user.name}}</div>
+    <div class="opacity-70">{{user.email}}</div>
+  </div>
+  </div>

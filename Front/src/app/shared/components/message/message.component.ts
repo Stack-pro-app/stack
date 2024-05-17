@@ -82,6 +82,7 @@ downloadFile(url: string, fileName: string) {
     console.log(this.message)
   }
 
+
   timeDifference(previous: string): string {
     const date = new Date(previous);
     date.setHours(date.getHours() + 1);

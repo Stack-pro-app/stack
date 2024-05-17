@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../core/services/Auth/auth.service';
 import { ThemeSwitcherComponent } from '../../../shared/components/theme-switcher/theme-switcher.component';
 import { InvitationsComponent } from '../invitations/invitations.component';
+import { Profile2Component } from '../profile-2/profile-2.component';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, CommonModule, ThemeSwitcherComponent,InvitationsComponent],
+  imports: [RouterLink, CommonModule, ThemeSwitcherComponent,InvitationsComponent,Profile2Component],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })

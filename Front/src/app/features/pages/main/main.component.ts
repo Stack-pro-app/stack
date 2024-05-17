@@ -19,6 +19,7 @@ import { UserService } from '../../../core/services/user.service';
 import { StoreService } from '../../../core/services/store/store.service';
 import { ThemeSwitcherComponent } from '../../../shared/components/theme-switcher/theme-switcher.component';
 import { NotificationComponent } from '../notification/notification.component';
+import { Profile2Component } from '../profile-2/profile-2.component';
 
 @Component({
   selector: 'app-main',
@@ -31,7 +32,8 @@ import { NotificationComponent } from '../notification/notification.component';
     CommonModule,
     ThemeSwitcherComponent,
     FormsModule,
-    NotificationComponent
+    NotificationComponent,
+    Profile2Component,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
@@ -173,6 +175,21 @@ export class MainComponent implements OnInit, OnChanges {
       });
     this.onGetUsers();
   }
+
+  isSelf(id:number){
+    return id.toString() == localStorage.getItem('userId');
+  }
+
+  get filteredUsers() {
+    if (!this.searchTerm) {
+      return this.CUsers;
+    }
+    return this.CUsers.filter(user =>
+      user.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+
   fetchMembers() {
     this.userService.getChannelUsers(this.currentChannelP.id).subscribe({
       next: (response) => {
@@ -234,10 +251,8 @@ export class MainComponent implements OnInit, OnChanges {
   }
   onUpdateWorkspace() {
     const name = this.workspaceForm.value.workspaceName;
-    console.log(name);
     this.workspaceService.Update(this.currentWorkspace.id, name).subscribe({
       next: (response) => {
-        console.log(response);
       },
       error: (error) => {
         console.error('Updating  error', error);
