@@ -125,6 +125,10 @@ namespace messaging_service.Data
             .HasIndex(uw => new { uw.UserId, uw.WorkspaceId })
             .IsUnique();
 
+            modelBuilder.Entity<Invitation>()
+            .HasIndex(i => new { i.UserId, i.WorkspaceId })
+            .IsUnique();
+
 
             modelBuilder.Entity<Channel>()
             .HasIndex(c => new { c.WorkspaceId, c.Name })

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { WorkspaceService } from '../../../core/services/Workspace/workspace.service';
 
 @Component({
@@ -10,6 +10,7 @@ import { WorkspaceService } from '../../../core/services/Workspace/workspace.ser
   styleUrl: './invitations.component.css'
 })
 export class InvitationsComponent implements OnInit{
+  @Output() reloadWS = new EventEmitter<string>();
   invitations:any[] = [];
   invitaionsDtos:any[]=[];
   constructor(private workspaceService:WorkspaceService) {
@@ -25,12 +26,12 @@ export class InvitationsComponent implements OnInit{
     this.workspaceService.getUserSInvitions(localStorage.getItem('userId')).subscribe({
       next:(data)=>{
         this.invitations = data.result;
-        console.log(this.invitations);
       },
       error:(err)=>{
         console.log(err);
       },
-      complete:()=>{this.onGetInvitaionDto();
+      complete:()=>{
+        //this.onGetInvitaionDto();
       }
     })
   }
@@ -51,35 +52,35 @@ export class InvitationsComponent implements OnInit{
   }
 
   onAceptInvitaion(invitaion:any){
-    const invitation = this.invitations.filter((inv)=>inv.WorkspaceId == invitaion.workspaceId);
+    //const invitation = this.invitations.filter((inv)=>inv.WorkspaceId == invitaion.workspaceId);
 
-    this.workspaceService.onAcceptInvitation(invitation).subscribe({
+    this.workspaceService.onAcceptInvitation(invitaion.token).subscribe({
       next:(data)=>{
         this.onGetUserInvitaions();
-        window.location.reload();
 
       },
       error:(err)=>{
         console.log(err);
       },
       complete:()=>{
+        this.onGetUserInvitaions();
+        this.reloadWS.emit('reload');
       }
     })
 
   }
   onDeclineInvitation(invitaion:any){
-    const invitation = this.invitations.filter((inv)=>inv.WorkspaceId == invitaion.workspaceId);
+    //const invitation = this.invitations.filter((inv)=>inv.WorkspaceId == invitaion.workspaceId);
 
-    this.workspaceService.onDeclineInvitation(invitation).subscribe({
+    this.workspaceService.onDeclineInvitation(invitaion.token).subscribe({
       next:(data)=>{
-        this.onGetUserInvitaions();
-        window.location.reload();
 
       },
       error:(err)=>{
         console.log(err);
       },
-      complete:()=>{console.log("completed");
+      complete:()=>{
+        this.onGetUserInvitaions();
       }
     })
   }

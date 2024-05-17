@@ -162,6 +162,7 @@ namespace messaging_service.Repository
             var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new ValidationException("Invalid User");
             if(user.ProfilePicture != null)
             {
+                _logger.LogInformation(user.ProfilePictureKey);
                 await _S3client.DeleteObjectAsync("stack-messaging-service",user.ProfilePictureKey);
             }
             user.ProfilePicture = url;

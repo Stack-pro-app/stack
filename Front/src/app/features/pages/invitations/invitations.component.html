@@ -10,20 +10,20 @@
     <div class="row-span-1"><h1 class="text-2xl font-bold px-6">Invitations</h1>
     <div class="divider"></div></div>
     <div class="row-span-4 overflow-y-scroll">
-    <ng-container *ngIf="invitaionsDtos.length!==0;else NoInv">
-      <li *ngFor="let invitaion of invitaionsDtos">
+    <ng-container *ngIf="invitations.length!==0;else NoInv">
+      <li *ngFor="let invitaion of invitations">
           <div class="flex justify-between items-center mx-4 p-4">
             <p class="text-md">Join {{invitaion.name}}</p>
             <div class="grid grid-cols-2 grid-rows-1 grid-flow-col">
               <span class="col-span-1">
-              <button class="btn btn-circle btn-error btn-xs" (click)="onDeclineInvitation(invitaion)" title="decline invitation">
+              <button class="btn btn-circle btn-error btn-sm" (click)="onDeclineInvitation(invitaion)" title="decline invitation">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
               </button>
             </span>
               <span class="col-span-1">
-              <button class="btn btn-circle btn-success ml-3 btn-xs" (click)="onAceptInvitaion(invitaion)" title="Accept Invitation">
+              <button class="btn btn-circle btn-success ml-3 btn-sm" (click)="onAceptInvitaion(invitaion)" title="Accept Invitation">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
                 </svg>

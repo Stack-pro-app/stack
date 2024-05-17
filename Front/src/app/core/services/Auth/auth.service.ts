@@ -15,7 +15,6 @@ export class AuthService {
   constructor(private http: HttpClient, private store: StoreService) {}
 
   login(userData: any): Observable<any> {
-    console.log(userData);
     const loginUrl = `${this.url}login`;
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -23,21 +22,17 @@ export class AuthService {
 
     return this.http
       .post<any>(loginUrl, userData, { headers })
-      .pipe(tap((response) => console.log('Login Response:', response)));
+      .pipe(tap((response) => {}));
   }
   logout() {
-    console.log(this.store.isLogged());
     localStorage.clear();
-    console.log(this.store.isLogged());
   }
   register(userData: any): Observable<any> {
-    console.log(userData);
     const registerUrl = `${this.url}register`;
     return this.http.post(registerUrl, userData);
   }
   getChatUser(): Observable<any> {
     const userId = this.store.getUser().sub;
-    console.log(userId);
     const UserUrl = `${this.urlU}/${userId}`;
     return this.http.get(UserUrl);
   }
