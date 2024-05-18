@@ -63,6 +63,8 @@ namespace messaging_service.Repository
         public async Task CreateInvitation(int workspaceId, string authId)
         {
             User res = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId)?? throw new ValidationException("User not found");
+            var uw = await _context.UsersWorkspaces.FirstOrDefaultAsync(uw => uw.UserId == res.Id && uw.WorkspaceId == workspaceId);
+            if(uw != null) throw new ValidationException("User already in workspace");
             Invitation inv = new()
             {
                 WorkspaceId = workspaceId,

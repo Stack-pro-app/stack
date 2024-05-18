@@ -1,10 +1,11 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InputComponent } from '../../../shared/components/input/input.component';
 import { ChannelComponent } from '../../../shared/components/channel/channel.component';
 import { Channel } from '../../../core/Models/channel';
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -18,6 +19,7 @@ import { UserService } from '../../../core/services/user.service';
 import { StoreService } from '../../../core/services/store/store.service';
 import { ThemeSwitcherComponent } from '../../../shared/components/theme-switcher/theme-switcher.component';
 import { NotificationComponent } from '../notification/notification.component';
+import { Profile2Component } from '../profile-2/profile-2.component';
 
 @Component({
   selector: 'app-main',
@@ -29,18 +31,25 @@ import { NotificationComponent } from '../notification/notification.component';
     ReactiveFormsModule,
     CommonModule,
     ThemeSwitcherComponent,
-    NotificationComponent
+    FormsModule,
+    NotificationComponent,
+    Profile2Component,
   ],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
 export class MainComponent implements OnInit, OnChanges {
   Loading: Boolean = false;
+  @ViewChild('inputModify') inputModify: ElementRef | undefined;
   foundUser:any = {
     name:"Couldn't find User",
     email:"Couldn't find user",
   };
   showDeleteButton:Boolean = false;
+  channelToDelete:Channel|null = null;
+  channelToModify:Channel|null = null;
+  channelToModifyName:string = '';
+  channelUsers: any[] = [];
   searchTerm: string = '';
   id: string | null = '';
   channelRequest: any = {
@@ -80,6 +89,7 @@ export class MainComponent implements OnInit, OnChanges {
   constructor(
     private signalrService: SignalrService,
     private userService: UserService,
+    private channelService:ChannelService,
     private service: ChannelService,
     private builder: FormBuilder,
     private router: Router,
@@ -119,7 +129,6 @@ export class MainComponent implements OnInit, OnChanges {
       .subscribe({
         next: (response) => {
           this.currentWorkspace = response.result;
-          console.log('Wos', this.currentWorkspace);
 
           this.channels = this.currentWorkspace.channels;
 
@@ -132,8 +141,6 @@ export class MainComponent implements OnInit, OnChanges {
             name: response.result.mainChannel.name,
           };
           this.channels.push(this.currentChannelP);
-
-
           this.onGetUsers();
         },
         error: (error) => {
@@ -146,9 +153,9 @@ export class MainComponent implements OnInit, OnChanges {
       .getWorkspace(this.id, localStorage.getItem('userId'))
       .subscribe({
         next: (response) => {
-          console.log(response);
           this.currentWorkspace = response.result;
           this.channels = this.currentWorkspace.channels;
+          this.channels.push(response.result.mainChannel);
           this.currentChannelP = {
             channelString: response.result.mainChannel.channelString,
             created_at: response.result.mainChannel.created_at,
@@ -164,6 +171,58 @@ export class MainComponent implements OnInit, OnChanges {
       });
     this.onGetUsers();
   }
+
+  isSelf(id:number){
+    return id.toString() == localStorage.getItem('userId');
+  }
+
+  HandleLongText(text:string){
+    if(text.length > 40){
+      return text.slice(0, 40) + '...';
+    }
+    return text;
+  }
+
+  get filteredUsers() {
+    if (!this.searchTerm) {
+      return this.CUsers;
+    }
+    return this.CUsers.filter(user =>
+      user.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
+
+  emitMessage(){
+    this.store.skeletonMessage = true;
+  }
+
+
+  fetchMembers() {
+    this.userService.getChannelUsers(this.currentChannelP.id).subscribe({
+      next: (response) => {
+        this.channelUsers = response.result;
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {},
+    });
+  }
+  AddUserToChannel(userId: number){
+    this.channelService.AddUserToChannel(this.currentChannelP.id,userId).subscribe({
+      next: (response) => {
+      },
+      error: (error) => {
+        console.error('get Users  error', error);
+      },
+      complete: () => {
+        this.fetchMembers();
+      },
+    });
+  }
+  isUserInChannel(userId:number){
+    return this.channelUsers.some(user=>user.id == userId);
+  }
   onCreateChannel() {
     this.channelRequest.name = this.channelForm.value.channelName;
     this.channelRequest.workspaceId = this.currentWorkspace.id;
@@ -174,17 +233,16 @@ export class MainComponent implements OnInit, OnChanges {
         this.reload();
       },
       error: (error) => {
-        console.log(this.channelRequest);
-
         console.error('Chaneel creating error', error);
       },
-      complete: () => console.info('complete'),
+      complete: () =>{
+
+      },
     });
   }
   onDeleteWorkspace() {
     this.workspaceService.Delete(this.currentWorkspace.id).subscribe({
       next: (response) => {
-        console.log(response);
         this.router.navigate(['/Home']);
       },
       error: (error) => {
@@ -195,10 +253,8 @@ export class MainComponent implements OnInit, OnChanges {
   }
   onUpdateWorkspace() {
     const name = this.workspaceForm.value.workspaceName;
-    console.log(name);
     this.workspaceService.Update(this.currentWorkspace.id, name).subscribe({
       next: (response) => {
-        console.log(response);
       },
       error: (error) => {
         console.error('Updating  error', error);
@@ -222,9 +278,9 @@ export class MainComponent implements OnInit, OnChanges {
   });
   }
   onDeleteChannel() {
-    this.service.Delete(this.currentChannelP.id).subscribe({
+    if(this.channelToDelete){
+    this.service.Delete(this.channelToDelete.id).subscribe({
       next: (response) => {
-        console.log(response);
       },
       error: (error) => {
         console.error('Updating  error', error);
@@ -235,12 +291,11 @@ export class MainComponent implements OnInit, OnChanges {
       },
     });
   }
+  }
   onUpdateChannel() {
     const data = {
-      id: this.currentChannelP.id,
-      name: this.channelForm.value.channelName,
-      description: this.currentChannelP.description,
-      is_private: this.channelForm.value.channelPrivate,
+      id: this.channelToModify?.id,
+      name: this.channelToModifyName
     };
     this.service.Update(data).subscribe({
       next: (response) => {
@@ -250,6 +305,8 @@ export class MainComponent implements OnInit, OnChanges {
         console.error('Updating  error', error);
       },
       complete: () => {
+        this.channelToModify = null;
+        this.channelToModifyName = '';
         this.reload();
       },
     });
@@ -260,7 +317,6 @@ export class MainComponent implements OnInit, OnChanges {
       next: (response) => {
         userId = response.result.id;
         this.foundUser = response.result;
-        console.log(this.foundUser);
         this.Loading = !this.Loading;
       },
       error: (error) => {
@@ -284,6 +340,30 @@ export class MainComponent implements OnInit, OnChanges {
   onRemoveUser(data: any) {
     //Todo Remove User
   }
+  isMain(channel:Channel){
+    return channel.name == "main";
+  }
+  modifyChannel(channel:Channel){
+    this.channelToModify = channel;
+    this.channelToModifyName = channel.name;
+    setTimeout(() => {
+      this.inputModify?.nativeElement.focus();
+      const clickEvent = new MouseEvent('click');
+      this.inputModify?.nativeElement.dispatchEvent(clickEvent);
+    });
+  }
+  isModify(channel:Channel){
+    return this.channelToModify == channel;
+  }
+  cancelModify(event: MouseEvent){
+    if(this.inputModify){
+      const target = event.target as HTMLElement;
+      if (!this.inputModify?.nativeElement.contains(target)) {
+        this.channelToModify = null;
+        this.channelToModifyName = '';
+      }
+    }
+  }
   onGetUsers() {
     this.userService.getUersFromWorkSpace(this.currentWorkspace.id).subscribe({
       next: (response) => {
@@ -295,6 +375,9 @@ export class MainComponent implements OnInit, OnChanges {
       },
       complete: () => {},
     });
+  }
+  setChannelToDelete(channel: any) {
+    this.channelToDelete = channel;
   }
   onDeleteUserFromWs(id: any) {
     this.userService

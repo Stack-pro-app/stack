@@ -152,20 +152,24 @@ export class NotificationComponent implements OnInit,OnChanges{
   ToggleBell(){
     this.BellClick = false;
   }
-  toHoursPassed(createdAt:string){
-    let date = new Date(createdAt);
-    let now = new Date();
-    let diff = now.getTime() - date.getTime();
-    let hours = Math.floor(diff / 1000 / 60 / 60);
-    if(hours == 0){
-      let minutes = Math.floor(diff / 1000 / 60);
-      if(minutes==0){
+  toHoursPassed(previous:string){
+    const date = new Date(previous);
+    date.setHours(date.getHours() + 1);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const hours = Math.floor(diff / 1000 / 60 / 60);
+    if (hours <= 0) {
+      const minutes = Math.floor(diff / 1000 / 60);
+      if (minutes <= 0) {
         return "Just now";
       }
-      return minutes+" minutes ago";
+      return minutes + (minutes === 1 ? " minute" : " minutes") + " ago";
     }
-
-    return hours+" hours ago";
+    if (hours < 24) {
+      return hours + (hours === 1 ? " hour" : " hours") + " ago";
+    }
+    const days = Math.floor(hours / 24);
+    return days + (days === 1 ? " day" : " days") + " ago";
   }
   ResetPages():void{
     this.page = 1;

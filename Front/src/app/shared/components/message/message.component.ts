@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { UserService } from './../../../core/services/user.service';
 import { Component, Input, OnInit } from '@angular/core';
+import { AudioPlayerComponent } from '../../../features/pages/audio-player/audio-player.component';
 
 @Component({
   selector: 'app-message',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,AudioPlayerComponent],
   templateUrl: './message.component.html',
   styleUrl: './message.component.css',
 })
@@ -16,7 +17,7 @@ export class MessageComponent implements OnInit {
   }
   @Input() message: any;
   username: string = "";
-  profilePic: string = "../../../../assets/img/user-square.svg";
+  profilePic: string|null = null;
   loading:boolean = false;
 
 ngOnInit(): void {
@@ -33,7 +34,6 @@ isUsername():boolean{
       next: (response) => {
         this.username = response.result.name;
         this.profilePic = response.result.profilePicture?? "../../../../assets/img/user-square.svg";
-        console.log(response.result);
 
       },
       error: (error) => {
@@ -49,6 +49,14 @@ isUsername():boolean{
     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
     const lowerCaseFileName = fileName.toLowerCase();
     return imageExtensions.some(ext => lowerCaseFileName.endsWith(ext));
+  }
+  isAudioFileName(fileName: string | null): boolean {
+    if (!fileName) {
+      return false;
+    }
+    const audioExtensions = ['.mp3', '.mpeg', '.wav', '.ogg','stack-audio'];
+    const lowerCaseFileName = fileName.toLowerCase();
+    return audioExtensions.some(ext => lowerCaseFileName.includes(ext));
   }
 
   getFileExtension(fileName: string): string {
@@ -83,23 +91,25 @@ downloadFile(url: string, fileName: string) {
     console.log(this.message)
   }
 
+
   timeDifference(previous: string): string {
-    let date = new Date(previous);
-    let now = new Date();
-    let diff = now.getTime() - date.getTime();
-    let hours = Math.floor(diff / 1000 / 60 / 60);
-    if(hours == 0){
-      let minutes = Math.floor(diff / 1000 / 60);
-      if(minutes==0){
+    const date = new Date(previous);
+    date.setHours(date.getHours() + 1);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    const hours = Math.floor(diff / 1000 / 60 / 60);
+    if (hours <= 0) {
+      const minutes = Math.floor(diff / 1000 / 60);
+      if (minutes <= 0) {
         return "Just now";
       }
-      return minutes+" minutes ago";
+      return minutes + (minutes === 1 ? " minute" : " minutes") + " ago";
     }
-    if(hours<24){
-      return hours+" hours ago";
+    if (hours < 24) {
+      return hours + (hours === 1 ? " hour" : " hours") + " ago";
     }
-    let days = Math.floor(hours/24);
-    return days+" days ago";
+    const days = Math.floor(hours / 24);
+    return days + (days === 1 ? " day" : " days") + " ago";
   }
 
   onOpenEdit(data:any){

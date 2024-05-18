@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';import { GanttModule } from '@syncfusion/ej2-angular-gantt';
-
+import { Component } from '@angular/core';
+import { GanttModule } from '@syncfusion/ej2-angular-gantt';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './features/pages/header/header.component';
 

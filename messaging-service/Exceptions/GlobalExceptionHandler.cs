@@ -43,12 +43,12 @@ namespace messaging_service.Exceptions
             return exception switch
             {
                 SqlException => (StatusCodes.Status400BadRequest, "Failed To do the operation due to a database error,Check Your Request!"),
-                DbUpdateException => (StatusCodes.Status400BadRequest, "Failed To do the operation due to a bad request(One of the Attributes might be already in use or invalid),retry..."),
-                ConstraintException => (StatusCodes.Status400BadRequest, "Failed To do the operation due to a violated constraint (PK,FK,Uniqueness,etc...)"),
+                DbUpdateException => (StatusCodes.Status400BadRequest, "Failed To do the operation due to a bad request(One of the Attributes might be already in use or invalid,retry..."),
+                ConstraintException => (StatusCodes.Status400BadRequest, "Invalid Operation"),
                 TimeoutException => (StatusCodes.Status500InternalServerError, "Failed To do the operation For taking too long."),
-                DataException => (StatusCodes.Status400BadRequest, "Failed to do the operation due to invalid data"),
+                DataException => (StatusCodes.Status400BadRequest, "Invalid Data"),
                 InvalidOperationException => (StatusCodes.Status500InternalServerError,"Failed Operation due to invalid calls"),
-                ValidationException => (StatusCodes.Status400BadRequest,"Failed Operation due to Invalid Request Data"),
+                ValidationException => (StatusCodes.Status400BadRequest,exception.Message),
                 _ => (StatusCodes.Status500InternalServerError, "Internal Server Error"),
             } ;
         }

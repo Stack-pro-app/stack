@@ -61,4 +61,9 @@ export class UserService {
     const RequestUrl = `${this.url}/Picture`;
     return this.http.put(RequestUrl,profilePic);
   }
+
+  getChannelUsers(channelId:any):Observable<any>{
+    const RequestUrl = `${this.url}/channel/${channelId}`;
+    return this.http.get(RequestUrl);
+  }
 }
