@@ -2,5 +2,5 @@
 
 public interface IRabbitMQProducer
 {
-   void SendRegistration<T>(T register);
+   void SendRegistration<T>(T register,string queue);
 }

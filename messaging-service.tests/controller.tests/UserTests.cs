@@ -1,4 +1,5 @@
 ﻿
+using Amazon.S3;
 using AutoMapper;
 using messaging_service.Controllers;
 using messaging_service.models.domain;
@@ -17,11 +18,13 @@ namespace messaging_service.tests.controller.tests
     {
         public IUserRepository userRepository { get; set; }
         public IMapper mapper { get; set; }
+        public IAmazonS3 s3 { get; set; }
         public UserController Controller { get; set; }
         public UserTests() {
             userRepository = Mock.Of<IUserRepository>();
             mapper = Mock.Of<IMapper>();
-            Controller = new UserController(userRepository,mapper);
+            s3 = Mock.Of<IAmazonS3>();
+            Controller = new UserController(userRepository,mapper,s3);
         }
 
         [Fact]

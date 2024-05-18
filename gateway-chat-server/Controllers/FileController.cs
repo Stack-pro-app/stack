@@ -13,12 +13,12 @@ namespace gateway_chat_server.Controllers
     [Route("api/[controller]")]
     public class FileController : Controller
     {
-        private readonly IHubContext<FileHub> _hubContext;
+        private readonly IHubContext<ChannelHub> _hubContext;
         private readonly IAmazonS3 _s3Client;
         private readonly IMessageProducer _producer;
         private const long MaxFileSize = 50 * 1024 * 1024;
 
-        public FileController(IHubContext<FileHub> hubContext,IAmazonS3 s3Client,IMessageProducer producer)
+        public FileController(IHubContext<ChannelHub> hubContext,IAmazonS3 s3Client,IMessageProducer producer)
         {
                 _hubContext = hubContext;
                 _s3Client = s3Client;
@@ -26,7 +26,7 @@ namespace gateway_chat_server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadFile(FileDto file)
+        public async Task<IActionResult> UploadFile([FromForm] FileDto file)
         {
             if (file == null || file.FormFile?.Length == 0)
             {
@@ -72,9 +72,7 @@ namespace gateway_chat_server.Controllers
             _producer.SendMessage(fileRequest);
 
             string jsonData = JsonConvert.SerializeObject(fileRequest);
-            
-
-            await _hubContext.Clients.Group(file.ChannelString).SendAsync("fileReceived", jsonData);
+            await _hubContext.Clients.Group(file.ChannelString??"").SendAsync("messageReceived", jsonData);
 
 
             return Ok(fileRequest);

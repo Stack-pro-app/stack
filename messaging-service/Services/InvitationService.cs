@@ -55,6 +55,7 @@ namespace messaging_service.Services
 
 
             //Send Notification
+            /*
             NotificationDto notif = new()
             {
                 MailTo = user.Email,
@@ -69,7 +70,7 @@ namespace messaging_service.Services
             notif.Links.Add("Decline", "http://" + Environment.GetEnvironmentVariable("DOMAIN") + ":" + Environment.GetEnvironmentVariable("PORT")
                 + "/api/invitation/decline/" + invitation.Token);
             notif.NotificationStrings.Add(user.NotificationString);
-            _notificationService.SendNotification(notif);
+            _notificationService.SendNotification(notif);*/
         }
     }
 }

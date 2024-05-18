@@ -127,6 +127,10 @@ services:
       - DB_NAME=stack-auth
       - DB_PORT=1433
       - DB_SA_PASSWORD=password@12345#
+      - MQ_HOST=rabbitmq
+      - MQ_USER=user
+      - MQ_PASSWORD=password
+      - MQ_PORT=5672
       - JWT_KEY=ThisIsAVerySecretKeyForJWTGeneration
   database-3:
     container_name: database-3

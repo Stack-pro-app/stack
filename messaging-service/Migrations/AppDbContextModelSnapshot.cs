@@ -45,9 +45,10 @@ namespace messaging_service.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.HasIndex("WorkspaceId");
+
+                    b.HasIndex("UserId", "WorkspaceId")
+                        .IsUnique();
 
                     b.ToTable("Invitations", "chat");
                 });
@@ -212,6 +213,12 @@ namespace messaging_service.Migrations
                         .HasColumnType("nvarchar(450)")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePictureKey")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthId")
@@ -360,6 +367,7 @@ namespace messaging_service.Migrations
                     b.HasOne("messaging_service.models.domain.Workspace", "Workspace")
                         .WithMany("UserWorkspaces")
                         .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");

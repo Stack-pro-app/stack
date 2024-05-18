@@ -7,10 +7,11 @@ import { HeaderComponent } from '../header/header.component';
 import { ChatUser } from '../../../core/Models/chat-user';
 import { UserService } from '../../../core/services/user.service';
 import { MainComponent } from '../main/main.component';
+import { InvitationsComponent } from '../invitations/invitations.component';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, CommonModule, HeaderComponent,MainComponent],
+  imports: [RouterLink, CommonModule, HeaderComponent,MainComponent,InvitationsComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
@@ -35,33 +36,30 @@ export class HomeComponent implements OnInit {
   }
   decoded = this.store.getUser();
   ngOnInit(): void {
-    console.log(this.loggeduser);
     this.isLogged = this.store.isLogged();
     this.service.getChatUser().subscribe({
       next: (response) => {
         this.loggeduser=response.result;
         localStorage.setItem("userId",this.loggeduser.id.toString());
-        console.log(this.loggeduser);
-         this.userService.getWorkSpaces(this.loggeduser.authId).subscribe({
-           next: (response) => {
-             console.log(response);
-             this.workspaces= response.result.workspaces;
-             console.log(this.workspaces);
-           },
-           error: (error) => {
-             console.error('Login error', error);
-           },
-           complete: () => console.info('complete'),
-         });
-
+        this.FetchWorkspaces();
       },
       error: (error) => {
         console.error('Login error', error);
       },
-      complete: () => console.info('complete'),
+      complete: () =>{},
     });
-
-
+  }
+  FetchWorkspaces(){
+    this.userService.getWorkSpaces(this.loggeduser.authId).subscribe({
+      next: (response) => {
+        this.workspaces= response.result.workspaces;
+        this.store.setNotifString(response.result.user.notificationString);
+      },
+      error: (error) => {
+        console.error('Login error', error);
+      },
+      complete: () => {},
+    });
   }
   OnLogout() {
     this.service.logout();
@@ -69,7 +67,8 @@ export class HomeComponent implements OnInit {
   }
   onSetAdmin(id:any){
     this.store.setAdmin(id);
-    console.log("Admin is set",localStorage.getItem('Admin'));
-
+  }
+  onReloadWS(message:string){
+    this.FetchWorkspaces();
   }
   }

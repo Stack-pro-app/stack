@@ -45,7 +45,6 @@ AWSOptions awsOptions = new();
 
 awsOptions.Credentials = new Amazon.Runtime.BasicAWSCredentials(Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID"), Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY"));
 awsOptions.Region = Amazon.RegionEndpoint.USEast1;
-
 builder.Services.AddDefaultAWSOptions(awsOptions);
 builder.Services.AddAWSService<IAmazonS3>();
 builder.Services.AddScoped<IRabbitMQProducer,RabbitMQProducer>();

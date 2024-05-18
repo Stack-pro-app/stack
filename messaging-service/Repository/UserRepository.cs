@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Amazon.S3;
+using AutoMapper;
 using messaging_service.Data;
 using messaging_service.models.domain;
 using messaging_service.models.dto.Detailed;
@@ -16,12 +17,14 @@ namespace messaging_service.Repository
         private readonly IMapper _mapper;
         private readonly ILogger<UserRepository> _logger;
         private readonly IRabbitMQProducer _producer;
-        public UserRepository(AppDbContext context,IMapper mapper,ILogger<UserRepository> logger,IRabbitMQProducer producer)
+        private readonly IAmazonS3 _S3client;
+        public UserRepository(AppDbContext context,IMapper mapper, ILogger<UserRepository> logger, IRabbitMQProducer producer, IAmazonS3 s3client)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
             _producer = producer;
+            _S3client = s3client;
         }
 
         public async Task CreateUserAsync(User user)
@@ -153,6 +156,18 @@ namespace messaging_service.Repository
                 await _context.SaveChangesAsync();
                 IEnumerable<Workspace> workspaces = await _context.UsersWorkspaces.Where(uw => uw.UserId == user.Id).Include(uw => uw.Workspace).Select(uw=>uw.Workspace).ToListAsync();
                 return workspaces;
+        }
+        public async Task StoreProfilePicture(string authId, string url, string filePath)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.AuthId == authId) ?? throw new ValidationException("Invalid User");
+            if(user.ProfilePicture != null)
+            {
+                _logger.LogInformation(user.ProfilePictureKey);
+                await _S3client.DeleteObjectAsync("stack-messaging-service",user.ProfilePictureKey);
+            }
+            user.ProfilePicture = url;
+            user.ProfilePictureKey = filePath;
+            await _context.SaveChangesAsync();
         }
     }
 }

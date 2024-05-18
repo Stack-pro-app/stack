@@ -83,6 +83,11 @@ namespace messaging_service.Data
                 .HasForeignKey(c => c.ParentId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Workspace>()
+                .HasMany(w => w.UserWorkspaces)
+                .WithOne(uw => uw.Workspace)
+                .OnDelete(DeleteBehavior.Cascade);
+
             // Configure Invitation
             modelBuilder.Entity<Invitation>()
                 .HasOne<User>(i => i.User)
@@ -118,6 +123,10 @@ namespace messaging_service.Data
 
             modelBuilder.Entity<UserWorkspace>()
             .HasIndex(uw => new { uw.UserId, uw.WorkspaceId })
+            .IsUnique();
+
+            modelBuilder.Entity<Invitation>()
+            .HasIndex(i => new { i.UserId, i.WorkspaceId })
             .IsUnique();
 
 

@@ -4,10 +4,19 @@
     <!-- Page content here -->
 
     <div class="navbar bg-base-300">
+      <label
+      for="my-drawer-2"
+      class="btn btn-ghost btn-circle drawer-button lg:hidden"
+    >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+    </svg>
+    </label>
       <div class="flex-1">
-        <a class="btn btn-ghost text-xl" onclick="my_modal_8.showModal()"
+        <a class="btn btn-ghost text-xl"
           ># {{ currentChannelP.name }}</a
         >
+
         <!-- <label
           class="input input-bordered h-8 w-full m-3 ml-10 mr-10 flex items-center gap-2"
         >
@@ -31,7 +40,7 @@
           </svg>
         </label> -->
       </div>
-      <dialog *ngIf="isAdmin" id="my_modal_8" class="modal modal-bottom sm:modal-middle">
+      <!-- <dialog *ngIf="isAdmin" id="my_modal_8" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
           <form
             [formGroup]="channelForm"
@@ -58,7 +67,7 @@
                   type="checkbox"
                   class="checkbox"
                 />
-                <span class="label-text mr-auto ml-2">private</span>
+                <span class="label-text mr-auto ml-2">Private</span>
               </label>
             </div>
             <div class="form-control mt-6">
@@ -73,14 +82,17 @@
                 Delete
               </button>
               <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
-            </div>
+            </div> -->
             <!-- Open the modal using ID.showModal() method -->
 
             <dialog id="my_modal_9" class="modal">
               <div class="modal-box">
                 <h3 class="font-bold text-lg">Confirmation</h3>
                 <p class="py-4">
-                  Are You sure You want to delete the current Channel Space
+                  Are You sure You want to delete this channel?
+                </p>
+                <p class="text-xs font-bold opacity-70">
+                  This action is irreversible and all data associated with this channel will be permanently lost. Once deleted, you cannot recover any of the data. Please make sure this is what you intend to do.
                 </p>
                 <div class="modal-action">
                   <form method="dialog">
@@ -91,25 +103,31 @@
                     >
                       Delete
                     </button>
-                    <button class="btn">Close</button>
+                    <button class="btn" onclick="">Close</button>
                   </form>
                 </div>
               </div>
             </dialog>
-          </form>
-          <form method="dialog"></form>
-        </div>
-      </dialog>
+          <!-- </form>
+          <form method="dialog"></form> -->
+        <!-- </div> -->
+      <!-- </dialog> -->
 
       <!-- Open the modal using ID.showModal() method -->
       <dialog id="my_modal_1" class="modal modal-bottom sm:modal-middle">
-        <div class="w-500 modal-box">
+        <div class="modal-box hide-scrollbar" style="height:580px;">
+          <span class="flex justify-end items-center">
+            <button type="" class="btn btn-circle btn-ghost btn-sm" onclick="document.getElementById('my_modal_1').close()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+            </button>
+          </span>
           <div role="tablist" class="tabs tabs-lifted">
             <input
               type="radio"
               name="my_tabs_2"
               role="tab"
-              class="tab"
+              class="tab font-bold text-md"
               aria-label="Settings"
             />
             <div
@@ -118,38 +136,52 @@
             >
               <form
                 [formGroup]="workspaceForm"
-                (ngSubmit)="onUpdateWorkspace()"
                 class="card-body"
                 method="dialog"
               >
-                <div class="form-control">
+                <div class="form-control ">
                   <label class="label">
-                    <span class="label-text">Workspace Name : </span>
+                    <span class="label-text text-lg">Change Workspace Name : </span>
                   </label>
+                  <div class="grid grid-flow-col grid-cols-4 gap-1">
+                  <span class="col-span-3">
                   <input
                     formControlName="workspaceName"
                     type="text"
-                    placeholder="Workspace name: ..."
+                    placeholder="Be Creative..."
                     class="input input-bordered"
                     required
                   />
-                </div>
-                <div class="form-control mt-6">
+                </span>
+                <span class="col-span-1">
                   <button
-                    type="submit"
-                    class="btn btn-warning my-2 w-1/3 ml-auto"
+                  type="submit"
+                  (click)="onUpdateWorkspace()"
+                  class="btn btn-warning w-16"
                   >
-                    Change Name
-                  </button>
-
-                  <button
+                  <svg id="updateSVG" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 rotate">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
+                  </svg>
+                </button>
+              </span>
+            </div>
+                </div>
+                <div class="mt-6">
+                  <span class="text-lg">Delete Workspace:</span>
+                  <div class="flex justify-center items-center p-6">
+                  <div class="form-control">
+                    <button
                     type="submit"
                     onclick="my_modal_14.showModal()"
-                    class="btn btn-error w-1/3 ml-auto"
-                  >
+                    class="btn btn-error w-32"
+                    >
                     Delete
-                  </button>
-                  <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
+                    </button>
+                  </div>
+                </div>
+                    <span class="text-xs font-bold">
+                      This action is irreversible and all data associated with this workspace will be permanently lost. Once deleted, you cannot recover any of the data. Please make sure this is what you intend to do.
+                    </span>
                 </div>
 
                 <!-- Open the modal using ID.showModal() method -->
@@ -184,7 +216,7 @@
                   <div class="modal-box">
                     <h3 class="font-bold text-lg">Confirmation</h3>
                     <p class="py-4">
-                      Are You sure You want to delete the current Working Space
+                      Are You sure You want to delete the current Workspace?
                     </p>
                     <div class="modal-action">
                       <form method="dialog">
@@ -208,8 +240,8 @@
               type="radio"
               name="my_tabs_2"
               role="tab"
-              class="tab"
-              aria-label="Coworkers"
+              class="tab font-bold text-md"
+              aria-label="CoWorkers"
               checked
             />
             <div
@@ -220,7 +252,12 @@
               <label
                 class="input input-bordered h-8 w-30 m-3 flex items-center gap-2"
               >
-                <input type="text" class="grow size" placeholder="Search" />
+              <input
+              type="text"
+              class="grow size"
+              placeholder="Search"
+              [(ngModel)]="searchTerm"
+            />
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 16 16"
@@ -239,30 +276,29 @@
                   <!-- head -->
                   <thead>
                     <tr>
-                      <th>
-                        <label> </label>
-                      </th>
                       <th>Name</th>
 
                       <th></th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody class="h-72">
                     <!-- row 1 -->
-                    <tr *ngFor="let user of CUsers">
-                      <th>
-                        <label>
-                          <input type="checkbox" class="checkbox" />
-                        </label>
-                      </th>
+                    <tr *ngFor="let user of filteredUsers">
                       <td>
                         <div class="flex items-center gap-3">
                           <div class="avatar">
                             <div class="mask mask-squircle w-12 h-12">
                               <img
-                                src="https://i.ibb.co/XJ5y9WM/me.jpg"
-                                alt="Avatar Tailwind CSS Component"
+                              *ngIf="user.profilePicture"
+                                [src]="user.profilePicture"
+                                alt="Avatar"
                               />
+                              <div
+                              *ngIf="user.profilePicture == null"
+                              class="h-full w-full flex items-center justify-center text-lg bg-gray-300 text-gray-600"
+                            >
+                              {{ user.name.charAt(0).toUpperCase() }}
+                            </div>
                             </div>
                           </div>
                           <div>
@@ -276,8 +312,8 @@
 
                       <th>
                         <button
-                          class="btn btn-ghost btn-xs"
-                          *ngIf="!showDeleteButton"
+                          class="btn btn-ghost btn-circle"
+                          *ngIf="!showDeleteButton && !isSelf(user.id)"
                           (click)="showDeleteButton = true"
                           type="button"
                         >
@@ -324,7 +360,7 @@
               </div>
             </div>
 
-            <input
+            <!-- <input
               type="radio"
               name="my_tabs_2"
               role="tab"
@@ -336,31 +372,53 @@
               class="tab-content bg-base-100 border-base-300 rounded-box p-6"
             >
               Tab content 3
-            </div>
+            </div> -->
           </div>
         </div>
       </dialog>
       <div class="flex-none">
-        <label
-          for="my-drawer-2"
-          class="btn btn-primary drawer-button lg:hidden"
-        >
+        <button class="btn btn-ghost btn-circle">
+          <a [routerLink]="['/Home']">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+              />
+            </svg>
+          </a>
+        </button>
+        <button *ngIf="isAdmin" class="btn btn-ghost btn-circle" onclick="my_modal_1.showModal()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            class="inline-block w-5 h-5 stroke-current"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
           >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-            ></path>
+              d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
           </svg>
-        </label>
+        </button>
         <app-notification></app-notification>
-        <button class="btn btn-ghost btn-circle">
+        <app-profile-2></app-profile-2>
+        <!-- <button class="btn btn-ghost btn-circle">
           <a [routerLink]="['/Call', currentChannelP.channelString]">
             <div class="indicator">
               <svg
@@ -377,17 +435,184 @@
                   d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"
                 />
               </svg>
-              <!-- add if a video call is online  -->
               <span class="badge badge-xs badge-primary indicator-item" ></span>
             </div>
           </a>
-        </button>
-        <app-theme-switcher></app-theme-switcher>
+        </button> -->
+        <div class="mx-4 flex justify-center items-center">
+          <app-theme-switcher></app-theme-switcher>
+          </div>
 
       </div>
     </div>
-    <app-channel [currentChannelP]="currentChannelP"></app-channel>
-    <app-input [currentChannelP]="currentChannelP"></app-input>
+
+    <!-- component -->
+<div class="relative">
+  <div class="navbar min-h-5 max-h-16 bg-secondary flex justify-between">
+    <p class="m-6 opacity-70">{{HandleLongText(currentChannelP.description)}}</p>
+    <div class="flex m-6">
+      <span class="m-2 btn btn-circle btn-outline" onclick="my_modal_222.showModal()">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+      </svg>
+    </span>
+      <label *ngIf="isAdmin && currentChannelP.is_private"  class="m-2 btn btn-circle btn-outline" (click)="fetchMembers()" onclick="my_modal_55.showModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+        </svg>
+      </label>
+  </div>
+  </div>
+</div>
+<dialog id="my_modal_222" class="modal">
+  <div class="modal-box bg-secondary">
+    <h3 class="font-bold text-lg">#{{currentChannelP.name}}</h3>
+    <p class="py-4 break-words">{{currentChannelP.description}}</p>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
+</dialog>
+<dialog id="my_modal_55" class="modal">
+  <div class="modal-box">
+    <form method="dialog">
+      <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="font-bold text-lg">{{currentChannelP.name}}'s Users</h3>
+    <div class="divider"></div>
+    <div class="overflow-x-auto h-96 overflow-y-scroll hide-scrollbar">
+      <table class="table">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th>Users</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- row 1 -->
+          <tr *ngFor="let user of channelUsers">
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-12 h-12">
+                    <img
+                    *ngIf="user.profilePicture"
+                      [src]="user.profilePicture"
+                      alt="Avatar"
+                    />
+                    <div
+                    *ngIf="user.profilePicture == null"
+                    class="h-full w-full flex items-center justify-center text-lg bg-gray-300 text-gray-600"
+                  >
+                    {{ user.name.charAt(0).toUpperCase() }}
+                  </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="font-bold">{{ user.name }}</div>
+                  <div class="text-sm opacity-50">
+                    {{ user.email }}
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex justify-end items-center">
+      <button onclick="my_modal_34.showModal()" class="btn btn-lg btn-success btn-circle">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="my_modal_34" class="modal">
+  <div class="modal-box p-4">
+    <form method="dialog">
+      <button class="btn btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    <h3 class="font-bold text-lg py-4">Add Users</h3>
+    <div class="divider"></div>
+    <div class="overflow-x-auto overflow-y-scroll h-72 hide-scrollbar px-6">
+      <table class="table">
+        <!-- head -->
+        <thead>
+          <tr>
+            <th>Users</th>
+
+            <th>Add</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- row 1 -->
+          <tr *ngFor="let user of CUsers">
+            <ng-container *ngIf="!isSelf(user.id)">
+            <td>
+              <div class="flex items-center gap-3">
+                <div class="avatar">
+                  <div class="mask mask-squircle w-12 h-12">
+                    <img
+                    *ngIf="user.profilePicture"
+                      [src]="user.profilePicture"
+                      alt="Avatar"
+                    />
+                    <div
+                    *ngIf="user.profilePicture == null"
+                    class="h-full w-full flex items-center justify-center text-lg bg-gray-300 text-gray-600"
+                  >
+                    {{ user.name.charAt(0).toUpperCase() }}
+                  </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="font-bold">{{ user.name }}</div>
+                  <div class="text-sm opacity-50">
+                    {{ user.email }}
+                  </div>
+                </div>
+              </div>
+            </td>
+
+            <th>
+              <button
+                class="btn btn-ghost btn-circle"
+                type="button"
+                *ngIf="!isUserInChannel(user.id)"
+                (click)="AddUserToChannel(user.id)"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+              </button>
+              <button
+              class="btn btn-success btn-circle"
+              type="button"
+              *ngIf="isUserInChannel(user.id)"
+            >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+            </svg>
+            </button>
+            </th>
+            </ng-container>
+          </tr>
+        </tbody>
+        <!-- foot -->
+      </table>
+    </div>
+  </div>
+</dialog>
+
+
+    <app-channel [currentChannelP]="currentChannelP">
+
+    </app-channel>
+
+    <app-input (messageSent)="emitMessage()" [currentChannelP]="currentChannelP"></app-input>
     <!-- add channel here -->
     <dialog id="my_modal_11" class="modal modal-bottom sm:modal-middle">
       <div class="modal-box">
@@ -396,23 +621,25 @@
           class="card-body"
           method="dialog"
         >
+        <div class = "text-2xl font-bold">Send Invitation</div>
+        <div class="divider"></div>
           <div  class="form-control">
             <label class="label">
-              <span class="label-text">User Email : </span>
+              <span class="label-text">Your Co-Worker's Email : </span>
             </label>
             <input
               formControlName="userEmail"
               type="email"
-              placeholder="Enter UserEmail ..."
+              placeholder="Email..."
               class="input input-bordered"
               required
             />
           </div>
 
-          <div class="form-control mt-6">
-            <button type="submit" onclick="my_modal_19.showModal()" (click)="onFindUser()" (click)="Loading =!Loading" class="btn w-1/3 ml-auto">Find User</button>
-            <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
-          </div>
+          <span class="mt-6 flex justify-between items-center">
+            <button type="" class="btn btn-error w-1/3" onclick="my_modal_11.showModal()">Close</button>
+            <button type="submit" onclick="my_modal_19.showModal()" (click)="onFindUser()" (click)="Loading =!Loading" class="btn btn-success w-1/3">Find User</button>
+          </span>
         </form>
         <form method="dialog"></form>
       </div>
@@ -421,26 +648,61 @@
     <!-- Open the modal using ID.showModal() method -->
   <dialog id="my_modal_19" class="modal">
   <div  class="modal-box">
-    <h3 *ngIf="!Loading" class="font-bold text-lg">{{foundUser.name}}</h3>
-    <p *ngIf="!Loading" class="py-4">{{foundUser.email}}</p>
-    <span *ngIf="Loading" class="loading loading-spinner loading-lg"></span>
-
-    <div class="modal-action">
-      <form method="dialog"
-      >
-        <!-- if there is a button in form, it will close the modal (ngSubmit)="onAddUser()" -->
-        <button class="btn mr-5" (click)="onInviteUser()">invite User</button>
-        <button class="btn">Close</button>
-      </form>
+    <div class="flex justify-center h-32 w-auto">
+      <div class="grid grid-cols-3 gap-2">
+        <div class="col-span-1 flex justify-center items-center">
+          <img *ngIf="foundUser.profilePicture" [src]="foundUser.profilePicture" class="h-32 w-32 rounded-full shadow-md" />
+          <div
+          *ngIf="foundUser.profilePicture == null"
+          class="h-32 w-32 rounded-full shadow-md flex text-4xl items-center justify-center bg-gray-300 text-gray-600"
+        >
+          {{ foundUser.name.charAt(0).toUpperCase() }}
+        </div>
+        </div>
+        <div class="col-span-2 grid grid-flow-row grid-rows-2 p-6">
+          <span class="row-span-1">
+            <h3 *ngIf="!Loading" class="font-bold text-xl">{{foundUser.name}}?</h3>
+          </span>
+          <span class="row-span-1">
+            <p *ngIf="!Loading" >{{foundUser.email}}</p>
+          </span>
+        </div>
+      </div>
+      <div *ngIf="Loading" class="grid grid-flow-row grid-rows-3 mt-12">
+        <div class="flex justify-center items-center">
+          <span class="loading loading-spinner loading-lg row-span-2"></span>
+        </div>
+        <span class="row-span-1 opacity-70 text-center mt-2">
+        Looking Everywhere...
+        </span>
+      </div>
     </div>
+
+    <form method="dialog">
+    <div class="modal-action flex justify-between items-center">
+
+        <!-- if there is a button in form, it will close the modal (ngSubmit)="onAddUser()" -->
+        <button type="" class="btn btn-circle btn-error"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+        </button>
+        <button type="submit" class="btn btn-circle btn-success" (click)="onInviteUser()"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+        </svg>
+        </button>
+    </div>
+  </form>
   </div>
 </dialog>
     <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
       <div class="modal-box">
+        <div>
+          <h1 class="text-2xl font-bold pt-6">New Channel</h1>
+        </div>
+        <div class="divider"></div>
         <form
           [formGroup]="channelForm"
-          (ngSubmit)="onCreateChannel()"
-          class="card-body"
+          class="card-body -mt-8"
           method="dialog"
         >
           <div class="form-control">
@@ -450,7 +712,7 @@
             <input
               formControlName="channelName"
               type="text"
-              placeholder="channel name"
+              placeholder="Channel's name..."
               class="input input-bordered"
               required
             />
@@ -462,7 +724,7 @@
             <input
               formControlName="channelDescription"
               type="text"
-              placeholder="channel Description"
+              placeholder="Channel's Description..."
               class="input input-bordered"
               required
             />
@@ -474,20 +736,22 @@
                 type="checkbox"
                 class="checkbox"
               />
-              <span class="label-text mr-auto ml-2">private</span>
+              <span class="label-text mr-auto ml-2">Private</span>
             </label>
           </div>
-          <div class="form-control mt-6">
-            <button type="submit" class="btn w-1/3 ml-auto">Create</button>
-            <button type="" class="btn w-1/3 ml-auto mt-2">Close</button>
+          <div class="flex justify-between items-center">
+          <button onclick="document.getElementById('my_modal_5').close()" class="btn btn-error w-32 h-auto">Close</button>
+          <div class="form-control w-32 h-auto">
+            <button type="submit" (click)="onCreateChannel()" class="btn btn-success">Create</button>
           </div>
+        </div>
         </form>
         <form method="dialog"></form>
       </div>
     </dialog>
   </div>
-  <div class="drawer-side">
-    <div class="bg-base-300">
+  <div class="drawer-side scrollbar-hide-background" id="drawerSide">
+    <div class="bg-base-300 row-span-2">
       <label
         for="my-drawer-2"
         aria-label="close sidebar"
@@ -495,37 +759,81 @@
       ></label>
       <ul class="menu p-4 w-80 min-h-full bg-base-100 text-base-content">
         <!-- Sidebar content here -->
-        <a class="btn btn-ghost text-xl">{{ currentWorkspace.name }} </a>
+        <div class="grid grid-cols-5 grid-flow-col">
+        <a class="btn btn-ghost text-xl lg:col-span-5 col-span-4" >{{ currentWorkspace.name }} </a>
+        <span class="lg:hidden col-span-1 flex justify-center items-center">
+          <button for="my-drawer-2"
+          class="btn btn-ghost btn-circle" onclick="document.getElementById('my-drawer-2').click()">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
 
+          </button>
+        </span>
+      </div>
         <ul class="menu mt-10 bg-base-100 w-56 rounded-box">
           <li>
             <details open>
               <summary class=" ">Channels</summary>
               <ul>
                 <li *ngFor="let channel of channels">
-                  <a (click)="onChangeChannel(channel)"
-                    ># {{ channel.name }}
-                    <svg
-                      *ngIf="channel.is_private"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke-width="1.5"
-                      stroke="currentColor"
-                      class="w-4 h-4 ml-auto"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
-                      />
-                    </svg>
+                  <a (click)="onChangeChannel(channel)" (document:click)="cancelModify($event)" class="grid grid-cols-3 grid-flow-col">
+                    <span class="col-span-2"><span *ngIf="!isModify(channel);else Modify"># {{ channel.name }}</span></span>
+                      <ng-template #Modify>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                        </svg>
+                        <span>{{channelToModifyName}}</span>
+                      </ng-template>
+                        <input #inputModify id="inputModify" (keydown.enter)="onUpdateChannel()" *ngIf="isModify(channel)" [(ngModel)]="channelToModifyName" type="text"/>
+                    <span class="flex justify-end items-center col-span-1">
+                      <span class="flex justify-center items-center">
+                        <svg
+                          *ngIf="channel.is_private"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke-width="1.5"
+                          stroke="currentColor"
+                          class="w-4 h-4 ml-auto"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
+                          />
+                        </svg>
+                      </span>
+                      <ng-container *ngIf="!isMain(channel) && isAdmin">
+                      <span (click)="handleButtonClick($event)" class="flex justify-center mx-1 items-center dropdown dropdown-right">
+                        <button  class="btn-xs btn btn-circle btn-ghost">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z" />
+                          </svg>
+                        </button>
+                        <ul tabindex="0" class="dropdown-content z-[1] menu bg-neutral border shadow rounded-box">
+                          <li><a (click)="modifyChannel(channel)" class="btn btn-sm btn-circle btn-ghost">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                            </svg>
+                            </a>
+                          </li>
+                          <li ><a (click)="setChannelToDelete(channel)" onclick="my_modal_9.showModal()" class="btn btn-circle btn-ghost btn-sm text-error">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                              <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                            </svg>
+                          </a>
+                        </li>
+                        </ul>
+                      </span>
+                    </ng-container>
+                  </span>
                   </a>
                 </li>
 
-                <li class="" onclick="my_modal_5.showModal()">
+                <li class="" *ngIf="isAdmin" onclick="my_modal_5.showModal()">
                   <div class="flex items-center">
-                    <button *ngIf="isAdmin" class="flex items-center">
+                    <button  class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -550,17 +858,18 @@
             <details open>
               <summary class=" ">Direct Messages</summary>
               <ul>
-                <li *ngFor="let user of CUsers" class="py-1">
+                <li *ngFor="let user of CUsers">
+                  <ng-container *ngIf="!isSelf(user.id)">
                   <div class="flex items-center">
                     <img
-                      *ngIf="user.img != null"
-                      [src]="user.img"
+                      *ngIf="user.profilePicture != null"
+                      [src]="user.profilePicture"
                       alt="User Avatar"
-                      class="w-6 h-6 rounded-full mr-2"
+                      class="w-8 h-8 rounded-full mr-2 object-cover"
                     />
                     <div
-                      *ngIf="user.img == null"
-                      class="w-6 h-6 rounded-full mr-2 flex items-center justify-center bg-gray-300 text-gray-600"
+                      *ngIf="user.profilePicture == null"
+                      class="w-8 h-8 rounded-full mr-2 flex items-center justify-center bg-gray-300 text-gray-600"
                     >
                       {{ user.name.charAt(0).toUpperCase() }}
                     </div>
@@ -570,11 +879,12 @@
                       </span>
                     </button>
                   </div>
+                </ng-container>
                 </li>
 
-                <li class="" onclick="my_modal_11.showModal()">
+                <li *ngIf="isAdmin" class="" onclick="my_modal_11.showModal()">
                   <div class="flex items-center">
-                    <button *ngIf="isAdmin" class="flex items-center">
+                    <button class="flex items-center">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -588,7 +898,7 @@
                           d="M12 4.5v15m7.5-7.5h-15"
                         />
                       </svg>
-                      <span class="ml-1 text-sm">Add coworkers</span>
+                      <span class="ml-1 text-sm">Add Co-Workers</span>
                     </button>
                   </div>
                 </li>
@@ -602,102 +912,52 @@
                 <li class="py-1">
                   <div class="flex items-center">
                     <img
-                      src="https://i.ibb.co/Qc5fmj1/drive.png"
+                      src="../../../../assets/img/stack_project_icon.png"
                       alt="User Avatar"
-                      class="w-6 h-6 rounded-full mr-2"
+                      class="w-8 h-8 rounded-full mr-2"
                     />
 
                     <a [routerLink]="['/Project', 1]">
-                      <span class="font-semibold text-sm">Project</span>
+                      <span class="font-semibold text-md">Stack Project</span>
                     </a>
                   </div>
                 </li>
-                <li class="">
+                <li class="py-1">
                   <div class="flex items-center">
-                    <button *ngIf="isAdmin" class="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        class="w-4 h-4"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M12 4.5v15m7.5-7.5h-15"
-                        />
-                      </svg>
-                      <span class="ml-1 text-sm">Add apps</span>
-                    </button>
+                    <img
+                      src="../../../../assets/img/Stack_Meeting_icon.png"
+                      alt="User Avatar"
+                      class="w-8 h-8 rounded-full mr-2"
+                    />
+
+                    <a [routerLink]="['/Call', currentChannelP.channelString]">
+                      <span class="font-semibold text-md">Stack Meeting</span>
+                    </a>
                   </div>
                 </li>
               </ul>
             </details>
           </li>
         </ul>
-        <div class="divider"></div>
-
-        <div class="btm-nav fixed inset-x-0 bottom-0 flex justify-between ">
-          <button routerLink="/Profile" class="hover:bg-base-200">
-            <a href="">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                />
-              </svg>
-            </a>
-          </button>
-          <button *ngIf="isAdmin" class="hover:bg-base-200" onclick="my_modal_1.showModal()">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
-              />
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-              />
-            </svg>
-          </button>
-          <button class="hover:bg-base-200">
-            <a routerLink="/Home">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-                />
-              </svg>
-            </a>
-          </button>
-        </div>
       </ul>
     </div>
+    <!-- <div class="btm-nav fixed inset-x-0 bottom-0">
+      <button [routerLink]="['/Profile']" class="hover:bg-base-200">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+            />
+          </svg>
+      </button>
+    </div> -->
   </div>
 </div>
