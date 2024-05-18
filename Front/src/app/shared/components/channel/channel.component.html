@@ -12,6 +12,18 @@
         class="mr-auto w-full"
       >
       </app-message>
+      <span *ngIf="IsSkeletonMessage()" class="flex justify-between">
+        <div class="flex flex-col w-52">
+          <div class="flex gap-1 items-center">
+            <div class="skeleton shrink-0 w-10 h-10 rounded mr-3 object-cover"></div>
+            <div class="flex flex-col gap-3">
+              <div class="skeleton h-4 w-20"></div>
+              <div class="skeleton h-4 w-28"></div>
+            </div>
+          </div>
+        </div>
+        <span class="mx-4 text-neutral-400 text-sm">Sending...</span>
+      </span>
     </div>
   </div>
 </div>

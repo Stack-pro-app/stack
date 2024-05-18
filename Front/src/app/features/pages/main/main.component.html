@@ -612,7 +612,7 @@
 
     </app-channel>
 
-    <app-input [currentChannelP]="currentChannelP"></app-input>
+    <app-input (messageSent)="emitMessage()" [currentChannelP]="currentChannelP"></app-input>
     <!-- add channel here -->
     <dialog id="my_modal_11" class="modal modal-bottom sm:modal-middle">
       <div class="modal-box">

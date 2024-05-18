@@ -1,9 +1,11 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -31,6 +33,7 @@ import { AudioPlayerComponent } from '../../../features/pages/audio-player/audio
 export class InputComponent implements OnInit, OnChanges {
   @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef | undefined;
   @Input({ required: true }) currentChannelP: any;
+  @Output() messageSent = new EventEmitter<any>();
   constructor(
     private builder: FormBuilder,
     private service: ChatService,
@@ -84,6 +87,7 @@ export class InputComponent implements OnInit, OnChanges {
       channelString: this.currentChannelP.channelString,
       message: this.messageForm.value.message,
     };
+    this.messageSent.emit(true);
     if (this.fileUpload) {
       const file = this.fileUpload.nativeElement.files[0];
       if(file){

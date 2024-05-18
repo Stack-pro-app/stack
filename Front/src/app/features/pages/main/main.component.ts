@@ -192,6 +192,10 @@ export class MainComponent implements OnInit, OnChanges {
     );
   }
 
+  emitMessage(){
+    this.store.skeletonMessage = true;
+  }
+
 
   fetchMembers() {
     this.userService.getChannelUsers(this.currentChannelP.id).subscribe({

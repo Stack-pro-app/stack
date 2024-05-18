@@ -15,6 +15,7 @@ import { ChatService } from '../../../core/services/Chat/chat.service';
 import { Channel } from '../../../core/Models/channel';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { StoreService } from '../../../core/services/store/store.service';
 
 @Component({
   selector: 'app-channel',
@@ -35,6 +36,7 @@ export class ChannelComponent implements OnInit, OnChanges {
   constructor(private service: ChatService,
     private channelService: ChannelService,
     private fileService: FileService,
+    private storeService: StoreService,
     private signalrService : SignalrService) {
 
     }
@@ -60,11 +62,17 @@ export class ChannelComponent implements OnInit, OnChanges {
    this.getMessages(this.page);
   }
   AddMessage(message: any) {
-    message.created_at = this.formatDate(new Date().toISOString());
-    this.messages.push(message);
+    console.log(message.userId??message.UserId);
+    console.log(localStorage.getItem('userId'));
+    console.log(message.userId??message.UserId == localStorage.getItem('userId'));
+    if((message.userId??message.UserId) == localStorage.getItem('userId')){
+    this.storeService.skeletonMessage = false;
     if(message.attachement_Url??message.Attachement_Url){
       this.fileService.fileSent = false;
     }
+    }
+    message.created_at = this.formatDate(new Date().toISOString());
+    this.messages.push(message);
   }
   formatDate(date: string): Date {
     return new Date(date);
@@ -127,6 +135,10 @@ export class ChannelComponent implements OnInit, OnChanges {
 
       },
     });
+  }
+
+  IsSkeletonMessage(): boolean {
+    return this.storeService.skeletonMessage;
   }
 
   scrollToBottom(): void {
