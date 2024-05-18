@@ -41,19 +41,17 @@ export class ChannelComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
      //console.log("Changed WorkSpace Chanel" ,changes['currentChannelP']);
-          console.log(' ChanelStr', this.currentChannelP.channelString);
+     this.signalrService.joinChannel(this.currentChannelP.channelString);
           this.page = 1;
-          console.log("The page",this.page);
           this.getMessages(this.page);
 
-      this.signalrService.joinChannel(this.currentChannelP.channelString);
 
     }
   }
   ngOnInit(): void {
     this.page=1;
     this.signalrService.startConnection().subscribe(() => {
-            this.signalrService.joinChannel(this.currentChannelP.channelString);
+      this.signalrService.joinChannel(this.currentChannelP.channelString);
 
        this.signalrService.receiveMessage().subscribe((message) => {
         this.AddMessage(message);
@@ -66,9 +64,7 @@ export class ChannelComponent implements OnInit, OnChanges {
     this.messages.push(message);
     if(message.attachement_Url??message.Attachement_Url){
       this.fileService.fileSent = false;
-      console.log("Got the file!");
     }
-    console.log("Just a message");
   }
   formatDate(date: string): Date {
     return new Date(date);

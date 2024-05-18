@@ -17,11 +17,14 @@ import { ChatService } from '../../../core/services/Chat/chat.service';
 import { SignalrService } from '../../../core/services/signalr/signalr.service';
 import { FileService } from '../../../services/file.service';
 import { CommonModule } from '@angular/common';
-
+import * as RecordRTC from 'recordrtc';
+import { DomSanitizer,SafeUrl } from '@angular/platform-browser';
+import { AudioService } from '../../../core/services/audio.service';
+import { AudioPlayerComponent } from '../../../features/pages/audio-player/audio-player.component';
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule,CommonModule,AudioPlayerComponent],
   templateUrl: './input.component.html',
   styleUrl: './input.component.css',
 })
@@ -32,7 +35,8 @@ export class InputComponent implements OnInit, OnChanges {
     private builder: FormBuilder,
     private service: ChatService,
     private fileService: FileService,
-    private signalrService: SignalrService
+    private signalrService: SignalrService,
+    private sanitizer: DomSanitizer
   ) {}
   public messageForm!: FormGroup;
   messageDto: any = {
@@ -44,6 +48,12 @@ export class InputComponent implements OnInit, OnChanges {
   fileLoading : boolean = false;
   imageDataUrl: string | ArrayBuffer | null = null;
   files: any = [];
+  Recording:boolean=false;
+  record:any;
+  url:string | null = null;
+  audioUrl:string = '../../../../assets/Mastered Version.mp3'
+  error:any;
+  audio: any;
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentChannelP'] && changes['currentChannelP'].currentValue) {
       console.log("this is the new channel : " , changes['currentChannelP'].currentValue);
@@ -85,6 +95,14 @@ export class InputComponent implements OnInit, OnChanges {
         return;
       }
     }
+    if(this.audio){
+      this.onSendAudio();
+      this.fileService.fileSent = true;
+      return;
+    }
+    if(signalmessageDto.message == null ||signalmessageDto.message == ''){
+      return;
+    }
     this.signalrService.sendMessage(signalmessageDto);
     this.messageForm.reset();
   }
@@ -93,7 +111,7 @@ export class InputComponent implements OnInit, OnChanges {
   }
   //=======================================================================================================
   onFileChange(event: any) {
-    this.fileLoading = true
+    this.fileLoading = true;
     if(event.target.files.length > 0) {
       this.fileLoading = false;
       const reader = new FileReader();
@@ -107,6 +125,13 @@ export class InputComponent implements OnInit, OnChanges {
         this.fileLoading = false;
       },5000);
     }
+  }
+
+  cancel(){
+    if(this.fileUpload)
+    this.fileUpload.nativeElement.value = '';
+    this.imageDataUrl = null;
+    this.onRemoveAudio();
   }
 
   GetFile(){
@@ -154,5 +179,68 @@ export class InputComponent implements OnInit, OnChanges {
       return "../../../../assets/img/"+extention+".svg";
     }
     return "../../../../assets/img/unknown.svg";
+  }
+
+  //===========================
+
+  startRecording(){
+    this.Recording = true;
+    const mediaConstraints = {
+      video:false,
+      audio:true,
+    };
+    navigator.mediaDevices
+      .getUserMedia(mediaConstraints)
+      .then(this.successCallback.bind(this), this.errorCallback.bind(this));
+  }
+
+  successCallback(stream: MediaStream){
+    const options:RecordRTC.Options = {
+      mimeType: 'audio/wav',
+      desiredSampRate: 48000,
+    }
+    var SterroAudioRecorder = RecordRTC.StereoAudioRecorder;
+    this.record = new SterroAudioRecorder(stream,options);
+    this.record.record();
+    // setTimeout(() => {
+    //   this.stopRecording();
+    // }, 30000);
+  }
+
+  stopRecording(){
+    this.Recording = false;
+    this.record.stop(this.processRecording.bind(this));
+  }
+
+  processRecording(blob:any){
+    this.audio = blob;
+    this.url = URL.createObjectURL(blob);
+    console.log(this.url);
+  }
+
+  sanitize(url:string){
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
+
+  onRemoveAudio(){
+    this.audio = null;
+    this.url = null;
+  }
+
+  onSendAudio(){
+    const file = new File([this.audio],'stack-audio-'+new Date().toISOString() , {type: 'audio/wav'});
+    this.sendFile(file);
+    this.onRemoveAudio();
+  }
+
+  IsAudio(){
+    if(this.url == null || this.url == '' || this.url == undefined){
+      return false;
+    }
+    return true;
+  }
+
+  errorCallback(error:any){
+    this.error = 'can not play audio in your browser';
   }
 }

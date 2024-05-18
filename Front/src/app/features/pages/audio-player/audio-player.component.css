@@ -1,0 +1,130 @@
+input[type="range"] {
+  -webkit-appearance: none; /* Override default CSS styles */
+  -moz-appearance: none; /* Override default CSS styles */
+  appearance: none; /* Override default CSS styles */
+  width: 100%; /* Full-width */
+  background: transparent; /* Remove default background */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+/* WebKit browsers */
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  background: #ddd; /* Track background */
+  border-radius: 4px; /* Track border radius */
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background: #ddd; /* Thumb background */
+  cursor: pointer;
+  margin-top: -3px; /* Center the thumb */
+}
+
+/* Mozilla Firefox */
+input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: #ddd; /* Track background */
+  border-radius: 4px; /* Track border radius */
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #ddd; /* Thumb background */
+  cursor: pointer;
+}
+
+/* Microsoft Edge */
+input[type="range"]::-ms-track {
+  width: 100%;
+  height: 8px;
+  cursor: pointer;
+  background: transparent; /* Transparent background for MS Edge */
+  border-color: transparent;
+  color: transparent;
+}
+
+input[type="range"]::-ms-fill-lower {
+  background: #ddd; /* Track background */
+}
+
+input[type="range"]::-ms-fill-upper {
+  background: #ddd; /* Track background */
+}
+
+input[type="range"]::-ms-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: #ddd; /* Thumb background */
+  cursor: pointer;
+  margin-top: 0; /* Center the thumb */
+}
+
+/* Custom CSS for vertical range input */
+.vertical-range {
+  appearance: none;
+  width: 6px; /* Adjust width for vertical slider */
+  height: 100px; /* Adjust height as needed */
+  background: #ddd;
+  transform: rotate(-90deg);
+  margin: auto;
+  display: block;
+}
+
+.vertical-range::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 5px;
+  background: #ddd; /* Tailwind gray-300 */
+}
+
+.vertical-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px; /* Adjust size as needed */
+  height: 16px; /* Adjust size as needed */
+  background: #3b82f6; /* Tailwind blue-500 */
+  border-radius: 9999px; /* Tailwind rounded-full */
+  cursor: pointer;
+}
+
+.vertical-range::-moz-range-track {
+  width: 100%;
+  height: 2px;
+  background: #d1d5db; /* Tailwind gray-300 */
+  border-radius: 9999px; /* Tailwind rounded-full */
+}
+
+.vertical-range::-moz-range-thumb {
+  width: 16px; /* Adjust size as needed */
+  height: 16px; /* Adjust size as needed */
+  background: #3b82f6; /* Tailwind blue-500 */
+  border-radius: 9999px; /* Tailwind rounded-full */
+  cursor: pointer;
+}
+
+.vertical-range::-ms-track {
+  width: 100%;
+  height: 2px;
+  background: transparent;
+  border-color: transparent;
+  color: transparent;
+}
+
+.vertical-range::-ms-thumb {
+  width: 16px; /* Adjust size as needed */
+  height: 16px; /* Adjust size as needed */
+  background: #3b82f6; /* Tailwind blue-500 */
+  border-radius: 9999px; /* Tailwind rounded-full */
+  cursor: pointer;
+}
+
+

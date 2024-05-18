@@ -67,7 +67,6 @@ export class HomeComponent implements OnInit {
   }
   onSetAdmin(id:any){
     this.store.setAdmin(id);
-
   }
   onReloadWS(message:string){
     this.FetchWorkspaces();

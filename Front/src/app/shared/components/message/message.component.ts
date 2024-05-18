@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { UserService } from './../../../core/services/user.service';
 import { Component, Input, OnInit } from '@angular/core';
+import { AudioPlayerComponent } from '../../../features/pages/audio-player/audio-player.component';
 
 @Component({
   selector: 'app-message',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,AudioPlayerComponent],
   templateUrl: './message.component.html',
   styleUrl: './message.component.css',
 })
@@ -48,6 +49,14 @@ isUsername():boolean{
     const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp'];
     const lowerCaseFileName = fileName.toLowerCase();
     return imageExtensions.some(ext => lowerCaseFileName.endsWith(ext));
+  }
+  isAudioFileName(fileName: string | null): boolean {
+    if (!fileName) {
+      return false;
+    }
+    const audioExtensions = ['.mp3', '.mpeg', '.wav', '.ogg','stack-audio'];
+    const lowerCaseFileName = fileName.toLowerCase();
+    return audioExtensions.some(ext => lowerCaseFileName.includes(ext));
   }
 
   getFileExtension(fileName: string): string {

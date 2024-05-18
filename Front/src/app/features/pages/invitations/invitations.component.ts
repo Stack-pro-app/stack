@@ -17,10 +17,11 @@ export class InvitationsComponent implements OnInit{
 
   }
   ngOnInit(): void {
+    this.onGetUserInvitaions();
   }
 
   OnClick(){
-    this.onGetUserInvitaions( );
+    this.onGetUserInvitaions();
   }
   onGetUserInvitaions(){
     this.workspaceService.getUserSInvitions(localStorage.getItem('userId')).subscribe({

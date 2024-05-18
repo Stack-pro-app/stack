@@ -129,7 +129,6 @@ export class MainComponent implements OnInit, OnChanges {
       .subscribe({
         next: (response) => {
           this.currentWorkspace = response.result;
-          console.log('Wos', this.currentWorkspace);
 
           this.channels = this.currentWorkspace.channels;
 
@@ -142,8 +141,6 @@ export class MainComponent implements OnInit, OnChanges {
             name: response.result.mainChannel.name,
           };
           this.channels.push(this.currentChannelP);
-
-
           this.onGetUsers();
         },
         error: (error) => {
@@ -156,7 +153,6 @@ export class MainComponent implements OnInit, OnChanges {
       .getWorkspace(this.id, localStorage.getItem('userId'))
       .subscribe({
         next: (response) => {
-          console.log(response);
           this.currentWorkspace = response.result;
           this.channels = this.currentWorkspace.channels;
           this.channels.push(response.result.mainChannel);
@@ -180,6 +176,13 @@ export class MainComponent implements OnInit, OnChanges {
     return id.toString() == localStorage.getItem('userId');
   }
 
+  HandleLongText(text:string){
+    if(text.length > 40){
+      return text.slice(0, 40) + '...';
+    }
+    return text;
+  }
+
   get filteredUsers() {
     if (!this.searchTerm) {
       return this.CUsers;
@@ -193,7 +196,6 @@ export class MainComponent implements OnInit, OnChanges {
   fetchMembers() {
     this.userService.getChannelUsers(this.currentChannelP.id).subscribe({
       next: (response) => {
-        console.log(response.result);
         this.channelUsers = response.result;
       },
       error: (error) => {
@@ -205,7 +207,6 @@ export class MainComponent implements OnInit, OnChanges {
   AddUserToChannel(userId: number){
     this.channelService.AddUserToChannel(this.currentChannelP.id,userId).subscribe({
       next: (response) => {
-        console.log(response);
       },
       error: (error) => {
         console.error('get Users  error', error);
@@ -228,8 +229,6 @@ export class MainComponent implements OnInit, OnChanges {
         this.reload();
       },
       error: (error) => {
-        console.log(this.channelRequest);
-
         console.error('Chaneel creating error', error);
       },
       complete: () =>{
@@ -240,7 +239,6 @@ export class MainComponent implements OnInit, OnChanges {
   onDeleteWorkspace() {
     this.workspaceService.Delete(this.currentWorkspace.id).subscribe({
       next: (response) => {
-        console.log(response);
         this.router.navigate(['/Home']);
       },
       error: (error) => {
@@ -279,7 +277,6 @@ export class MainComponent implements OnInit, OnChanges {
     if(this.channelToDelete){
     this.service.Delete(this.channelToDelete.id).subscribe({
       next: (response) => {
-        console.log(response);
       },
       error: (error) => {
         console.error('Updating  error', error);
@@ -296,7 +293,6 @@ export class MainComponent implements OnInit, OnChanges {
       id: this.channelToModify?.id,
       name: this.channelToModifyName
     };
-    console.log(data);
     this.service.Update(data).subscribe({
       next: (response) => {
         console.log(response);
@@ -317,7 +313,6 @@ export class MainComponent implements OnInit, OnChanges {
       next: (response) => {
         userId = response.result.id;
         this.foundUser = response.result;
-        console.log(this.foundUser);
         this.Loading = !this.Loading;
       },
       error: (error) => {
