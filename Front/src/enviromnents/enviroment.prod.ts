@@ -1,9 +1,8 @@
 export const environment = {
-  production:true,
-  API_MESAAGING_URL : "http://localhost:8090",
-  API_AUTH_URL : "http://localhost:8093",
-  API_NOTIFICATION_URL : "http://localhost:8092",
-  API_BASE_URL : "http://localhost:8094",
-  API_CHAT_URL : "http://localhost:8094",
-
-}
+    production: true, // Set to true for production
+    API_MESAAGING_URL: "/api/messaging/", // Update with the appropriate path
+    API_AUTH_URL: "/api/auth/", // Update with the appropriate path
+    API_NOTIFICATION_URL: "/api/notification/", // Update with the appropriate path
+    API_BASE_URL: "/api/", // Update with the appropriate path
+    API_CHAT_URL: "/api/chat/", // Update with the appropriate path
+  };
