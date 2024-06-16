@@ -1,12 +1,11 @@
 package com.ProjectMana.ProjectManagementSpring.Controllers;
 
 import com.ProjectMana.ProjectManagementSpring.DTO.userDTO;
-import com.ProjectMana.ProjectManagementSpring.enteties.Task;
+import com.ProjectMana.ProjectManagementSpring.RabbitMq.Producer;
 import com.ProjectMana.ProjectManagementSpring.enteties.UserT;
 import com.ProjectMana.ProjectManagementSpring.repo.UserRepo;
 import com.ProjectMana.ProjectManagementSpring.services.taskService;
 import com.ProjectMana.ProjectManagementSpring.services.userService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +20,20 @@ public class UserController {
     private UserRepo userRespo ;
   private   userService userService;
     private taskService  taskService ;
+    private Producer producer ;
 
-  public UserController(UserRepo userRespo, com.ProjectMana.ProjectManagementSpring.services.userService userService, com.ProjectMana.ProjectManagementSpring.services.taskService taskService) {
+  public UserController(UserRepo userRespo, com.ProjectMana.ProjectManagementSpring.services.userService userService, com.ProjectMana.ProjectManagementSpring.services.taskService taskService, Producer producer) {
     this.userRespo = userRespo;
     this.userService = userService;
     this.taskService = taskService;
+    this.producer = producer;
   }
 
   @PostMapping("/user")
 
-    public userDTO create(@RequestBody userDTO userDTO){
-       return this.userService.post(userDTO);
+    public ResponseEntity<String> create(@RequestBody userDTO userDTO){
+       this.producer.sendJson(userDTO);
+       return ResponseEntity.ok("user sent to the queue");
     }
 
     @GetMapping ("/user/{id}")
@@ -42,7 +44,7 @@ public class UserController {
 
 
       List<userDTO> filteredUsers = allUsers.stream()
-        .filter(user -> uniqueUserList.contains(user.AuthId))
+        .filter(user -> uniqueUserList.contains(user.authId))
         .collect(Collectors.toList());
 
       return filteredUsers;
