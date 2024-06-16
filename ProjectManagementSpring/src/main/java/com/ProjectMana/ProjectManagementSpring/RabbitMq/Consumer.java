@@ -19,7 +19,7 @@ public class Consumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
     @RabbitListener(queues = "${rabbitmq.queue.name}")
     public void consume(userDTO user) {
-        LOGGER.info("recieving : {}", user);
+        LOGGER.info("recieving : {}", user.toString());
         this.userService.post(user) ;
 
     }

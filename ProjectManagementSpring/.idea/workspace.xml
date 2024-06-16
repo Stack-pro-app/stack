@@ -5,21 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9c43abd9-9a8d-4c75-88ea-54be16ee975b" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/091cd3d6-a1ed-4fb8-8d1c-6c4d3f31a9f6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/091cd3d6-a1ed-4fb8-8d1c-6c4d3f31a9f6.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/091cd3d6-a1ed-4fb8-8d1c-6c4d3f31a9f6/storage_v2/_src_/database/projectManag.Z4_6Ng/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/091cd3d6-a1ed-4fb8-8d1c-6c4d3f31a9f6/storage_v2/_src_/database/projectManag.Z4_6Ng/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/Controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/Controllers/UserController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/DTO/userDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/DTO/userDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/services/userService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/services/userService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/Controllers/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/Controllers/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/RabbitMq/Consumer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/RabbitMq/Consumer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/RabbitMq/Producer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/RabbitMq/Producer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/enteties/UserT.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/enteties/UserT.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/DTO/userDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/DTO/userDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/services/userService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/services/userService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/ProjectMana/ProjectManagementSpring/ProjectManagementSpringApplicationTests.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/RabbitMq/Consumer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/RabbitMq/Consumer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/RabbitMq/Producer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/RabbitMq/Producer.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

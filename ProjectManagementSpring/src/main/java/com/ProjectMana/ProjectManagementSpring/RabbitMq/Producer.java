@@ -27,8 +27,8 @@ public class Producer {
     }
     public void sendJson(userDTO user){
 
-        //LOGGER.info("producing: {}", user);
-       // userDTO ii = new userDTO(154,"sadf","mm","rjd@vv.com");
+        LOGGER.info("producing: {}", user);
+
         rabbitTemplate.convertAndSend("",this.queueName,user);
         //rabbitTemplate.convertAndSend(this.exchangeName,this.keyName,user);
 

@@ -18,4 +18,14 @@ public class userDTO {
     public String getUserName() {
         return userName;
     }
+
+    @Override
+    public String toString() {
+        return "userDTO{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", authId='" + authId + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
