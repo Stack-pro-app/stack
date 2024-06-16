@@ -11,6 +11,11 @@ import { VideoCallComponent } from './features/pages/VideoCall/video-call/video-
 import { WelcomeComponent } from './features/pages/Welcome/welcome/welcome.component';
 import {authGuard} from "./core/Guards/auth.guard";
 export const routes: Routes = [
+  {
+    path: 'project/:id',
+    loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
+  },
+
   { path: '',
     pathMatch: 'full',
     redirectTo:  'Welcome' },
@@ -49,10 +54,7 @@ export const routes: Routes = [
   { path: '**',
     pathMatch: 'full',
     component: PageNotFoundComponent },
-  {
-    path: 'project/:id',
-    loadChildren: () => import('./project/project.module').then(m => m.ProjectModule)
-  },
+
   { path: '**', pathMatch: 'full', component: PageNotFoundComponent },
 
 ];

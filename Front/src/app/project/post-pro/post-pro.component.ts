@@ -4,7 +4,7 @@ import {MatStepper} from "@angular/material/stepper";
 import {NgToastService} from "ng-angular-popup";
 import {ProjectInter} from "../../interfaces/project-inter";
 import {ProjectService} from "../../services/project.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Route, Router} from "@angular/router";
 
 
 @Component({
@@ -22,7 +22,7 @@ export class PostProComponent implements OnInit{
   works : any ;
 
 
-  constructor(private act0:ActivatedRoute,private fb: FormBuilder, private toast: NgToastService,private srv:ProjectService) {
+  constructor(private router: Router,private act0:ActivatedRoute,private fb: FormBuilder, private toast: NgToastService,private srv:ProjectService) {
     this.act1=act0;
 
     this.f1 = fb.group({
@@ -44,7 +44,7 @@ export class PostProComponent implements OnInit{
 
   ngOnInit(): void {
     console.log(this.act1.paramMap.subscribe({
-        next :(value)=>{console.log(value);this.idAdmin=value?.get('id');},
+        next :(value)=>{console.log(value.get('id'));this.idAdmin=value?.get('id');},
       }
     ));
     this.srv.findWorks(this.idAdmin).subscribe({
@@ -103,6 +103,15 @@ export class PostProComponent implements OnInit{
     );
 
 
+  }
+  goToProject() {
+
+    const idAdm  = this.idAdmin ;
+    console.log(idAdm);
+    // Navigate to the current URL followed by '/post'
+
+
+    this.router.navigateByUrl(`project/${idAdm}`)
   }
 
 }

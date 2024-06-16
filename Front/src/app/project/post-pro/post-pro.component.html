@@ -45,7 +45,7 @@
             </div>
 
             <div class="btt1">
-              <button (click)="checkName()">NEXT</button>
+              <button (click)="checkName()" class="btn btn-primary">NEXT</button>
 
             </div>
           </div>
@@ -80,8 +80,8 @@
 
 
         <div class="btt2">
-          <button type="button"  matStepperPrevious class="btn btn-secondary">Back</button>
-          <button type="button"   (click)="save()" class="btn btn-primary">Next</button>
+          <button type="button" style="margin-right: 115px;"  matStepperPrevious class="btn btn-secondary ">Back</button>
+          <button type="button"   (click)="save()" class="btn btn-primary X">Next</button>
         </div>
 
       </form>
@@ -100,7 +100,7 @@
               <h4 class="congratulation-contents-title">Done! </h4>
               <p class="congratulation-contents-para"> Your project is created successfully.  </p>
               <div class="btn-wrapper mt-4">
-                <a  routerLink="/project" class="cmn-btn btn-bg-1">Go to Home</a>
+                <button class="cmn-btn btn-bg-1" (click)="goToProject()">Go to Projects</button>
               </div>
             </div>
           </div>
@@ -125,7 +125,9 @@
             <p class="congratulation-contents-para"> Your project is not created .  </p>
             <div class="btn-wrapper mt-4">
 
-              <a [routerLink]="['/project/', idAdmin]" class="cmn-btn btn-bg-1">Go to Home</a>
+              <button class="cmn-btn btn-bg-1" (click)="goToProject()">Go to Projects</button>
+
+
 
             </div>
           </div>

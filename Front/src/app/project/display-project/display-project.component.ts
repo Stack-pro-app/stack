@@ -9,7 +9,7 @@ import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
 
 import {EditProjectComponent} from "../edit-project/edit-project.component";
 import {ProjectInter} from "../../interfaces/project-inter";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-display-project',
@@ -22,7 +22,7 @@ export class DisplayProjectComponent implements OnInit {
   act1:ActivatedRoute  ;
   id:any
 
-  constructor(private act0:ActivatedRoute,public dialog: MatDialog, private srv: ProjectService, private toast: NgToastService, private confirmationService: ConfirmationService) {
+  constructor(private router: Router,private act0:ActivatedRoute,public dialog: MatDialog, private srv: ProjectService, private toast: NgToastService, private confirmationService: ConfirmationService) {
     this.act1=act0;
   }
 
@@ -71,6 +71,12 @@ export class DisplayProjectComponent implements OnInit {
         this.toast.error({detail: "ERROR", summary: 'Deletion Canceled', sticky: true});
       }
     });
+  }
+  navigateToPost() {
+    // Get the current URL
+    const currentUrl = this.router.url;
+    // Navigate to the current URL followed by '/post'
+    this.router.navigateByUrl(`${currentUrl}/post`);
   }
 
   /*updatePro(taskId: number) {

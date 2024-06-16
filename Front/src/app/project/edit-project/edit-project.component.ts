@@ -63,7 +63,7 @@ export class EditProjectComponent implements OnInit{
     this.srv.createExam(this.pro).subscribe(
       {
         next:value => {
-          this.toast.success({detail:"SUCCESS",summary:'EXAM Updated WITH SUCCESS'});
+          this.toast.success({detail:"SUCCESS",summary:'Project Updated WITH SUCCESS'});
           this.changed=false ;
 
         }
