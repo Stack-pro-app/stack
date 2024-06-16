@@ -4,11 +4,34 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9c43abd9-9a8d-4c75-88ea-54be16ee975b" name="Changes" comment="" />
+    <list default="true" id="9c43abd9-9a8d-4c75-88ea-54be16ee975b" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/091cd3d6-a1ed-4fb8-8d1c-6c4d3f31a9f6.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/091cd3d6-a1ed-4fb8-8d1c-6c4d3f31a9f6.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/091cd3d6-a1ed-4fb8-8d1c-6c4d3f31a9f6/storage_v2/_src_/database/projectManag.Z4_6Ng/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/091cd3d6-a1ed-4fb8-8d1c-6c4d3f31a9f6/storage_v2/_src_/database/projectManag.Z4_6Ng/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/Controllers/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/Controllers/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/DTO/userDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/DTO/userDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/services/userService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ProjectMana/ProjectManagementSpring/services/userService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/Controllers/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/Controllers/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/DTO/userDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/DTO/userDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/services/userService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/ProjectMana/ProjectManagementSpring/services/userService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/ProjectMana/ProjectManagementSpring/ProjectManagementSpringApplicationTests.class" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -29,33 +52,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/msi/Desktop/TMP4/stack/ProjectManagementSpring/src/main/java/com/ProjectMana/ProjectManagementSpring/services",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/msi/Desktop/TMP4/stack/ProjectManagementSpring/src/main/java/com/ProjectMana/ProjectManagementSpring/services&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;26c67187e4859c47b4890657663c3221&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\msi\Desktop\TMP4\stack\ProjectManagementSpring\src\main\java\com\ProjectMana\ProjectManagementSpring\services" />
       <recent name="C:\Users\msi\Desktop\TMP4\stack\ProjectManagementSpring\src\main\java\com\ProjectMana\ProjectManagementSpring" />
     </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean" />
+    </option>
   </component>
   <component name="RunManager">
     <configuration name="ProjectManagementSpringApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
@@ -75,7 +107,12 @@
       <option name="presentableId" value="Default" />
       <updated>1714880156052</updated>
       <workItem from="1714880167234" duration="130000" />
-      <workItem from="1714880309047" duration="3220000" />
+      <workItem from="1714880309047" duration="5133000" />
+      <workItem from="1715314911583" duration="1749000" />
+      <workItem from="1715331364003" duration="5359000" />
+      <workItem from="1716023547101" duration="288000" />
+      <workItem from="1716118789557" duration="691000" />
+      <workItem from="1716128424843" duration="1434000" />
     </task>
     <servers />
   </component>

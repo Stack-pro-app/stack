@@ -13,3 +13,12 @@ spring :
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+rabbitmq:
+  queue:
+    name: workspace
+
+  exchange:
+    name:
+  key :
+    name: keySpring

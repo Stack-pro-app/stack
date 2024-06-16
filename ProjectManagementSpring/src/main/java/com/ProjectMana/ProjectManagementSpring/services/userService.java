@@ -36,7 +36,7 @@ public class userService {
         return l;
     }
   public userDTO post(userDTO user ){
-    UserT u = new UserT(null,user.userName,user.AuthId,user.email,null);
+    UserT u = new UserT(user.id,user.userName,user.authId,user.email,null);
 
     user.id= this.userRepo.save(u).id;
     return user ;
