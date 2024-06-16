@@ -108,6 +108,15 @@ public class UserController {
     return uniqueUserList;
 
   }
+  @GetMapping ("/IDfromAuthId/{authId}")
+  public Integer  returnId(@PathVariable String authId ){
+    UserT u =this.userRespo.findByAuthId(authId);
+    if(u!=null){
+      return u.id ;
+    }else {
+      return null ;
+    }
+  }
 
 
 }
