@@ -7,7 +7,7 @@ import {EditSettingsModel, PdfExport, ToolbarItem} from "@syncfusion/ej2-angular
 import { GanttComponent } from '@syncfusion/ej2-angular-gantt';
 
 import {MatDialog} from "@angular/material/dialog";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-gantt',
@@ -33,7 +33,7 @@ export class Gantt1Component implements OnInit{
   public ganttObject: GanttComponent|undefined;
 
 
-  constructor(private act0:ActivatedRoute,private  taskservice:TaskService,public dialog: MatDialog) {
+  constructor(private router: Router,private act0:ActivatedRoute,private  taskservice:TaskService,public dialog: MatDialog) {
     this.act1=act0;
   }
 
@@ -151,6 +151,7 @@ export class Gantt1Component implements OnInit{
       (this.ganttObject as GanttComponent).csvExport();
     }
   }
+
 
 
 }

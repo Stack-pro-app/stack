@@ -23,11 +23,11 @@ const routes: Routes = [
   {path:"activity",component:ActivityComponent},
   {path:"xx",component:StatisticsComponent},
   {path:"userTasks/:id",component:ListTaskComponent},
-  {path:"gg",component:Gantt1Component},
+  {path:"gantt",component:Gantt1Component},
   {path:"post",component:PostProComponent},
   {path : "",component:DisplayProjectComponent},
   { path: 'edit/:id', component: EditProjectComponent },
-  {path : "tsk",component:ListTasksComponent},
+  {path : "tasks",component:ListTasksComponent},
   {path : "users",component:UsersComponent},
 
 ];
