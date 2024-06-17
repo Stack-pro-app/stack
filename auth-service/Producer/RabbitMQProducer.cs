@@ -14,8 +14,8 @@ public class RabbitMQProducer : IRabbitMQProducer
         var factory = new ConnectionFactory
         {
             HostName = Environment.GetEnvironmentVariable("MQ_HOST") ?? "tf-lb-20240616235407969800000001-2051060928.us-east-1.elb.amazonaws.com",
-            UserName = Environment.GetEnvironmentVariable("MQ_USER") ?? "guest",
-            Password = Environment.GetEnvironmentVariable("MQ_PASSWORD") ?? "guest",
+            UserName = Environment.GetEnvironmentVariable("MQ_USER") ?? "user",
+            Password = Environment.GetEnvironmentVariable("MQ_PASSWORD") ?? "password",
             Port = int.Parse(Environment.GetEnvironmentVariable("MQ_PORT") ?? "5672")
         };
         
