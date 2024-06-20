@@ -18,9 +18,7 @@ services:
       - backend
   gateway-chat:
     container_name: gateway-chat
-    build:
-      context: /gateway-chat-server
-      dockerfile: Dockerfile
+    image: oussamazaoui872/slack-gateway-chat-server:latest
     ports:
       - "8091:8080"
     networks:
@@ -34,9 +32,7 @@ services:
       - MQ_PORT=5672
   messaging-service:
     container_name: messaging-service
-    build:
-      context: /messaging-service
-      dockerfile: Dockerfile
+    image: oussamazaoui872/slack-messaging-service:latest
     ports:
       - "8090:8080"
     networks:
@@ -105,16 +101,16 @@ services:
     container_name: projectManagement
     image: oussamazaoui872/slack-project-management-service:latest
     ports:
-      - "8088:8080":
+      - "8088:8080"
     depends_on:
-      - database-3
+      - database-5
     networks:
       - project-management
 
-  database-3:
+  database-5:
     image: postgres:latest
     ports:
-      - "5432:5432"
+      - "5435:5435"
     restart: always
     environment:
       POSTGRES_DB: projectManag
