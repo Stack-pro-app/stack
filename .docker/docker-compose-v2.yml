@@ -97,16 +97,25 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password12345#
     networks:
       - notification
-  projectManagement:
-    container_name: projectManagement
-    image: oussamazaoui872/slack-project-management-service:latest
+  projectmanagement:
+    container_name: projectmanagement
+    # image: oussamazaoui872/slack-project-management-service:latest
+    build:
+      context: ..\projectManagementspring
+      dockerfile: Dockerfile
     ports:
       - "8088:8080"
     depends_on:
       - rabbitmq
       - database-5
+    environment:
+      - MQ_HOST=rabbitmq
+      - MQ_USER=user
+      - MQ_PASSWORD=password
+      - MQ_PORT=5672
     networks:
       - project-management
+      - backend
 
   database-5:
     container_name : database-5

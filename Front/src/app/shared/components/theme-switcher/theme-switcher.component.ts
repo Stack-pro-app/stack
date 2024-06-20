@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './theme-switcher.component.css'
 })
 export class ThemeSwitcherComponent {
-value = 'light';
+value = 'synthwave';
 setTheme(theme:string) {
   localStorage.setItem('theme', theme);
 }

@@ -21,7 +21,7 @@ public class Consumer {
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
-    @RabbitListener(queues = "${rabbitmq.queue.name}")
+    @RabbitListener(queues = "register-pm")
     public void consume(userDTO user) {
         LOGGER.info("recieving : {}", user.toString());
         this.userService.post(user) ;

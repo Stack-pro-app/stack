@@ -1,4 +1,5 @@
 spring :
+    
   datasource:
     url : jdbc:postgresql://database-5:5432/projectManag
     username: postgres
@@ -15,8 +16,12 @@ spring :
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 rabbitmq:
+  host: ${MQ_HOST}
+  port: ${MQ_PORT}
+  username: ${MQ_USER}
+  password: ${MQ_PASSWORD}
   queue:
-    name: USER
+    name: register-pm
 
   exchange:
     name:
