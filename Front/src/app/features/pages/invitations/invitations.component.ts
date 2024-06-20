@@ -27,6 +27,8 @@ export class InvitationsComponent implements OnInit{
     this.workspaceService.getUserSInvitions(localStorage.getItem('userId')).subscribe({
       next:(data)=>{
         this.invitations = data.result;
+        this.onGetInvitaionDto();
+        console.log(this.invitations);
       },
       error:(err)=>{
         console.log(err);

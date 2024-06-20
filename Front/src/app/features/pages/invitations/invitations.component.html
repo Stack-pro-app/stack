@@ -15,9 +15,9 @@
     <div class="divider"></div></div>
     <div class="row-span-4 overflow-y-scroll">
     <ng-container *ngIf="invitations.length!==0;else NoInv">
-      <li *ngFor="let invitaion of invitations">
+      <li *ngFor="let invitaion of invitations; let i = index">
           <div class="flex justify-between items-center mx-4 p-4">
-            <p class="text-md">Join {{invitaion.name}}</p>
+            <p class="text-md">Join {{this.invitaionsDtos[i].name}}</p>
             <div class="grid grid-cols-2 grid-rows-1 grid-flow-col">
               <span class="col-span-1">
               <button class="btn btn-circle btn-error btn-sm" (click)="onDeclineInvitation(invitaion)" title="decline invitation">
