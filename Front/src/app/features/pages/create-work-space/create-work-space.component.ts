@@ -11,15 +11,20 @@ import {
 import { Router } from '@angular/router';
 import { WorkspaceService } from '../../../core/services/Workspace/workspace.service';
 import { Workspace } from '../../../core/Models/workspace';
+import {SplitButtonModule} from "primeng/splitbutton";
+import {MenuItem} from "primeng/api";
 
 @Component({
   selector: 'app-create-work-space',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, SplitButtonModule],
   templateUrl: './create-work-space.component.html',
   styleUrl: './create-work-space.component.css',
 })
 export class CreateWorkSpaceComponent implements OnInit {
+  // @ts-ignore
+  items: MenuItem[];
+  buttonsVisible: boolean = false;
   inputText: string = '';
   displayedText: string = '';
   WorkspaceName: string = '';
@@ -40,7 +45,16 @@ export class CreateWorkSpaceComponent implements OnInit {
     private builder: FormBuilder,
     private router: Router,
     private service: WorkspaceService
-  ) {}
+  ) {
+    this.items = [
+      {label : 'DASHBOARD' ,routerLink: ['/project/1/dash'] },
+      {label : 'Projects' ,routerLink: ['/project/1/post'] },
+      {label : 'Tasks' ,routerLink: ['/project/1/tasks'] },
+      {label : 'GANTT' ,routerLink: ['/project/1/gantt'] },
+      {label : 'YOUR TASKS' ,routerLink: ['/project/1/userTasks/3'] },
+
+    ];
+  }
   form!: FormGroup;
   ngOnInit(): void {
     this.form = this.builder.group({
@@ -142,4 +156,13 @@ export class CreateWorkSpaceComponent implements OnInit {
   get Emails(): FormControl {
     return this.form.get('coworkersEmails') as FormControl;
   }
+  navigateTo(link: string) {
+    this.router.navigate([link]);
+  }
+  toggleButtons() {
+    this.buttonsVisible = !this.buttonsVisible;
+  }
+
+
+
 }

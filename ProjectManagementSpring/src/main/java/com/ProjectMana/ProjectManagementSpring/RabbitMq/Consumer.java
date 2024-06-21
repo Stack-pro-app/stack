@@ -2,7 +2,7 @@ package com.ProjectMana.ProjectManagementSpring.RabbitMq;
 
 import com.ProjectMana.ProjectManagementSpring.DTO.WorkSpaceDTO;
 import com.ProjectMana.ProjectManagementSpring.DTO.userDTO;
-import com.ProjectMana.ProjectManagementSpring.enteties.UserT;
+
 import com.ProjectMana.ProjectManagementSpring.services.userService;
 import com.ProjectMana.ProjectManagementSpring.services.workService;
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class Consumer {
-    private userService userService;
+   /* private userService userService;
     private workService wrkService ;
 
     public Consumer(com.ProjectMana.ProjectManagementSpring.services.userService userService, workService wrkService) {
@@ -32,6 +32,6 @@ public class Consumer {
 
         this.wrkService.postWork(wrk) ;
 
-    }
+    }*/
 
 }

@@ -31,9 +31,11 @@ public class UserController {
 
   @PostMapping("/user")
 
-    public ResponseEntity<String> create(@RequestBody userDTO userDTO){
-       this.producer.sendJson(userDTO);
-       return ResponseEntity.ok("user sent to the queue");
+    public userDTO create(@RequestBody userDTO userDTO){
+      // this.producer.sendJson(userDTO);
+
+    return this.userService.post(userDTO);
+
     }
 
     @GetMapping ("/user/{id}")
